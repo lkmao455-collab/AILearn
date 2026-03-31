@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install:*)",
+      "Bash(npm run:*)",
+      "Bash(netstat -ano)",
+      "Bash(findstr :3001)",
+      "Bash(E:/cv-learn/README.md:*)",
+      "Bash(findstr :5173)"
+    ]
+  }
+}
