@@ -6,6 +6,17 @@ import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism'
 
 function QuizCard({ question, selectedIndex, result, onSelect, onSubmit, onAIExplain, onNext }) {
   const [copied, setCopied] = useState(false)
+  const [explanationFontSize, setExplanationFontSize] = useState(14) // 默认14px
+
+  // 放大文字
+  const increaseFontSize = () => {
+    setExplanationFontSize(prev => Math.min(prev + 2, 24))
+  }
+
+  // 缩小文字
+  const decreaseFontSize = () => {
+    setExplanationFontSize(prev => Math.max(prev - 2, 10))
+  }
 
   if (!question) {
     return (
@@ -196,15 +207,40 @@ ${optionsText}`
               正确答案：<span className="font-bold">{result.correctAnswer}</span>
             </p>
             <div className="bg-white/70 rounded-lg p-3">
-              <div className="text-sm text-slate-600">
-                <span className="font-medium">📖 解析：</span>
+              <div className="flex items-center justify-between mb-3">
+                <span className="font-medium text-slate-700">📖 解析：</span>
+                <div className="flex items-center space-x-2">
+                  <span className="text-xs text-slate-500">{explanationFontSize}px</span>
+                  <button
+                    onClick={decreaseFontSize}
+                    disabled={explanationFontSize <= 10}
+                    className="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-200 text-slate-700 hover:bg-slate-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    title="缩小文字"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                    </svg>
+                  </button>
+                  <button
+                    onClick={increaseFontSize}
+                    disabled={explanationFontSize >= 24}
+                    className="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-200 text-slate-700 hover:bg-slate-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    title="放大文字"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <div className="text-slate-600" style={{ fontSize: `${explanationFontSize}px`, lineHeight: '1.6' }}>
                 <ReactMarkdown
                   remarkPlugins={[remarkGfm]}
                   components={{
                     code({ node, inline, className, children, ...props }) {
                       const match = /language-(\w+)/.exec(className || '')
                       return inline ? (
-                        <code className={`${className} bg-slate-100 px-1.5 py-0.5 rounded text-sm font-mono text-pink-600`} {...props}>
+                        <code className={`${className} bg-slate-100 px-1.5 py-0.5 rounded font-mono text-pink-600`} style={{ fontSize: `${explanationFontSize}px` }} {...props}>
                           {children}
                         </code>
                       ) : (
@@ -216,7 +252,7 @@ ${optionsText}`
                             language={match?.[1] || 'text'}
                             style={atomDark}
                             PreTag="div"
-                            className="!m-0 !p-3 !text-sm"
+                            className="!m-0 !p-3"
                             {...props}
                           >
                             {String(children).replace(/\n$/, '')}
@@ -225,29 +261,29 @@ ${optionsText}`
                       )
                     },
                     p({ children }) {
-                      return <p className="mb-2 text-slate-700 leading-relaxed">{children}</p>
+                      return <p className="mb-3 text-slate-700 leading-relaxed" style={{ fontSize: `${explanationFontSize}px` }}>{children}</p>
                     },
                     h1({ children }) {
-                      return <h1 className="text-lg font-bold text-slate-900 mb-2 mt-3">{children}</h1>
+                      return <h1 className="font-bold text-slate-900 mb-3 mt-4" style={{ fontSize: `${explanationFontSize + 4}px` }}>{children}</h1>
                     },
                     h2({ children }) {
-                      return <h2 className="text-base font-bold text-slate-900 mb-2 mt-3">{children}</h2>
+                      return <h2 className="font-bold text-slate-900 mb-3 mt-4" style={{ fontSize: `${explanationFontSize + 2}px` }}>{children}</h2>
                     },
                     h3({ children }) {
-                      return <h3 className="text-sm font-bold text-slate-800 mb-1 mt-2">{children}</h3>
+                      return <h3 className="font-bold text-slate-800 mb-2 mt-3" style={{ fontSize: `${explanationFontSize + 1}px` }}>{children}</h3>
                     },
                     ul({ children }) {
-                      return <ul className="mb-2 list-disc list-inside space-y-0.5 text-slate-700">{children}</ul>
+                      return <ul className="mb-3 list-disc list-inside space-y-1 text-slate-700" style={{ fontSize: `${explanationFontSize}px` }}>{children}</ul>
                     },
                     ol({ children }) {
-                      return <ol className="mb-2 list-decimal list-inside space-y-0.5 text-slate-700">{children}</ol>
+                      return <ol className="mb-3 list-decimal list-inside space-y-1 text-slate-700" style={{ fontSize: `${explanationFontSize}px` }}>{children}</ol>
                     },
                     li({ children }) {
-                      return <li className="pl-1">{children}</li>
+                      return <li className="pl-1" style={{ fontSize: `${explanationFontSize}px` }}>{children}</li>
                     },
                     blockquote({ children }) {
                       return (
-                        <blockquote className="border-l-4 border-blue-500 pl-3 py-1 my-2 bg-blue-50 rounded-r text-sm">
+                        <blockquote className="border-l-4 border-blue-500 pl-3 py-2 my-3 bg-blue-50 rounded-r" style={{ fontSize: `${explanationFontSize}px` }}>
                           {children}
                         </blockquote>
                       )

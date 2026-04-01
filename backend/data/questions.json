@@ -10,7 +10,7 @@
     ],
     "answer": "B",
     "explanation": "YOLO (You Only Look Once) 是单阶段目标检测算法，将目标检测转化为回归问题，直接从输入图像到边界框坐标和类别概率。",
-    "topic": "目标检测",
+    "topic": "YOLO",
     "subtopic": "YOLO",
     "difficulty": "easy"
   },
@@ -130,7 +130,7 @@
     ],
     "answer": "C",
     "explanation": "YOLOv5 使用 CSPDarknet 作为骨干网络，结合了 CSP（Cross Stage Partial）结构提高效率。",
-    "topic": "目标检测",
+    "topic": "YOLO",
     "subtopic": "YOLO",
     "difficulty": "medium"
   },
@@ -220,7 +220,7 @@
     ],
     "answer": "B",
     "explanation": "IoU (Intersection over Union) 交并比，是预测框与真实框的交集除以并集，用于评估检测精度。",
-    "topic": "目标检测",
+    "topic": "YOLO",
     "subtopic": "评估指标",
     "difficulty": "easy"
   },
@@ -235,7 +235,7 @@
     ],
     "answer": "C",
     "explanation": "Faster R-CNN 是两阶段检测算法，先生成候选区域（RPN），再进行分类和回归。YOLO 和 SSD 是单阶段算法。",
-    "topic": "目标检测",
+    "topic": "YOLO",
     "subtopic": "R-CNN",
     "difficulty": "medium"
   },
@@ -295,7 +295,7 @@
     ],
     "answer": "D",
     "explanation": "YOLO 的损失函数包含定位损失（边界框回归）、置信度损失和分类损失，不包含重构损失。",
-    "topic": "目标检测",
+    "topic": "YOLO",
     "subtopic": "YOLO",
     "difficulty": "hard"
   },
@@ -385,7 +385,7 @@
     ],
     "answer": "A",
     "explanation": "RPN (Region Proposal Network) 区域提议网络，用于生成候选目标区域。",
-    "topic": "目标检测",
+    "topic": "YOLO",
     "subtopic": "R-CNN",
     "difficulty": "medium"
   },
@@ -430,7 +430,7 @@
     ],
     "answer": "A",
     "explanation": "mAP (mean Average Precision) 是各类别 AP 的平均值，是目标检测的主要评价指标。",
-    "topic": "目标检测",
+    "topic": "YOLO",
     "subtopic": "评估指标",
     "difficulty": "medium"
   },
@@ -520,7 +520,7 @@
     ],
     "answer": "C",
     "explanation": "YOLOv3 在 3 个不同尺度的特征图上进行预测，分别检测大、中、小目标。",
-    "topic": "目标检测",
+    "topic": "YOLO",
     "subtopic": "YOLO",
     "difficulty": "medium"
   },
@@ -565,7 +565,7 @@
     ],
     "answer": "B",
     "explanation": "NMS 通过抑制非极大值的检测框，去除重复的边界框，保留最优检测结果。",
-    "topic": "目标检测",
+    "topic": "YOLO",
     "subtopic": "后处理",
     "difficulty": "medium"
   },
@@ -655,7 +655,7 @@
     ],
     "answer": "A",
     "explanation": "SSD (Single Shot MultiBox Detector) 是单阶段多框检测器。",
-    "topic": "目标检测",
+    "topic": "YOLO",
     "subtopic": "SSD",
     "difficulty": "medium"
   },
@@ -715,7 +715,7 @@
     ],
     "answer": "D",
     "explanation": "YOLOv4 使用 Mosaic、SAM、PANet 等，但不包含 Transformer 组件。",
-    "topic": "目标检测",
+    "topic": "YOLO",
     "subtopic": "YOLO",
     "difficulty": "hard"
   },
@@ -790,7 +790,7 @@
     ],
     "answer": "B",
     "explanation": "Anchor 是预定义的边界框模板，用于生成候选检测框。",
-    "topic": "目标检测",
+    "topic": "YOLO",
     "subtopic": "基础概念",
     "difficulty": "medium"
   },
@@ -850,7 +850,7 @@
     ],
     "answer": "A",
     "explanation": "RetinaNet 引入 Focal Loss 解决正负样本不平衡问题。",
-    "topic": "目标检测",
+    "topic": "YOLO",
     "subtopic": "损失函数",
     "difficulty": "medium"
   },
@@ -925,7 +925,7 @@
     ],
     "answer": "A",
     "explanation": "YOLO 将图像划分为 SxS 网格，每个网格负责预测中心点落在其中的目标。",
-    "topic": "目标检测",
+    "topic": "YOLO",
     "subtopic": "YOLO",
     "difficulty": "medium"
   },
@@ -1000,7 +1000,7 @@
     ],
     "answer": "B",
     "explanation": "Precision 查准率，表示预测为正的样本中实际为正的比例。",
-    "topic": "目标检测",
+    "topic": "YOLO",
     "subtopic": "评估指标",
     "difficulty": "medium"
   },
@@ -1075,7 +1075,7 @@
     ],
     "answer": "D",
     "explanation": "YOLOv7 引入 E-ELAN、重参数化等，但仍基于 CNN 架构。",
-    "topic": "目标检测",
+    "topic": "YOLO",
     "subtopic": "YOLO",
     "difficulty": "hard"
   },
@@ -1150,7 +1150,7 @@
     ],
     "answer": "D",
     "explanation": "实例分割同时提供类别、边界框和像素级掩码。",
-    "topic": "目标检测",
+    "topic": "YOLO",
     "subtopic": "实例分割",
     "difficulty": "medium"
   },
@@ -1225,7 +1225,7 @@
     ],
     "answer": "B",
     "explanation": "CornerNet 通过检测目标框的左上角和右下角进行目标检测。",
-    "topic": "目标检测",
+    "topic": "YOLO",
     "subtopic": "Anchor-Free",
     "difficulty": "hard"
   },
@@ -1300,7 +1300,7 @@
     ],
     "answer": "B",
     "explanation": "FCOS (Fully Convolutional One-Stage) 是无锚框的单阶段检测器。",
-    "topic": "目标检测",
+    "topic": "YOLO",
     "subtopic": "Anchor-Free",
     "difficulty": "medium"
   },
@@ -1375,7 +1375,7 @@
     ],
     "answer": "B",
     "explanation": "CenterNet 将目标表示为中心点，通过关键点检测实现。",
-    "topic": "目标检测",
+    "topic": "YOLO",
     "subtopic": "Anchor-Free",
     "difficulty": "medium"
   },
@@ -1450,7 +1450,7 @@
     ],
     "answer": "C",
     "explanation": "DETR 首次将 Transformer 成功应用于端到端目标检测。",
-    "topic": "目标检测",
+    "topic": "YOLO",
     "subtopic": "Transformer",
     "difficulty": "medium"
   },
@@ -1510,7 +1510,7 @@
     ],
     "answer": "D",
     "explanation": "YOLOv8 引入 Anchor-Free、解耦头、C2f 等多项改进。",
-    "topic": "目标检测",
+    "topic": "YOLO",
     "subtopic": "YOLO",
     "difficulty": "medium"
   },
@@ -1585,7 +1585,7 @@
     ],
     "answer": "D",
     "explanation": "IoU 阈值在跟踪中用于多方面评估和筛选。",
-    "topic": "目标检测",
+    "topic": "YOLO",
     "subtopic": "目标跟踪",
     "difficulty": "medium"
   },
@@ -1675,7 +1675,7 @@
     ],
     "answer": "B",
     "explanation": "Swin Transformer 引入滑动窗口注意力，实现层次化特征学习。",
-    "topic": "目标检测",
+    "topic": "YOLO",
     "subtopic": "Transformer",
     "difficulty": "hard"
   },
@@ -1735,7 +1735,7 @@
     ],
     "answer": "B",
     "explanation": "YOLO-Pose 是基于 YOLO 的人体姿态估计模型。",
-    "topic": "目标检测",
+    "topic": "YOLO",
     "subtopic": "姿态估计",
     "difficulty": "medium"
   },
@@ -1810,7 +1810,7 @@
     ],
     "answer": "D",
     "explanation": "YOLOv5 提供 n/s/m/l/x 等多种模型尺寸。",
-    "topic": "目标检测",
+    "topic": "YOLO",
     "subtopic": "YOLO",
     "difficulty": "easy"
   },
@@ -1885,7 +1885,7 @@
     ],
     "answer": "A",
     "explanation": "FPN 特征金字塔网络，用于多尺度特征融合。",
-    "topic": "目标检测",
+    "topic": "YOLO",
     "subtopic": "特征融合",
     "difficulty": "medium"
   },
@@ -1945,7 +1945,7 @@
     ],
     "answer": "B",
     "explanation": "Mask R-CNN 在 Faster R-CNN 基础上增加掩码预测分支。",
-    "topic": "目标检测",
+    "topic": "YOLO",
     "subtopic": "实例分割",
     "difficulty": "easy"
   },
@@ -2020,7 +2020,7 @@
     ],
     "answer": "D",
     "explanation": "CIoU 综合考虑重叠面积、中心点距离和宽高比。",
-    "topic": "目标检测",
+    "topic": "YOLO",
     "subtopic": "损失函数",
     "difficulty": "hard"
   },
@@ -2080,7 +2080,7 @@
     ],
     "answer": "D",
     "explanation": "R-CNN 是另一类检测框架，不属于 YOLO 系列。",
-    "topic": "目标检测",
+    "topic": "YOLO",
     "subtopic": "YOLO",
     "difficulty": "easy"
   },
@@ -2155,7 +2155,7 @@
     ],
     "answer": "D",
     "explanation": "软 NMS 降低重叠框分数而非直接删除，更平滑。",
-    "topic": "目标检测",
+    "topic": "YOLO",
     "subtopic": "后处理",
     "difficulty": "hard"
   },
@@ -2215,7 +2215,7 @@
     ],
     "answer": "C",
     "explanation": "YOLO 是单阶段检测器，其他是两阶段。",
-    "topic": "目标检测",
+    "topic": "YOLO",
     "subtopic": "基础概念",
     "difficulty": "easy"
   },
@@ -2275,7 +2275,7 @@
     ],
     "answer": "D",
     "explanation": "YOLOv2 引入了 Anchor Box、多尺度训练等多项改进。",
-    "topic": "目标检测",
+    "topic": "YOLO",
     "subtopic": "YOLO",
     "difficulty": "medium"
   },
@@ -2350,7 +2350,7 @@
     ],
     "answer": "B",
     "explanation": "Recall 查全率，表示实际为正的样本中被正确预测的比例。",
-    "topic": "目标检测",
+    "topic": "YOLO",
     "subtopic": "评估指标",
     "difficulty": "medium"
   },
@@ -2410,7 +2410,7 @@
     ],
     "answer": "A",
     "explanation": "YOLOv3 使用 Darknet-53 作为骨干网络。",
-    "topic": "目标检测",
+    "topic": "YOLO",
     "subtopic": "YOLO",
     "difficulty": "medium"
   },
@@ -2470,7 +2470,7 @@
     ],
     "answer": "D",
     "explanation": "这些都是常用的目标检测数据集。",
-    "topic": "目标检测",
+    "topic": "YOLO",
     "subtopic": "数据集",
     "difficulty": "easy"
   },
@@ -2530,7 +2530,7 @@
     ],
     "answer": "D",
     "explanation": "这些都是无锚框的目标检测器。",
-    "topic": "目标检测",
+    "topic": "YOLO",
     "subtopic": "Anchor-Free",
     "difficulty": "medium"
   },
@@ -2590,7 +2590,7 @@
     ],
     "answer": "D",
     "explanation": "YOLOv4 综合了大量技巧提升性能。",
-    "topic": "目标检测",
+    "topic": "YOLO",
     "subtopic": "YOLO",
     "difficulty": "medium"
   },
@@ -2650,7 +2650,7 @@
     ],
     "answer": "A",
     "explanation": "AP50 表示 IoU 阈值为 0.5 时的平均精度。",
-    "topic": "目标检测",
+    "topic": "YOLO",
     "subtopic": "评估指标",
     "difficulty": "medium"
   },
@@ -2725,7 +2725,7 @@
     ],
     "answer": "A",
     "explanation": "HOG 特征在行人检测中效果很好。",
-    "topic": "目标检测",
+    "topic": "YOLO",
     "subtopic": "特征",
     "difficulty": "medium"
   },
@@ -2800,7 +2800,7 @@
     ],
     "answer": "D",
     "explanation": "Mosaic 数据增强拼接 4 张图，增加小目标和背景多样性。",
-    "topic": "目标检测",
+    "topic": "YOLO",
     "subtopic": "YOLO",
     "difficulty": "medium"
   },
@@ -2860,7 +2860,7 @@
     ],
     "answer": "D",
     "explanation": "这些都是常用的 3D 检测数据集。",
-    "topic": "目标检测",
+    "topic": "YOLO",
     "subtopic": "3D 检测",
     "difficulty": "medium"
   },
@@ -2920,7 +2920,7 @@
     ],
     "answer": "D",
     "explanation": "这些都是基于 Transformer 的检测方法。",
-    "topic": "目标检测",
+    "topic": "YOLO",
     "subtopic": "Transformer",
     "difficulty": "medium"
   },
@@ -2980,7 +2980,7 @@
     ],
     "answer": "A",
     "explanation": "自顶向下先检测人体框，再在框内估计姿态。",
-    "topic": "目标检测",
+    "topic": "YOLO",
     "subtopic": "姿态估计",
     "difficulty": "medium"
   },
