@@ -15,7 +15,7 @@ services:
     plan: free
     branch: master
     rootDir: .
-    dockerfilePath: backend/Dockerfile
+    dockerfilePath: Dockerfile
     envVars:
       - key: NODE_ENV
         value: production
