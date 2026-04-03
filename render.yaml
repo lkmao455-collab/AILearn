@@ -1,14 +1,14 @@
-# Render 部署配置 - 免费版
 services:
-  # 后端服务 - 使用 Node.js 运行时（免费）
+  # 后端服务 - 改为 Node 运行（不使用 Docker）
   - type: web
     name: cv-learn-backend
     runtime: node
-    region: singapore
+    plan: free
+    region: oregon   # 免费版推荐用 oregon
     branch: master
     rootDir: backend
     buildCommand: npm install
-    startCommand: npm start
+    startCommand: node index.js   # ⚠️ 改成你的入口文件
     envVars:
       - key: NODE_ENV
         value: production
@@ -17,13 +17,14 @@ services:
       - key: DASHSCOPE_API_KEY
         sync: false
       - key: PORT
-        value: 10000
+        value: 10000   # ⚠️ Render 推荐端口
     healthCheckPath: /api/health
 
-  # 前端静态站点（免费）
+  # 前端静态站点（免费版OK）
   - type: web
     name: cv-learn-frontend
     runtime: static
+    plan: free
     branch: master
     rootDir: frontend
     buildCommand: npm install && npm run build
