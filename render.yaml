@@ -22,9 +22,7 @@ services:
       - key: JWT_SECRET
         generateValue: true
       - key: DATABASE_URL
-        fromDatabase:
-          name: cv-learn-db
-          property: connectionString
+        sync: false  # 需要手动设置 PostgreSQL 连接字符串
       - key: DASHSCOPE_API_KEY
         sync: false
       - key: PORT
