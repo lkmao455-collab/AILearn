@@ -1,14 +1,13 @@
 services:
-  # 后端服务 - 改为 Node 运行（不使用 Docker）
+  # 后端
   - type: web
     name: cv-learn-backend
     runtime: node
-    plan: free
-    region: oregon   # 免费版推荐用 oregon
+    region: oregon
     branch: master
     rootDir: backend
     buildCommand: npm install
-    startCommand: node index.js   # ⚠️ 改成你的入口文件
+    startCommand: node index.js
     envVars:
       - key: NODE_ENV
         value: production
@@ -17,14 +16,13 @@ services:
       - key: DASHSCOPE_API_KEY
         sync: false
       - key: PORT
-        value: 10000   # ⚠️ Render 推荐端口
+        value: 10000
     healthCheckPath: /api/health
 
-  # 前端静态站点（免费版OK）
+  # 前端
   - type: web
     name: cv-learn-frontend
     runtime: static
-    plan: free
     branch: master
     rootDir: frontend
     buildCommand: npm install && npm run build
