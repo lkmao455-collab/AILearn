@@ -1,12 +1,5 @@
 # Render 部署配置 - 使用 Docker
 services:
-  # PostgreSQL 数据库
-  - type: pserv
-    name: cv-learn-db
-    runtime: postgres
-    plan: free
-    region: singapore
-
   # 后端服务 - 使用 Docker
   - type: web
     name: cv-learn-backend
@@ -14,15 +7,13 @@ services:
     region: singapore
     plan: free
     branch: master
-    rootDir: .
+    rootDir: backend
     dockerfilePath: Dockerfile
     envVars:
       - key: NODE_ENV
         value: production
       - key: JWT_SECRET
         generateValue: true
-      - key: DATABASE_URL
-        sync: false  # 需要手动设置 PostgreSQL 连接字符串
       - key: DASHSCOPE_API_KEY
         sync: false
       - key: PORT
@@ -33,12 +24,11 @@ services:
   - type: web
     name: cv-learn-frontend
     runtime: static
-    region: singapore
     plan: free
     branch: master
     rootDir: frontend
     buildCommand: npm install && npm run build
-    staticPublishPath: dist
+    staticPublishPath: ./dist
     envVars:
       - key: VITE_API_URL
         value: https://ailearn-8p3f.onrender.com
