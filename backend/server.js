@@ -51,6 +51,23 @@ app.use('/api/wrong-questions', wrongQuestionsRouter);
 app.use('/api/ai', aiRouter);
 app.use('/api/rank', rankRouter);
 
+// 根路径 - 返回 API 信息
+app.get('/', (req, res) => {
+  res.json({
+    name: 'CV Learn API',
+    version: '2.0.0',
+    status: 'running',
+    endpoints: {
+      health: '/api/health',
+      questions: '/api/questions',
+      auth: '/api/auth',
+      wrongQuestions: '/api/wrong-questions',
+      ai: '/api/ai',
+      rank: '/api/rank'
+    }
+  });
+});
+
 // 健康检查
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'CV Learn Server is running', timestamp: new Date().toISOString() });

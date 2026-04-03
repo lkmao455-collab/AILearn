@@ -13,7 +13,8 @@ RUN npm ci --only=production
 # 复制后端代码
 COPY . .
 
-# 暴露端口
+# Render 会自动设置 PORT 环境变量
+# 应用会监听 process.env.PORT 或默认 3001
 EXPOSE 3001
 
 # 启动命令
