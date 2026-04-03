@@ -1,13 +1,15 @@
 services:
-  # 后端
+  # 全栈服务：后端 + 前端
   - type: web
-    name: cv-learn-backend
+    name: cv-learn
     runtime: node
     region: oregon
     branch: master
-    rootDir: backend
-    buildCommand: npm install
-    startCommand: node server.js
+    rootDir: .
+    buildCommand: |
+      cd frontend && npm install && npm run build
+      cd ../backend && npm install
+    startCommand: cd backend && node server.js
     envVars:
       - key: NODE_ENV
         value: production
@@ -17,16 +19,6 @@ services:
         sync: false
       - key: PORT
         value: 10000
-    healthCheckPath: /api/health
-
-  # 前端
-  - type: web
-    name: cv-learn-frontend
-    runtime: static
-    branch: master
-    rootDir: frontend
-    buildCommand: npm install && npm run build
-    staticPublishPath: ./dist
-    envVars:
       - key: VITE_API_URL
-        value: https://ailearn-8p3f.onrender.com/api
+        value: /api
+    healthCheckPath: /api/health

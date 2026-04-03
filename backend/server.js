@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const path = require('path');
 
 const questionsRouter = require('./routes/questions');
 const authRouter = require('./routes/auth');
@@ -105,5 +106,21 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log('╚══════════════════════════════════════════════════════════╝');
   console.log('');
 });
+
+// 生产环境：托管前端静态文件
+if (process.env.NODE_ENV === 'production') {
+  // 设置静态文件目录
+  app.use(express.static(path.join(__dirname, '../frontend/dist')));
+  
+  // 所有非API请求都返回前端页面
+  app.get('*', (req, res) => {
+    // 如果是API请求，返回404
+    if (req.path.startsWith('/api')) {
+      return res.status(404).json({ error: 'API endpoint not found' });
+    }
+    // 否则返回前端页面
+    res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
+  });
+}
 
 module.exports = app;
