@@ -43,7 +43,4 @@ services:
     publishDir: dist
     envVars:
       - key: VITE_API_URL
-        fromService:
-          name: cv-learn-backend
-          type: web
-          envVarKey: RENDER_EXTERNAL_URL
+        value: https://ailearn-8p3f.onrender.com
