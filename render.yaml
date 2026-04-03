@@ -30,6 +30,9 @@ services:
       - key: PORT
         value: 3001
     healthCheckPath: /api/health
+    dependsOn:
+      - type: pserv
+        name: cv-learn-db
 
   # 前端静态站点
   - type: static
