@@ -1,13 +1,14 @@
-# Render 部署配置 - 使用 Docker
+# Render 部署配置 - 免费版
 services:
-  # 后端服务 - 使用 Docker
+  # 后端服务 - 使用 Node.js 运行时（免费）
   - type: web
     name: cv-learn-backend
-    runtime: docker
+    runtime: node
     region: singapore
     branch: master
     rootDir: backend
-    dockerfilePath: Dockerfile
+    buildCommand: npm install
+    startCommand: npm start
     envVars:
       - key: NODE_ENV
         value: production
@@ -16,10 +17,10 @@ services:
       - key: DASHSCOPE_API_KEY
         sync: false
       - key: PORT
-        value: 3001
+        value: 10000
     healthCheckPath: /api/health
 
-  # 前端静态站点
+  # 前端静态站点（免费）
   - type: web
     name: cv-learn-frontend
     runtime: static
@@ -29,4 +30,4 @@ services:
     staticPublishPath: ./dist
     envVars:
       - key: VITE_API_URL
-        value: https://ailearn-8p3f.onrender.com
+        value: https://cv-learn-backend.onrender.com
