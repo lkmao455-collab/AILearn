@@ -14,9 +14,27 @@ const { initQuestions } = require('./controllers/questionsController');
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// 中间件
-app.use(cors());
-app.use(bodyParser.json());
+// CORS 配置
+const allowedOrigins = process.env.NODE_ENV === 'production'
+  ? [
+      'https://cv-learn-frontend.onrender.com', // 默认Render前端域名
+      process.env.FRONTEND_URL, // 从环境变量读取
+    ].filter(Boolean)
+  : ['http://localhost:5173', 'http://localhost:3000', 'http://127.0.0.1:5173'];
+
+app.use(cors({
+  origin: (origin, callback) => {
+    // 允许无来源的请求（如移动端或curl）
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      console.log(`CORS blocked: ${origin}`);
+      callback(null, false);
+    }
+  },
+  credentials: true
+}));
 
 // 请求日志
 app.use((req, res, next) => {
@@ -46,13 +64,14 @@ try {
 
 // 启动服务器
 app.listen(PORT, () => {
+  const baseUrl = process.env.RENDER_EXTERNAL_URL || `http://localhost:${PORT}`;
   console.log('');
   console.log('╔══════════════════════════════════════════════════════════╗');
   console.log('║                                                          ║');
   console.log('║           🚀 CV Learn Server 已启动                      ║');
   console.log('║                                                          ║');
-  console.log(`║  🌐 本地访问：http://localhost:${PORT}                      ║`);
-  console.log(`║  📚 API 端点：http://localhost:${PORT}/api                   ║`);
+  console.log(`║  🌐 访问地址：${baseUrl.padEnd(52 - baseUrl.length, ' ')} ║`);
+  console.log(`║  📚 API 端点：${(baseUrl + '/api').padEnd(52 - baseUrl.length - 4, ' ')} ║`);
   console.log('║                                                          ║');
   console.log('║  主要接口：                                               ║');
   console.log('║  • POST /api/auth/register  - 用户注册                   ║');
