@@ -5,7 +5,6 @@ services:
     name: cv-learn-backend
     runtime: docker
     region: singapore
-    plan: free
     branch: master
     rootDir: backend
     dockerfilePath: Dockerfile
@@ -24,7 +23,6 @@ services:
   - type: web
     name: cv-learn-frontend
     runtime: static
-    plan: free
     branch: master
     rootDir: frontend
     buildCommand: npm install && npm run build
