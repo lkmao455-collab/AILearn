@@ -1,30 +1,32 @@
-# CV Learn Backend - Dockerfile for Render
-FROM node:20-slim
+# CV Learn Backend - Dockerfile for Render (多阶段构建)
 
-# 安装 Python（用于编译原生模块）
+# 阶段 1: 编译阶段
+FROM node:20-slim AS builder
+
+# 安装编译工具
 RUN apt-get update && apt-get install -y python3 make g++ \
     && rm -rf /var/lib/apt/lists/*
 
-# 设置工作目录
 WORKDIR /app
 
-# 只复制 package 文件（不复制 node_modules）
+# 复制并安装依赖
 COPY backend/package*.json ./
+RUN npm ci
 
-# 删除可能存在的本地 node_modules（重要！）
-RUN rm -rf node_modules package-lock.json
-
-# 重新安装依赖（在容器内编译原生模块）
-RUN npm install
-
-# 复制后端代码（排除 node_modules）
+# 复制代码
 COPY backend/ ./
 
-# 再次确保没有错误的本地模块
-RUN rm -rf node_modules/better-sqlite3/build/Release/*.node 2>/dev/null || true
+# 阶段 2: 运行阶段 (更小的镜像)
+FROM node:20-slim
 
-# 重新编译 better-sqlite3
-RUN npm rebuild better-sqlite3
+WORKDIR /app
+
+# 只复制编译后的 node_modules 和代码
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/ ./
+
+# 创建数据目录
+RUN mkdir -p data
 
 # 暴露端口
 EXPOSE 3001
