@@ -1,7 +1,4 @@
-# Render 部署配置
-# 此文件用于在 Render 上一键部署 CV Learn 全栈应用
-# 确保使用 Node.js 运行时（非 Docker）
-
+# Render 部署配置 - 使用 Docker
 services:
   # PostgreSQL 数据库
   - type: pserv
@@ -9,18 +6,15 @@ services:
     runtime: postgres
     plan: free
     region: singapore
-    ipAllowList: []
 
-  # 后端服务 - 使用 Node.js 运行时
+  # 后端服务 - 使用 Docker
   - type: web
     name: cv-learn-backend
-    runtime: node
+    runtime: docker
     region: singapore
     plan: free
     branch: master
     rootDir: backend
-    buildCommand: npm install
-    startCommand: node server.js
     envVars:
       - key: NODE_ENV
         value: production
@@ -32,6 +26,8 @@ services:
           property: connectionString
       - key: DASHSCOPE_API_KEY
         sync: false
+      - key: PORT
+        value: 3001
     healthCheckPath: /api/health
 
   # 前端静态站点
