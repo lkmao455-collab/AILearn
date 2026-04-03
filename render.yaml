@@ -32,9 +32,10 @@ services:
       - type: pserv
         name: cv-learn-db
 
-  # 前端静态站点
-  - type: static
+  # 前端静态站点 - Blueprint 中使用 web + static runtime
+  - type: web
     name: cv-learn-frontend
+    runtime: static
     region: singapore
     plan: free
     branch: master
