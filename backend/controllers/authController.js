@@ -3,6 +3,25 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { v4: uuidv4 } = require('uuid');
 
+const isPostgres = require('../config/database').isPostgres;
+
+// 查询辅助函数
+const getQuery = async (stmt, ...params) => {
+  if (isPostgres) {
+    return await stmt.get(...params);
+  } else {
+    return stmt.get(...params);
+  }
+};
+
+const runQuery = async (stmt, ...params) => {
+  if (isPostgres) {
+    return await stmt.run(...params);
+  } else {
+    return stmt.run(...params);
+  }
+};
+
 // 用户注册
 const register = async (req, res) => {
   try {
@@ -17,7 +36,8 @@ const register = async (req, res) => {
     }
 
     // 检查用户名是否已存在
-    const existingUser = db.prepare('SELECT id FROM users WHERE username = ?').get(username);
+    const existingUserStmt = db.prepare('SELECT id FROM users WHERE username = ?');
+    const existingUser = await getQuery(existingUserStmt, username);
     if (existingUser) {
       return res.status(409).json({ message: '用户名已存在' });
     }
@@ -27,15 +47,17 @@ const register = async (req, res) => {
     const userId = uuidv4();
 
     // 插入新用户
-    db.prepare(`
+    const insertUserStmt = db.prepare(`
       INSERT INTO users (id, username, password) VALUES (?, ?, ?)
-    `).run(userId, username, hashedPassword);
+    `);
+    await runQuery(insertUserStmt, userId, username, hashedPassword);
 
     // 初始化用户统计
-    db.prepare(`
+    const insertStatsStmt = db.prepare(`
       INSERT INTO user_stats (user_id, total_count, correct_count, wrong_count)
       VALUES (?, 0, 0, 0)
-    `).run(userId);
+    `);
+    await runQuery(insertStatsStmt, userId);
 
     res.status(201).json({
       message: '注册成功',
@@ -57,7 +79,8 @@ const login = async (req, res) => {
     }
 
     // 查找用户
-    const user = db.prepare('SELECT * FROM users WHERE username = ?').get(username);
+    const userStmt = db.prepare('SELECT * FROM users WHERE username = ?');
+    const user = await getQuery(userStmt, username);
     if (!user) {
       return res.status(401).json({ message: '用户名或密码错误' });
     }
@@ -90,15 +113,17 @@ const login = async (req, res) => {
 };
 
 // 获取当前用户信息
-const getProfile = (req, res) => {
+const getProfile = async (req, res) => {
   try {
-    const user = db.prepare('SELECT id, username, created_at FROM users WHERE id = ?').get(req.userId);
+    const userStmt = db.prepare('SELECT id, username, created_at FROM users WHERE id = ?');
+    const user = await getQuery(userStmt, req.userId);
     if (!user) {
       return res.status(404).json({ message: '用户不存在' });
     }
 
     // 获取用户统计
-    const stats = db.prepare('SELECT * FROM user_stats WHERE user_id = ?').get(req.userId);
+    const statsStmt = db.prepare('SELECT * FROM user_stats WHERE user_id = ?');
+    const stats = await getQuery(statsStmt, req.userId);
 
     res.json({
       user,

@@ -5,27 +5,101 @@ const axios = require('axios');
 // DashScope API URL (兼容 OpenAI 格式)
 const DASHSCOPE_API_URL = 'https://dashscope.aliyuncs.com/compatible-mode/v1';
 
+// 判断是否为 PostgreSQL 模式
+const isPostgres = require('../config/database').isPostgres;
+
+// 执行查询的辅助函数（处理同步/异步差异）
+const runQuery = async (stmt, ...params) => {
+  if (isPostgres) {
+    return await stmt.run(...params);
+  } else {
+    return stmt.run(...params);
+  }
+};
+
+const getQuery = async (stmt, ...params) => {
+  if (isPostgres) {
+    return await stmt.get(...params);
+  } else {
+    return stmt.get(...params);
+  }
+};
+
+const allQuery = async (stmt, ...params) => {
+  if (isPostgres) {
+    return await stmt.all(...params);
+  } else {
+    return stmt.all(...params);
+  }
+};
+
+// 获取插入语句（处理 SQLite/PostgreSQL 差异）
+const getInsertQuestionSQL = () => {
+  if (isPostgres) {
+    return `
+      INSERT INTO questions (id, topic, subtopic, difficulty, question, options, answer, explanation)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+      ON CONFLICT (id) DO NOTHING
+    `;
+  }
+  return `
+    INSERT INTO questions (id, topic, subtopic, difficulty, question, options, answer, explanation)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+  `;
+};
+
+// 获取 upsert 用户统计的 SQL
+const getUpsertStatsSQL = () => {
+  if (isPostgres) {
+    return `
+      INSERT INTO user_stats (user_id, total_count, correct_count, wrong_count, updated_at)
+      VALUES ($1, 1, $2, $3, NOW())
+      ON CONFLICT (user_id) DO UPDATE SET
+        total_count = user_stats.total_count + 1,
+        correct_count = user_stats.correct_count + EXCLUDED.correct_count,
+        wrong_count = user_stats.wrong_count + EXCLUDED.wrong_count,
+        updated_at = NOW()
+    `;
+  }
+  return `
+    INSERT INTO user_stats (user_id, total_count, correct_count, wrong_count)
+    VALUES (?, 1, ?, ?)
+    ON CONFLICT(user_id) DO UPDATE SET
+      total_count = total_count + 1,
+      correct_count = correct_count + excluded.correct_count,
+      wrong_count = wrong_count + excluded.wrong_count,
+      updated_at = datetime('now')
+  `;
+};
+
+// 获取随机排序 SQL
+const getRandomSQL = () => {
+  return isPostgres ? 'RANDOM()' : 'RANDOM()';
+};
+
 // 初始化题库（从 JSON 文件导入）
-const initQuestions = () => {
+const initQuestions = async () => {
   try {
     const questionsData = require('../data/questions.json');
 
     // 检查是否已存在题目
-    const existingCount = db.prepare('SELECT COUNT(*) as count FROM questions').get();
-    if (existingCount.count > 0) {
+    const checkStmt = db.prepare('SELECT COUNT(*) as count FROM questions');
+    const existingCount = await getQuery(checkStmt);
+
+    if (existingCount && existingCount.count > 0) {
       console.log(`数据库中已有 ${existingCount.count} 道题目`);
       return;
     }
 
     // 批量插入题目
-    const insert = db.prepare(`
-      INSERT INTO questions (id, topic, subtopic, difficulty, question, options, answer, explanation)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-    `);
+    const insertSQL = getInsertQuestionSQL();
+    const insertStmt = db.prepare(insertSQL);
 
-    const transaction = db.transaction((questions) => {
-      for (const q of questions) {
-        insert.run(
+    let insertedCount = 0;
+    for (const q of questionsData) {
+      try {
+        await runQuery(
+          insertStmt,
           q.id,
           q.topic,
           q.subtopic || null,
@@ -35,26 +109,32 @@ const initQuestions = () => {
           q.answer,
           q.explanation
         );
+        insertedCount++;
+      } catch (err) {
+        // 忽略重复插入错误
+        if (!err.message?.includes('unique constraint') && !err.message?.includes('UNIQUE')) {
+          console.error(`插入题目失败 (ID: ${q.id}):`, err.message);
+        }
       }
-    });
+    }
 
-    transaction(questionsData);
-    console.log(`成功初始化 ${questionsData.length} 道题目到数据库`);
+    console.log(`成功初始化 ${insertedCount} 道题目到数据库`);
   } catch (error) {
     console.error('初始化题库失败:', error);
   }
 };
 
 // 获取所有题目
-const getAllQuestions = (req, res) => {
+const getAllQuestions = async (req, res) => {
   try {
-    const questions = db.prepare('SELECT * FROM questions').all();
+    const stmt = db.prepare('SELECT * FROM questions');
+    const questions = await allQuery(stmt);
 
     res.json({
       success: true,
       data: questions.map(q => ({
         ...q,
-        options: JSON.parse(q.options)
+        options: typeof q.options === 'string' ? JSON.parse(q.options) : q.options
       })),
       total: questions.length
     });
@@ -68,10 +148,11 @@ const getAllQuestions = (req, res) => {
 };
 
 // 根据 ID 获取题目
-const getQuestionById = (req, res) => {
+const getQuestionById = async (req, res) => {
   try {
     const { id } = req.params;
-    const question = db.prepare('SELECT * FROM questions WHERE id = ?').get(id);
+    const stmt = db.prepare('SELECT * FROM questions WHERE id = ?');
+    const question = await getQuery(stmt, id);
 
     if (!question) {
       return res.status(404).json({
@@ -84,7 +165,7 @@ const getQuestionById = (req, res) => {
       success: true,
       data: {
         ...question,
-        options: JSON.parse(question.options)
+        options: typeof question.options === 'string' ? JSON.parse(question.options) : question.options
       }
     });
   } catch (error) {
@@ -97,9 +178,11 @@ const getQuestionById = (req, res) => {
 };
 
 // 获取随机题目
-const getRandomQuestion = (req, res) => {
+const getRandomQuestion = async (req, res) => {
   try {
-    const question = db.prepare('SELECT * FROM questions ORDER BY RANDOM() LIMIT 1').get();
+    const randomSQL = `SELECT * FROM questions ORDER BY ${getRandomSQL()} LIMIT 1`;
+    const stmt = db.prepare(randomSQL);
+    const question = await getQuery(stmt);
 
     if (!question) {
       return res.status(404).json({
@@ -112,7 +195,7 @@ const getRandomQuestion = (req, res) => {
       success: true,
       data: {
         ...question,
-        options: JSON.parse(question.options)
+        options: typeof question.options === 'string' ? JSON.parse(question.options) : question.options
       }
     });
   } catch (error) {
@@ -125,12 +208,13 @@ const getRandomQuestion = (req, res) => {
 };
 
 // 检查答案
-const checkAnswer = (req, res) => {
+const checkAnswer = async (req, res) => {
   try {
     const { questionId, userAnswer } = req.body;
     const userId = req.userId;
 
-    const question = db.prepare('SELECT * FROM questions WHERE id = ?').get(questionId);
+    const stmt = db.prepare('SELECT * FROM questions WHERE id = ?');
+    const question = await getQuery(stmt, questionId);
 
     if (!question) {
       return res.status(404).json({
@@ -139,9 +223,14 @@ const checkAnswer = (req, res) => {
       });
     }
 
-    // 标准化答案比较：去除空格，转大写
-    const normalizedUserAnswer = String(userAnswer).trim().toUpperCase();
-    const normalizedCorrectAnswer = String(question.answer).trim().toUpperCase();
+    // 标准化答案比较
+    const extractAnswerLetter = (answer) => {
+      const str = String(answer).trim().toUpperCase();
+      const match = str.match(/^[A-D]/);
+      return match ? match[0] : str;
+    };
+    const normalizedUserAnswer = extractAnswerLetter(userAnswer);
+    const normalizedCorrectAnswer = extractAnswerLetter(question.answer);
     const isCorrect = normalizedUserAnswer === normalizedCorrectAnswer;
 
     console.log(`[checkAnswer] 题目ID: ${questionId}, 用户答案: ${userAnswer} (标准化: ${normalizedUserAnswer}), 正确答案: ${question.answer} (标准化: ${normalizedCorrectAnswer}), 是否正确: ${isCorrect}`);
@@ -149,28 +238,35 @@ const checkAnswer = (req, res) => {
     // 如果提供了 userId，记录做题记录
     if (userId && userId !== 'guest') {
       // 插入做题记录
-      db.prepare(`
+      const recordStmt = db.prepare(`
         INSERT INTO question_records (user_id, question_id, user_answer, is_correct)
         VALUES (?, ?, ?, ?)
-      `).run(userId, questionId, userAnswer, isCorrect ? 1 : 0);
+      `);
+      await runQuery(recordStmt, userId, questionId, userAnswer, isCorrect ? 1 : 0);
 
       // 更新用户统计
-      db.prepare(`
-        INSERT INTO user_stats (user_id, total_count, correct_count, wrong_count)
-        VALUES (?, 1, ?, ?)
-        ON CONFLICT(user_id) DO UPDATE SET
-          total_count = total_count + 1,
-          correct_count = correct_count + ?,
-          wrong_count = wrong_count + ?,
-          updated_at = datetime('now')
-      `).run(userId, isCorrect ? 1 : 0, isCorrect ? 0 : 1, isCorrect ? 1 : 0, isCorrect ? 0 : 1);
+      const correctIncrement = isCorrect ? 1 : 0;
+      const wrongIncrement = isCorrect ? 0 : 1;
+      const statsSQL = getUpsertStatsSQL();
+      const statsStmt = db.prepare(statsSQL);
+      await runQuery(statsStmt, userId, correctIncrement, wrongIncrement);
 
       // 如果答错，自动添加到错题本
       if (!isCorrect) {
-        db.prepare(`
-          INSERT OR IGNORE INTO wrong_questions (user_id, question_id, user_answer)
-          VALUES (?, ?, ?)
-        `).run(userId, questionId, userAnswer);
+        if (isPostgres) {
+          const wrongStmt = db.prepare(`
+            INSERT INTO wrong_questions (user_id, question_id, user_answer)
+            VALUES ($1, $2, $3)
+            ON CONFLICT (user_id, question_id) DO NOTHING
+          `);
+          await runQuery(wrongStmt, userId, questionId, userAnswer);
+        } else {
+          const wrongStmt = db.prepare(`
+            INSERT OR IGNORE INTO wrong_questions (user_id, question_id, user_answer)
+            VALUES (?, ?, ?)
+          `);
+          await runQuery(wrongStmt, userId, questionId, userAnswer);
+        }
       }
     }
 
@@ -198,7 +294,8 @@ const aiExplain = async (req, res) => {
     const { questionId } = req.body;
     const apiKey = req.apiKey;
 
-    const question = db.prepare('SELECT * FROM questions WHERE id = ?').get(questionId);
+    const stmt = db.prepare('SELECT * FROM questions WHERE id = ?');
+    const question = await getQuery(stmt, questionId);
 
     if (!question) {
       return res.status(404).json({
@@ -207,9 +304,13 @@ const aiExplain = async (req, res) => {
       });
     }
 
+    const options = typeof question.options === 'string'
+      ? JSON.parse(question.options)
+      : question.options;
+
     const aiExplanation = await getAIExplanationFromDashScope(apiKey, {
       question: question.question,
-      options: JSON.parse(question.options),
+      options: options,
       correctAnswer: question.answer,
       topic: question.topic,
       subtopic: question.subtopic
@@ -280,41 +381,50 @@ const testConnection = async (req, res) => {
 };
 
 // 获取所有分类
-const getCategories = (req, res) => {
+const getCategories = async (req, res) => {
   try {
     const { topic } = req.query;
     console.log('[getCategories] 收到请求, req.query:', req.query);
     console.log('[getCategories] topic 值:', topic, '类型:', typeof topic);
 
-    const topics = db.prepare(`
+    const topicsStmt = db.prepare(`
       SELECT topic, COUNT(*) as count FROM questions GROUP BY topic
-    `).all();
+    `);
+    const topics = await allQuery(topicsStmt);
 
-    const subtopics = db.prepare(`
+    const subtopicsStmt = db.prepare(`
       SELECT DISTINCT subtopic FROM questions WHERE subtopic IS NOT NULL
-    `).all().map(s => s.subtopic);
+    `);
+    const subtopicsResult = await allQuery(subtopicsStmt);
+    const subtopics = subtopicsResult.map(s => s.subtopic).filter(Boolean);
 
     // 如果有指定 topic，则只统计该 topic 下的难度分布
     let difficulties;
     if (topic) {
-      difficulties = db.prepare(`
+      const diffStmt = db.prepare(`
         SELECT difficulty, COUNT(*) as count FROM questions WHERE topic = ? GROUP BY difficulty
-      `).all(topic).map(d => ({
+      `);
+      const diffResult = await allQuery(diffStmt, topic);
+      difficulties = diffResult.map(d => ({
         name: d.difficulty,
         label: d.difficulty === 'easy' ? '简单' : d.difficulty === 'medium' ? '中等' : '困难',
         count: d.count
       }));
     } else {
-      difficulties = db.prepare(`
+      const diffStmt = db.prepare(`
         SELECT difficulty, COUNT(*) as count FROM questions GROUP BY difficulty
-      `).all().map(d => ({
+      `);
+      const diffResult = await allQuery(diffStmt);
+      difficulties = diffResult.map(d => ({
         name: d.difficulty,
         label: d.difficulty === 'easy' ? '简单' : d.difficulty === 'medium' ? '中等' : '困难',
         count: d.count
       }));
     }
 
-    const total = db.prepare('SELECT COUNT(*) as count FROM questions').get().count;
+    const totalStmt = db.prepare('SELECT COUNT(*) as count FROM questions');
+    const totalResult = await getQuery(totalStmt);
+    const total = totalResult.count;
 
     res.json({
       success: true,
@@ -330,19 +440,31 @@ const getCategories = (req, res) => {
 };
 
 // 根据分类筛选题目
-const getQuestionsByCategory = (req, res) => {
+const getQuestionsByCategory = async (req, res) => {
   try {
     const { topic, difficulty } = req.query;
 
     let sql = 'SELECT * FROM questions WHERE 1=1';
-    if (topic) sql += ` AND topic = '${topic}'`;
-    if (difficulty) sql += ` AND difficulty = '${difficulty}'`;
+    const params = [];
 
-    const questions = db.prepare(sql).all();
+    if (topic) {
+      sql += ` AND topic = ?`;
+      params.push(topic);
+    }
+    if (difficulty) {
+      sql += ` AND difficulty = ?`;
+      params.push(difficulty);
+    }
+
+    const stmt = db.prepare(sql);
+    const questions = await allQuery(stmt, ...params);
 
     res.json({
       success: true,
-      data: questions.map(q => ({ ...q, options: JSON.parse(q.options) })),
+      data: questions.map(q => ({
+        ...q,
+        options: typeof q.options === 'string' ? JSON.parse(q.options) : q.options
+      })),
       total: questions.length
     });
   } catch (error) {

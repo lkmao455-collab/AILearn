@@ -54,13 +54,15 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'CV Learn Server is running', timestamp: new Date().toISOString() });
 });
 
-// 初始化数据库和题库
-try {
-  initQuestions();
-  console.log('✅ 数据库初始化完成');
-} catch (error) {
-  console.error('❌ 数据库初始化失败:', error);
-}
+// 初始化数据库和题库（异步）
+(async () => {
+  try {
+    await initQuestions();
+    console.log('✅ 数据库初始化完成');
+  } catch (error) {
+    console.error('❌ 数据库初始化失败:', error);
+  }
+})();
 
 // 启动服务器
 app.listen(PORT, () => {

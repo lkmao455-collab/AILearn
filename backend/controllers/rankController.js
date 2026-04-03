@@ -1,9 +1,28 @@
 const db = require('../config/database');
 
+const isPostgres = require('../config/database').isPostgres;
+
+// 查询辅助函数
+const getQuery = async (stmt, ...params) => {
+  if (isPostgres) {
+    return await stmt.get(...params);
+  } else {
+    return stmt.get(...params);
+  }
+};
+
+const allQuery = async (stmt, ...params) => {
+  if (isPostgres) {
+    return await stmt.all(...params);
+  } else {
+    return stmt.all(...params);
+  }
+};
+
 // 获取排行榜
-const getRanking = (req, res) => {
+const getRanking = async (req, res) => {
   try {
-    const rankings = db.prepare(`
+    const stmt = db.prepare(`
       SELECT
         u.id,
         u.username,
@@ -19,7 +38,8 @@ const getRanking = (req, res) => {
       JOIN users u ON s.user_id = u.id
       ORDER BY s.correct_count DESC, accuracy DESC, s.total_count DESC
       LIMIT 50
-    `).all();
+    `);
+    const rankings = await allQuery(stmt);
 
     // 添加排名
     const rankedData = rankings.map((item, index) => ({
@@ -47,11 +67,11 @@ const getRanking = (req, res) => {
 };
 
 // 获取当前用户排名
-const getUserRank = (req, res) => {
+const getUserRank = async (req, res) => {
   try {
     const userId = req.userId;
 
-    const userStats = db.prepare(`
+    const userStatsStmt = db.prepare(`
       SELECT
         s.total_count,
         s.correct_count,
@@ -62,7 +82,8 @@ const getUserRank = (req, res) => {
         END as accuracy
       FROM user_stats s
       WHERE s.user_id = ?
-    `).get(userId);
+    `);
+    const userStats = await getQuery(userStatsStmt, userId);
 
     if (!userStats) {
       return res.json({
@@ -78,16 +99,20 @@ const getUserRank = (req, res) => {
     }
 
     // 计算排名
-    const allUsers = db.prepare(`
-      SELECT user_id, correct_count,
+    const allUsersStmt = db.prepare(`
+      SELECT
+        u.id as user_id,
+        s.correct_count,
         CASE
-          WHEN (SELECT total_count FROM user_stats WHERE user_id = us.user_id) > 0
-          THEN ROUND((SELECT correct_count FROM user_stats WHERE user_id = us.user_id) * 100.0 / (SELECT total_count FROM user_stats WHERE user_id = us.user_id), 2)
+          WHEN s.total_count > 0 THEN ROUND(s.correct_count * 100.0 / s.total_count, 2)
           ELSE 0
-        END as accuracy
-      FROM user_stats us
-      ORDER BY correct_count DESC, accuracy DESC, total_count DESC
-    `).all();
+        END as accuracy,
+        s.total_count
+      FROM user_stats s
+      JOIN users u ON s.user_id = u.id
+      ORDER BY s.correct_count DESC, accuracy DESC, s.total_count DESC
+    `);
+    const allUsers = await allQuery(allUsersStmt);
 
     const rank = allUsers.findIndex(u => u.user_id === userId) + 1;
 

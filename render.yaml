@@ -3,6 +3,14 @@
 # 访问 https://dashboard.render.com/ 并选择 "Blueprint" 部署
 
 services:
+  # PostgreSQL 数据库
+  - type: pserv
+    name: cv-learn-db
+    runtime: postgres
+    plan: free
+    region: singapore
+    ipAllowList: []  # 允许所有 IP 访问（仅用于开发，生产环境应限制）
+
   # 后端服务
   - type: web
     name: cv-learn-backend
@@ -18,11 +26,16 @@ services:
         value: production
       - key: JWT_SECRET
         generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: cv-learn-db
+          property: connectionString
       - key: DASHSCOPE_API_KEY
         sync: false
-      - key: DB_PATH
-        value: /tmp/cv_learn.db
     healthCheckPath: /api/health
+    dependsOn:
+      - type: pserv
+        name: cv-learn-db
 
   # 前端静态站点
   - type: static

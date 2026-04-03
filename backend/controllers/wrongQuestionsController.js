@@ -1,23 +1,51 @@
 const db = require('../config/database');
 
+const isPostgres = require('../config/database').isPostgres;
+
+// 查询辅助函数
+const getQuery = async (stmt, ...params) => {
+  if (isPostgres) {
+    return await stmt.get(...params);
+  } else {
+    return stmt.get(...params);
+  }
+};
+
+const allQuery = async (stmt, ...params) => {
+  if (isPostgres) {
+    return await stmt.all(...params);
+  } else {
+    return stmt.all(...params);
+  }
+};
+
+const runQuery = async (stmt, ...params) => {
+  if (isPostgres) {
+    return await stmt.run(...params);
+  } else {
+    return stmt.run(...params);
+  }
+};
+
 // 获取用户的错题列表
-const getWrongQuestions = (req, res) => {
+const getWrongQuestions = async (req, res) => {
   try {
     const userId = req.userId;
 
-    const wrongQuestions = db.prepare(`
+    const stmt = db.prepare(`
       SELECT wq.*, q.topic, q.subtopic, q.difficulty, q.question, q.options, q.answer, q.explanation
       FROM wrong_questions wq
       JOIN questions q ON wq.question_id = q.id
       WHERE wq.user_id = ?
       ORDER BY wq.created_at DESC
-    `).all(userId);
+    `);
+    const wrongQuestions = await allQuery(stmt, userId);
 
     res.json({
       success: true,
       data: wrongQuestions.map(q => ({
         ...q,
-        options: JSON.parse(q.options)
+        options: typeof q.options === 'string' ? JSON.parse(q.options) : q.options
       }))
     });
   } catch (error) {
@@ -30,7 +58,7 @@ const getWrongQuestions = (req, res) => {
 };
 
 // 添加错题
-const addWrongQuestion = (req, res) => {
+const addWrongQuestion = async (req, res) => {
   try {
     const userId = req.userId;
     const { questionId, userAnswer } = req.body;
@@ -43,7 +71,8 @@ const addWrongQuestion = (req, res) => {
     }
 
     // 检查题目是否存在
-    const question = db.prepare('SELECT id FROM questions WHERE id = ?').get(questionId);
+    const questionStmt = db.prepare('SELECT id FROM questions WHERE id = ?');
+    const question = await getQuery(questionStmt, questionId);
     if (!question) {
       return res.status(404).json({
         success: false,
@@ -52,7 +81,8 @@ const addWrongQuestion = (req, res) => {
     }
 
     // 检查是否已经存在
-    const exists = db.prepare('SELECT id FROM wrong_questions WHERE user_id = ? AND question_id = ?').get(userId, questionId);
+    const existsStmt = db.prepare('SELECT id FROM wrong_questions WHERE user_id = ? AND question_id = ?');
+    const exists = await getQuery(existsStmt, userId, questionId);
     if (exists) {
       return res.status(409).json({
         success: false,
@@ -61,10 +91,11 @@ const addWrongQuestion = (req, res) => {
     }
 
     // 插入错题
-    db.prepare(`
+    const insertStmt = db.prepare(`
       INSERT INTO wrong_questions (user_id, question_id, user_answer)
       VALUES (?, ?, ?)
-    `).run(userId, questionId, userAnswer);
+    `);
+    await runQuery(insertStmt, userId, questionId, userAnswer);
 
     res.json({
       success: true,
@@ -80,14 +111,15 @@ const addWrongQuestion = (req, res) => {
 };
 
 // 移除错题
-const removeWrongQuestion = (req, res) => {
+const removeWrongQuestion = async (req, res) => {
   try {
     const userId = req.userId;
     const { questionId } = req.params;
 
-    const result = db.prepare(`
+    const stmt = db.prepare(`
       DELETE FROM wrong_questions WHERE user_id = ? AND question_id = ?
-    `).run(userId, questionId);
+    `);
+    const result = await runQuery(stmt, userId, questionId);
 
     if (result.changes === 0) {
       return res.status(404).json({
@@ -110,11 +142,12 @@ const removeWrongQuestion = (req, res) => {
 };
 
 // 清空所有错题
-const clearWrongQuestions = (req, res) => {
+const clearWrongQuestions = async (req, res) => {
   try {
     const userId = req.userId;
 
-    db.prepare('DELETE FROM wrong_questions WHERE user_id = ?').run(userId);
+    const stmt = db.prepare('DELETE FROM wrong_questions WHERE user_id = ?');
+    await runQuery(stmt, userId);
 
     res.json({
       success: true,
