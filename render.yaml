@@ -1,6 +1,6 @@
 # Render 部署配置
 # 此文件用于在 Render 上一键部署 CV Learn 全栈应用
-# 访问 https://dashboard.render.com/ 并选择 "Blueprint" 部署
+# 确保使用 Node.js 运行时（非 Docker）
 
 services:
   # PostgreSQL 数据库
@@ -9,18 +9,18 @@ services:
     runtime: postgres
     plan: free
     region: singapore
-    ipAllowList: []  # 允许所有 IP 访问（仅用于开发，生产环境应限制）
+    ipAllowList: []
 
-  # 后端服务
+  # 后端服务 - 使用 Node.js 运行时
   - type: web
     name: cv-learn-backend
     runtime: node
     region: singapore
     plan: free
-    branch: main
+    branch: master
     rootDir: backend
     buildCommand: npm install
-    startCommand: npm start
+    startCommand: node server.js
     envVars:
       - key: NODE_ENV
         value: production
@@ -33,15 +33,13 @@ services:
       - key: DASHSCOPE_API_KEY
         sync: false
     healthCheckPath: /api/health
-    dependsOn:
-      - type: pserv
-        name: cv-learn-db
 
   # 前端静态站点
   - type: static
     name: cv-learn-frontend
     region: singapore
-    branch: main
+    plan: free
+    branch: master
     rootDir: frontend
     buildCommand: npm install && npm run build
     publishDir: dist
@@ -51,10 +49,3 @@ services:
           name: cv-learn-backend
           type: web
           envVarKey: RENDER_EXTERNAL_URL
-
-  # 可选：PostgreSQL 数据库（如果需要迁移）
-  # - type: pserv
-  #   name: cv-learn-db
-  #   runtime: postgres
-  #   plan: free
-  #   region: singapore
