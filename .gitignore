@@ -40,3 +40,7 @@ dist-ssr
 
 # OS files
 Thumbs.db
+
+# Scripts (保护题目生成脚本)
+backend/scripts/
+scripts/
