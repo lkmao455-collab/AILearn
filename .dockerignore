@@ -1,0 +1,27 @@
+# 忽略 node_modules（关键！避免复制 Windows 编译的二进制文件）
+backend/node_modules
+frontend/node_modules
+node_modules
+
+# 忽略日志和本地文件
+npm-debug.log
+.env
+.env.local
+
+# 忽略数据库文件（容器内会创建新的）
+backend/data/*.db
+backend/data/*.db-shm
+backend/data/*.db-wal
+
+# 忽略 git 和文档
+.git
+.gitignore
+README.md
+LICENSE
+
+# 忽略部署文件（它们不需要在容器内）
+render.yaml
+*.md
+
+# 忽略脚本（生成题目的脚本）
+backend/scripts
