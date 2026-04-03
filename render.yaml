@@ -29,4 +29,4 @@ services:
     staticPublishPath: ./dist
     envVars:
       - key: VITE_API_URL
-        value: https://cv-learn-backend.onrender.com
+        value: https://ailearn-8p3f.onrender.com/api
