@@ -1,19 +1,41 @@
  import { useState, useEffect, useCallback, useRef } from 'react'
 import { useAuth } from '../contexts/AuthContext'
+import { useTheme } from '../contexts/ThemeContext'
 import { checkAnswer, getRandomQuestion, getQuestionsByCategory, getWrongQuestions, removeWrongQuestion, getCategories } from '../api/quizApi'
 import QuizCard from '../components/QuizCard'
 import WrongQuestionsBook from '../components/WrongQuestionsBook'
 
 function QuizPage() {
   const { user } = useAuth()
+  const { appliedTheme } = useTheme()
+  const isDark = appliedTheme === 'dark'
   const [currentQuestion, setCurrentQuestion] = useState(null)
   const [selectedIndex, setSelectedIndex] = useState(null)
   const [result, setResult] = useState(null)
   const [loading, setLoading] = useState(false)
-  const [wrongQuestions, setWrongQuestions] = useState([])
-  const [stats, setStats] = useState({ correct: 0, wrong: 0, total: 0 })
+  // 错题本 - 从 localStorage 读取
+  const [wrongQuestions, setWrongQuestions] = useState(() => {
+    const saved = localStorage.getItem('quiz_wrong_questions')
+    return saved ? JSON.parse(saved) : []
+  })
   const [totalQuestions, setTotalQuestions] = useState(0)
   const [categoryStats, setCategoryStats] = useState({ topics: [], difficulties: [] })
+
+  // 做题统计 - 从 localStorage 读取
+  const [stats, setStats] = useState(() => {
+    const saved = localStorage.getItem('quiz_stats')
+    return saved ? JSON.parse(saved) : { correct: 0, wrong: 0, total: 0 }
+  })
+
+  // 做题统计变化时保存到 localStorage
+  useEffect(() => {
+    localStorage.setItem('quiz_stats', JSON.stringify(stats))
+  }, [stats])
+
+  // 错题本变化时保存到 localStorage
+  useEffect(() => {
+    localStorage.setItem('quiz_wrong_questions', JSON.stringify(wrongQuestions))
+  }, [wrongQuestions])
 
   // 分类筛选状态 - 从 localStorage 读取
   const [selectedTopic, setSelectedTopic] = useState(() => {
@@ -47,7 +69,19 @@ function QuizPage() {
   const loadWrongQuestions = async () => {
     try {
       const res = await getWrongQuestions()
-      setWrongQuestions(res.data || [])
+      const serverWrongQuestions = res.data || []
+      // 合并本地和后端的错题数据（以本地为主，避免覆盖）
+      setWrongQuestions(prev => {
+        const localWrongQuestions = prev || []
+        // 合并两个数组，去重（基于 id）
+        const merged = [...localWrongQuestions]
+        serverWrongQuestions.forEach(sq => {
+          if (!merged.find(mq => mq.id === sq.id)) {
+            merged.push(sq)
+          }
+        })
+        return merged
+      })
     } catch (error) {
       console.error('加载错题失败:', error)
     }
@@ -207,36 +241,50 @@ function QuizPage() {
             }}
           />
           {/* 统计信息 - 放在错题本下面 */}
-          <div className="bg-white rounded-xl shadow-md p-4 border border-slate-200">
-            <h3 className="text-sm font-medium text-slate-700 mb-3">📊 做题统计</h3>
+          <div className={`rounded-xl shadow-md p-4 border transition-colors duration-300 ${
+            isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'
+          }`}>
+            <h3 className={`text-sm font-medium mb-3 ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>📊 做题统计</h3>
             <div className="grid grid-cols-2 gap-3">
-              <div className="bg-slate-50 rounded-lg p-3 text-center">
-                <div className="text-xs text-slate-500 mb-1">已做题数</div>
-                <div className="text-xl font-bold text-slate-800">{stats.total}</div>
+              <div className={`rounded-lg p-3 text-center transition-colors duration-300 ${
+                isDark ? 'bg-slate-700/50' : 'bg-slate-50'
+              }`}>
+                <div className={`text-xs mb-1 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>已做题数</div>
+                <div className={`text-xl font-bold ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>{stats.total}</div>
               </div>
-              <div className="bg-slate-50 rounded-lg p-3 text-center">
-                <div className="text-xs text-slate-500 mb-1">未做题数</div>
-                <div className="text-xl font-bold text-orange-600">{Math.max(0, filteredQuestions.length - stats.total)}</div>
+              <div className={`rounded-lg p-3 text-center transition-colors duration-300 ${
+                isDark ? 'bg-slate-700/50' : 'bg-slate-50'
+              }`}>
+                <div className={`text-xs mb-1 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>未做题数</div>
+                <div className="text-xl font-bold text-orange-500">{Math.max(0, filteredQuestions.length - stats.total)}</div>
               </div>
-              <div className="bg-slate-50 rounded-lg p-3 text-center">
-                <div className="text-xs text-slate-500 mb-1">正确</div>
-                <div className="text-xl font-bold text-green-600">{stats.correct}</div>
+              <div className={`rounded-lg p-3 text-center transition-colors duration-300 ${
+                isDark ? 'bg-slate-700/50' : 'bg-slate-50'
+              }`}>
+                <div className={`text-xs mb-1 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>正确</div>
+                <div className="text-xl font-bold text-green-500">{stats.correct}</div>
               </div>
-              <div className="bg-slate-50 rounded-lg p-3 text-center">
-                <div className="text-xs text-slate-500 mb-1">错误</div>
-                <div className="text-xl font-bold text-red-600">{stats.wrong}</div>
+              <div className={`rounded-lg p-3 text-center transition-colors duration-300 ${
+                isDark ? 'bg-slate-700/50' : 'bg-slate-50'
+              }`}>
+                <div className={`text-xs mb-1 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>错误</div>
+                <div className="text-xl font-bold text-red-500">{stats.wrong}</div>
               </div>
             </div>
             {stats.total > 0 && (
-              <div className="mt-3 pt-3 border-t border-slate-100">
+              <div className={`mt-3 pt-3 border-t transition-colors duration-300 ${
+                isDark ? 'border-slate-700' : 'border-slate-100'
+              }`}>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-slate-500">正确率</span>
-                  <span className="text-lg font-bold text-blue-600">
+                  <span className={`text-sm ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>正确率</span>
+                  <span className="text-lg font-bold text-blue-500">
                     {((stats.correct / stats.total) * 100).toFixed(1)}%
                   </span>
                 </div>
-                <div className="mt-2 w-full bg-slate-200 rounded-full h-2">
-                  <div 
+                <div className={`mt-2 w-full rounded-full h-2 transition-colors duration-300 ${
+                  isDark ? 'bg-slate-700' : 'bg-slate-200'
+                }`}>
+                  <div
                     className="bg-blue-500 h-2 rounded-full transition-all duration-300"
                     style={{ width: `${(stats.correct / stats.total) * 100}%` }}
                   ></div>

@@ -1,9 +1,12 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { useTheme } from '../contexts/ThemeContext'
 import { register, login } from '../api/quizApi'
 
 function RegisterPage({ onLogin }) {
   const navigate = useNavigate()
+  const { appliedTheme } = useTheme()
+  const isDark = appliedTheme === 'dark'
   const [formData, setFormData] = useState({
     username: '',
     password: '',
@@ -61,7 +64,11 @@ function RegisterPage({ onLogin }) {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-blue-50 to-purple-50 flex items-center justify-center p-4">
+    <div className={`min-h-screen flex items-center justify-center p-4 transition-colors duration-300 ${
+      isDark
+        ? 'bg-slate-900'
+        : 'bg-gradient-to-br from-green-50 via-blue-50 to-purple-50'
+    }`}>
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
@@ -69,13 +76,19 @@ function RegisterPage({ onLogin }) {
             <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
               <span className="text-white font-bold text-lg">CV</span>
             </div>
-            <span className="text-2xl font-bold text-slate-800">CV Learn</span>
+            <span className={`text-2xl font-bold transition-colors duration-300 ${
+              isDark ? 'text-slate-100' : 'text-slate-800'
+            }`}>CV Learn</span>
           </Link>
-          <p className="text-slate-500 mt-2">机器视觉 AI 学习平台</p>
+          <p className={`mt-2 transition-colors duration-300 ${
+            isDark ? 'text-slate-400' : 'text-slate-500'
+          }`}>机器视觉 AI 学习平台</p>
         </div>
 
         {/* 注册表单 */}
-        <div className="bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
+        <div className={`rounded-2xl shadow-xl border overflow-hidden transition-colors duration-300 ${
+          isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'
+        }`}>
           <div className="px-8 py-6 bg-gradient-to-r from-green-500 to-blue-600">
             <h2 className="text-2xl font-bold text-white text-center">创建账户</h2>
             <p className="text-white/80 text-center mt-1">加入我们，开始学习</p>
@@ -83,13 +96,17 @@ function RegisterPage({ onLogin }) {
 
           <form onSubmit={handleSubmit} className="p-8 space-y-5">
             {error && (
-              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm">
+              <div className={`px-4 py-3 rounded-xl text-sm border ${
+                isDark ? 'bg-red-900/30 border-red-700 text-red-300' : 'bg-red-50 border-red-200 text-red-700'
+              }`}>
                 {error}
               </div>
             )}
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className={`block text-sm font-medium mb-2 transition-colors duration-300 ${
+                isDark ? 'text-slate-300' : 'text-slate-700'
+              }`}>
                 用户名
               </label>
               <input
@@ -97,14 +114,20 @@ function RegisterPage({ onLogin }) {
                 name="username"
                 value={formData.username}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all outline-none"
+                className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all outline-none ${
+                  isDark
+                    ? 'bg-slate-700 border-slate-600 text-white placeholder-slate-400'
+                    : 'bg-white border-slate-300 text-slate-900'
+                }`}
                 placeholder="请输入用户名"
                 disabled={loading}
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className={`block text-sm font-medium mb-2 transition-colors duration-300 ${
+                isDark ? 'text-slate-300' : 'text-slate-700'
+              }`}>
                 密码
               </label>
               <input
@@ -112,14 +135,20 @@ function RegisterPage({ onLogin }) {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all outline-none"
+                className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all outline-none ${
+                  isDark
+                    ? 'bg-slate-700 border-slate-600 text-white placeholder-slate-400'
+                    : 'bg-white border-slate-300 text-slate-900'
+                }`}
                 placeholder="请输入密码（至少 6 位）"
                 disabled={loading}
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className={`block text-sm font-medium mb-2 transition-colors duration-300 ${
+                isDark ? 'text-slate-300' : 'text-slate-700'
+              }`}>
                 确认密码
               </label>
               <input
@@ -127,7 +156,11 @@ function RegisterPage({ onLogin }) {
                 name="confirmPassword"
                 value={formData.confirmPassword}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all outline-none"
+                className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all outline-none ${
+                  isDark
+                    ? 'bg-slate-700 border-slate-600 text-white placeholder-slate-400'
+                    : 'bg-white border-slate-300 text-slate-900'
+                }`}
                 placeholder="请再次输入密码"
                 disabled={loading}
               />
@@ -138,7 +171,7 @@ function RegisterPage({ onLogin }) {
               disabled={loading}
               className={`w-full py-3 rounded-xl font-medium transition-all duration-200 ${
                 loading
-                  ? 'bg-slate-300 text-slate-500 cursor-not-allowed'
+                  ? (isDark ? 'bg-slate-700 text-slate-500 cursor-not-allowed' : 'bg-slate-300 text-slate-500 cursor-not-allowed')
                   : 'bg-gradient-to-r from-green-500 to-blue-600 text-white hover:from-green-600 hover:to-blue-700 shadow-md hover:shadow-lg'
               }`}
             >
@@ -156,10 +189,14 @@ function RegisterPage({ onLogin }) {
             </button>
           </form>
 
-          <div className="px-8 py-4 bg-slate-50 border-t border-slate-200 text-center">
-            <p className="text-sm text-slate-600">
+          <div className={`px-8 py-4 border-t text-center transition-colors duration-300 ${
+            isDark ? 'bg-slate-700/50 border-slate-700' : 'bg-slate-50 border-slate-200'
+          }`}>
+            <p className={`text-sm transition-colors duration-300 ${
+              isDark ? 'text-slate-300' : 'text-slate-600'
+            }`}>
               已有账户？{' '}
-              <Link to="/login" className="text-green-600 hover:text-green-700 font-medium">
+              <Link to="/login" className="text-green-500 hover:text-green-400 font-medium">
                 立即登录
               </Link>
             </p>

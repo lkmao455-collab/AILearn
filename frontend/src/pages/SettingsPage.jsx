@@ -1,7 +1,48 @@
 import { useState, useEffect } from 'react'
 import { testApiKeyConnection, generateQuestionByAI } from '../api/quizApi'
+import { useTheme } from '../contexts/ThemeContext'
 
 function SettingsPage() {
+  const { theme, setTheme, appliedTheme } = useTheme()
+  const isDark = appliedTheme === 'dark'
+
+  // 主题选项配置 - 确保高对比度
+  const themeOptions = [
+    {
+      value: 'light',
+      label: '浅色模式',
+      icon: '☀️',
+      description: '明亮的界面风格',
+      selectedBg: 'bg-blue-500',
+      selectedBorder: 'border-blue-600',
+      unselectedBg: 'bg-slate-100',
+      unselectedBorder: 'border-slate-300',
+      unselectedText: 'text-slate-700'
+    },
+    {
+      value: 'dark',
+      label: '深色模式',
+      icon: '🌙',
+      description: '暗色的界面风格',
+      selectedBg: 'bg-indigo-500',
+      selectedBorder: 'border-indigo-400',
+      unselectedBg: 'bg-slate-800',
+      unselectedBorder: 'border-slate-600',
+      unselectedText: 'text-slate-200'
+    },
+    {
+      value: 'system',
+      label: '跟随系统',
+      icon: '🖥️',
+      description: '自动切换浅色/深色',
+      selectedBg: 'bg-purple-500',
+      selectedBorder: 'border-purple-600',
+      unselectedBg: 'bg-slate-100',
+      unselectedBorder: 'border-slate-300',
+      unselectedText: 'text-slate-700'
+    }
+  ]
+
   const [apiKey, setApiKey] = useState('')
   const [saved, setSaved] = useState(false)
   const [error, setError] = useState('')
@@ -242,9 +283,15 @@ function SettingsPage() {
   }
 
   const difficultyColors = {
-    easy: 'bg-green-100 text-green-700 border-green-300 hover:bg-green-200',
-    medium: 'bg-yellow-100 text-yellow-700 border-yellow-300 hover:bg-yellow-200',
-    hard: 'bg-red-100 text-red-700 border-red-300 hover:bg-red-200'
+    easy: isDark
+      ? 'bg-green-900/50 text-green-300 border-green-700 hover:bg-green-900/70'
+      : 'bg-green-100 text-green-700 border-green-300 hover:bg-green-200',
+    medium: isDark
+      ? 'bg-yellow-900/50 text-yellow-300 border-yellow-700 hover:bg-yellow-900/70'
+      : 'bg-yellow-100 text-yellow-700 border-yellow-300 hover:bg-yellow-200',
+    hard: isDark
+      ? 'bg-red-900/50 text-red-300 border-red-700 hover:bg-red-900/70'
+      : 'bg-red-100 text-red-700 border-red-300 hover:bg-red-200'
   }
 
   const difficultyColorsSelected = {
@@ -254,9 +301,100 @@ function SettingsPage() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
+    <div className={`max-w-2xl mx-auto space-y-6 ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>
+      {/* 主题设置 */}
+      <div className={`rounded-2xl shadow-lg border overflow-hidden transition-colors duration-300 ${
+        isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'
+      }`}>
+        {/* 头部 */}
+        <div className="bg-gradient-to-r from-indigo-500 to-purple-500 px-6 py-4">
+          <h1 className="text-2xl font-bold text-white">🎨 外观设置</h1>
+          <p className="text-indigo-100 text-sm mt-1">选择你喜欢的界面主题</p>
+        </div>
+
+        {/* 内容 */}
+        <div className="p-6 space-y-6">
+          {/* 当前主题显示 */}
+          <div className={`rounded-xl p-4 border transition-colors duration-300 ${
+            isDark ? 'bg-slate-700/50 border-slate-600' : 'bg-slate-50 border-slate-200'
+          }`}>
+            <h3 className={`font-medium mb-3 ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>当前主题</h3>
+            <div className="flex flex-wrap gap-2">
+              <span className={`px-3 py-1 rounded-full text-sm ${
+                theme === 'system'
+                  ? (isDark ? 'bg-purple-500/30 text-purple-300' : 'bg-purple-100 text-purple-700')
+                  : (appliedTheme === 'dark'
+                      ? 'bg-indigo-500/30 text-indigo-300'
+                      : 'bg-blue-100 text-blue-700')
+              }`}>
+                {theme === 'system' ? '跟随系统' : (appliedTheme === 'dark' ? '深色模式' : '浅色模式')}
+                {theme === 'system' && ` (${appliedTheme === 'dark' ? '当前深色' : '当前浅色'})`}
+              </span>
+            </div>
+          </div>
+
+          {/* 主题选择 */}
+          <div>
+            <label className={`block text-sm font-medium mb-4 ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+              选择主题
+            </label>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {themeOptions.map((option) => {
+                const isSelected = theme === option.value
+                return (
+                  <button
+                    key={option.value}
+                    onClick={() => setTheme(option.value)}
+                    className={`relative p-4 rounded-xl border-2 transition-all duration-200 text-left group ${
+                      isSelected
+                        ? `${option.selectedBg} border-transparent shadow-lg shadow-${option.selectedBg.split('-')[1]}-500/30`
+                        : `${option.unselectedBg} ${option.unselectedBorder} ${option.unselectedText} hover:border-opacity-70`
+                    } ${isDark && !isSelected && option.value !== 'system' ? 'bg-slate-800 border-slate-600 text-slate-200' : ''}`}
+                  >
+                    {/* 选中标记 */}
+                    {isSelected && (
+                      <div className="absolute top-2 right-2 w-6 h-6 bg-white rounded-full flex items-center justify-center shadow-md">
+                        <svg className="w-4 h-4 text-indigo-600" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                      </div>
+                    )}
+
+                    <div className="flex items-center space-x-3">
+                      <span className="text-2xl">{option.icon}</span>
+                      <div>
+                        <div className={`font-semibold ${isSelected ? 'text-white' : (isDark ? 'text-slate-200' : 'text-slate-800')}`}>
+                          {option.label}
+                        </div>
+                        <div className={`text-xs mt-0.5 ${isSelected ? 'text-white/80' : (isDark ? 'text-slate-400' : 'text-slate-500')}`}>
+                          {option.description}
+                        </div>
+                      </div>
+                    </div>
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+
+          {/* 提示信息 */}
+          <div className={`rounded-xl p-4 border transition-colors duration-300 ${
+            isDark ? 'bg-blue-900/30 border-blue-700 text-blue-200' : 'bg-blue-50 border-blue-200 text-blue-700'
+          }`}>
+            <h3 className="font-medium mb-2">💡 主题说明</h3>
+            <ul className="space-y-1 text-sm">
+              <li>• <strong>浅色模式</strong>：适合光线充足的环境，提供清晰的阅读体验</li>
+              <li>• <strong>深色模式</strong>：适合低光环境，减少眼睛疲劳</li>
+              <li>• <strong>跟随系统</strong>：自动根据操作系统设置切换主题</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
       {/* 题目类型设置 */}
-      <div className="bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden">
+      <div className={`rounded-2xl shadow-lg border overflow-hidden transition-colors duration-300 ${
+        isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'
+      }`}>
         {/* 头部 */}
         <div className="bg-gradient-to-r from-blue-500 to-cyan-500 px-6 py-4">
           <h1 className="text-2xl font-bold text-white">📚 题目类型设置</h1>
@@ -266,13 +404,19 @@ function SettingsPage() {
         {/* 内容 */}
         <div className="p-6 space-y-6">
           {/* 当前设置显示 */}
-          <div className="bg-slate-50 rounded-xl p-4 border border-slate-200">
-            <h3 className="font-medium text-slate-800 mb-3">当前设置</h3>
+          <div className={`rounded-xl p-4 border transition-colors duration-300 ${
+            isDark ? 'bg-slate-700/50 border-slate-600' : 'bg-slate-50 border-slate-200'
+          }`}>
+            <h3 className={`font-medium mb-3 ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>当前设置</h3>
             <div className="flex flex-wrap gap-2">
-              <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">
+              <span className={`px-3 py-1 rounded-full text-sm ${
+                isDark ? 'bg-blue-500/30 text-blue-300' : 'bg-blue-100 text-blue-700'
+              }`}>
                 知识点: {selectedTopic || '全部'}
               </span>
-              <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm">
+              <span className={`px-3 py-1 rounded-full text-sm ${
+                isDark ? 'bg-purple-500/30 text-purple-300' : 'bg-purple-100 text-purple-700'
+              }`}>
                 难度: {selectedDifficulty === 'easy' ? '简单' : selectedDifficulty === 'medium' ? '中等' : selectedDifficulty === 'hard' ? '困难' : '全部'}
               </span>
             </div>
@@ -280,14 +424,16 @@ function SettingsPage() {
 
           {/* Topic 筛选 */}
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-3">知识点类型</label>
+            <label className={`block text-sm font-medium mb-3 ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>知识点类型</label>
             <div className="flex flex-wrap gap-2">
               <button
                 onClick={() => handleTopicChange(null)}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-all border ${
                   selectedTopic === null
                     ? 'bg-blue-500 text-white border-blue-600'
-                    : 'bg-slate-100 text-slate-600 border-slate-200 hover:bg-slate-200'
+                    : isDark
+                      ? 'bg-slate-700 text-slate-300 border-slate-600 hover:bg-slate-600'
+                      : 'bg-slate-100 text-slate-600 border-slate-200 hover:bg-slate-200'
                 }`}
               >
                 全部
@@ -299,7 +445,9 @@ function SettingsPage() {
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-all border ${
                     selectedTopic === topic.topic
                       ? 'bg-blue-500 text-white border-blue-600'
-                      : 'bg-slate-100 text-slate-600 border-slate-200 hover:bg-slate-200'
+                      : isDark
+                        ? 'bg-slate-700 text-slate-300 border-slate-600 hover:bg-slate-600'
+                        : 'bg-slate-100 text-slate-600 border-slate-200 hover:bg-slate-200'
                   }`}
                 >
                   {topic.topic} ({topic.count})
@@ -310,14 +458,16 @@ function SettingsPage() {
 
           {/* Difficulty 筛选 */}
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-3">难度级别</label>
+            <label className={`block text-sm font-medium mb-3 ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>难度级别</label>
             <div className="flex flex-wrap gap-2">
               <button
                 onClick={() => handleDifficultyChange(null)}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-all border ${
                   selectedDifficulty === null
                     ? 'bg-slate-800 text-white border-slate-900'
-                    : 'bg-slate-100 text-slate-600 border-slate-200 hover:bg-slate-200'
+                    : isDark
+                      ? 'bg-slate-700 text-slate-300 border-slate-600 hover:bg-slate-600'
+                      : 'bg-slate-100 text-slate-600 border-slate-200 hover:bg-slate-200'
                 }`}
               >
                 全部
@@ -342,36 +492,42 @@ function SettingsPage() {
           {(selectedTopic || selectedDifficulty) && (
             <button
               onClick={handleClearFilter}
-              className="text-sm text-slate-500 hover:text-slate-700 underline"
+              className={`text-sm underline transition-colors ${
+                isDark ? 'text-slate-400 hover:text-slate-200' : 'text-slate-500 hover:text-slate-700'
+              }`}
             >
               清除筛选
             </button>
           )}
 
           {/* 提示信息 */}
-          <div className="bg-amber-50 rounded-xl p-4 border border-amber-200">
-            <h3 className="font-medium text-amber-800 mb-2">⚠️ 切换提示</h3>
-            <p className="text-sm text-amber-700">
+          <div className={`rounded-xl p-4 border transition-colors duration-300 ${
+            isDark ? 'bg-amber-900/30 border-amber-700 text-amber-200' : 'bg-amber-50 border-amber-200 text-amber-800'
+          }`}>
+            <h3 className="font-medium mb-2">⚠️ 切换提示</h3>
+            <p className="text-sm">
               切换题目类型需要验证，请输入"我真的已经学会当前题型了"才能切换。
               这是为了帮助你保持专注，避免频繁切换题目类型。
             </p>
           </div>
 
           {/* AI 生成新题按钮 */}
-          <div className="pt-4 border-t border-slate-200">
+          <div className={`pt-4 border-t transition-colors duration-300 ${
+            isDark ? 'border-slate-700' : 'border-slate-200'
+          }`}>
             <button
               onClick={openAIGenerateDialog}
               disabled={aiGenerateLoading}
               className={`w-full px-6 py-3 rounded-xl font-medium transition-all duration-200 flex items-center justify-center space-x-2 ${
                 aiGenerateLoading
-                  ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
+                  ? 'bg-slate-700 text-slate-400 cursor-not-allowed'
                   : 'bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600 shadow-md hover:shadow-lg'
               }`}
             >
               <span>✨</span>
               <span>{aiGenerateLoading ? 'AI 出题中...' : 'AI 生成新题'}</span>
             </button>
-            <p className="text-xs text-slate-500 text-center mt-2">
+            <p className={`text-xs text-center mt-2 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
               使用 AI 根据当前设置生成新题目
             </p>
           </div>
@@ -379,7 +535,9 @@ function SettingsPage() {
       </div>
 
       {/* API Key 设置 */}
-      <div className="bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden">
+      <div className={`rounded-2xl shadow-lg border overflow-hidden transition-colors duration-300 ${
+        isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'
+      }`}>
         {/* 头部 */}
         <div className="bg-gradient-to-r from-purple-500 to-pink-500 px-6 py-4">
           <h1 className="text-2xl font-bold text-white">⚙️ AI 解析设置</h1>
@@ -390,7 +548,7 @@ function SettingsPage() {
         <div className="p-6 space-y-6">
           {/* API Key 配置 */}
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2">
+            <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
               DashScope API Key
             </label>
             <div className="space-y-3">
@@ -399,7 +557,11 @@ function SettingsPage() {
                 value={apiKey}
                 onChange={(e) => setApiKey(e.target.value)}
                 placeholder="sk-xxxxxxxxxxxxxxxx"
-                className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all"
+                className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all ${
+                  isDark
+                    ? 'bg-slate-700 border-slate-600 text-white placeholder-slate-400'
+                    : 'bg-white border-slate-300 text-slate-900'
+                }`}
               />
               <div className="flex space-x-3">
                 <button
@@ -423,7 +585,11 @@ function SettingsPage() {
                     </button>
                     <button
                       onClick={handleClear}
-                      className="px-6 py-3 bg-slate-200 text-slate-700 rounded-xl font-medium hover:bg-slate-300 transition-all"
+                      className={`px-6 py-3 rounded-xl font-medium transition-all ${
+                        isDark
+                          ? 'bg-slate-700 text-slate-300 hover:bg-slate-600'
+                          : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
+                      }`}
                     >
                       清除配置
                     </button>
@@ -434,8 +600,10 @@ function SettingsPage() {
 
             {/* 状态提示 */}
             {saved && (
-              <div className="mt-3 p-3 bg-green-50 border border-green-200 rounded-xl">
-                <p className="text-green-700 text-sm flex items-center">
+              <div className={`mt-3 p-3 border rounded-xl ${
+                isDark ? 'bg-green-900/30 border-green-700' : 'bg-green-50 border-green-200'
+              }`}>
+                <p className={`text-sm flex items-center ${isDark ? 'text-green-300' : 'text-green-700'}`}>
                   <span className="mr-2">✅</span>
                   API Key 已保存到本地浏览器
                 </p>
@@ -443,8 +611,10 @@ function SettingsPage() {
             )}
 
             {error && (
-              <div className="mt-3 p-3 bg-red-50 border border-red-200 rounded-xl">
-                <p className="text-red-700 text-sm flex items-center">
+              <div className={`mt-3 p-3 border rounded-xl ${
+                isDark ? 'bg-red-900/30 border-red-700' : 'bg-red-50 border-red-200'
+              }`}>
+                <p className={`text-sm flex items-center ${isDark ? 'text-red-300' : 'text-red-700'}`}>
                   <span className="mr-2">❌</span>
                   {error}
                 </p>
@@ -455,8 +625,8 @@ function SettingsPage() {
             {testLog && (
               <div className={`mt-4 p-4 rounded-xl border font-mono text-sm whitespace-pre-wrap ${
                 testLog.includes('✅')
-                  ? 'bg-green-50 border-green-300 text-green-800'
-                  : 'bg-red-50 border-red-300 text-red-800'
+                  ? (isDark ? 'bg-green-900/30 border-green-600 text-green-200' : 'bg-green-50 border-green-300 text-green-800')
+                  : (isDark ? 'bg-red-900/30 border-red-600 text-red-200' : 'bg-red-50 border-red-300 text-red-800')
               }`}>
                 <p className="font-semibold mb-2">📋 测试日志：</p>
                 {testLog}
@@ -465,10 +635,12 @@ function SettingsPage() {
           </div>
 
           {/* 获取 API Key 指引 */}
-          <div className="bg-slate-50 rounded-xl p-4 border border-slate-200">
-            <h3 className="font-medium text-slate-800 mb-2">📖 如何获取 API Key？</h3>
-            <ol className="space-y-2 text-sm text-slate-600">
-              <li>1. 访问 <a href="https://dashscope.console.aliyun.com/" target="_blank" rel="noopener noreferrer" className="text-purple-600 hover:underline">阿里云 DashScope 控制台</a></li>
+          <div className={`rounded-xl p-4 border transition-colors duration-300 ${
+            isDark ? 'bg-slate-700/50 border-slate-600' : 'bg-slate-50 border-slate-200'
+          }`}>
+            <h3 className={`font-medium mb-2 ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>📖 如何获取 API Key？</h3>
+            <ol className={`space-y-2 text-sm ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+              <li>1. 访问 <a href="https://dashscope.console.aliyun.com/" target="_blank" rel="noopener noreferrer" className="text-purple-400 hover:underline">阿里云 DashScope 控制台</a></li>
               <li>2. 登录/注册阿里云账号</li>
               <li>3. 开通"模型服务"（通义千问）</li>
               <li>4. 在"API-KEY 管理"页面创建新的 API Key</li>
@@ -477,9 +649,11 @@ function SettingsPage() {
           </div>
 
           {/* 安全提示 */}
-          <div className="bg-amber-50 rounded-xl p-4 border border-amber-200">
-            <h3 className="font-medium text-amber-800 mb-2">🔒 安全提示</h3>
-            <ul className="space-y-1 text-sm text-amber-700">
+          <div className={`rounded-xl p-4 border transition-colors duration-300 ${
+            isDark ? 'bg-amber-900/30 border-amber-700 text-amber-200' : 'bg-amber-50 border-amber-200 text-amber-800'
+          }`}>
+            <h3 className="font-medium mb-2">🔒 安全提示</h3>
+            <ul className="space-y-1 text-sm">
               <li>• 你的 API Key 只存储在本地浏览器，不会上传到服务器</li>
               <li>• 每次调用 AI 解析时，API Key 会直接发送给阿里云 DashScope 服务</li>
               <li>• 请妥善保管你的 API Key，不要分享给他人</li>
@@ -488,9 +662,11 @@ function SettingsPage() {
           </div>
 
           {/* 使用说明 */}
-          <div className="bg-blue-50 rounded-xl p-4 border border-blue-200">
-            <h3 className="font-medium text-blue-800 mb-2">💡 使用说明</h3>
-            <ul className="space-y-1 text-sm text-blue-700">
+          <div className={`rounded-xl p-4 border transition-colors duration-300 ${
+            isDark ? 'bg-blue-900/30 border-blue-700 text-blue-200' : 'bg-blue-50 border-blue-200 text-blue-700'
+          }`}>
+            <h3 className="font-medium mb-2">💡 使用说明</h3>
+            <ul className="space-y-1 text-sm">
               <li>• 配置 API Key 后，在刷题页面可以使用"AI 详细解析"功能</li>
               <li>• AI 解析使用阿里云通义千问（Qwen3.5-Plus）模型</li>
               <li>• 每次解析约消耗少量 token，费用低廉</li>
@@ -503,42 +679,54 @@ function SettingsPage() {
       {/* 验证对话框 */}
       {showVerifyDialog && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 p-6">
+          <div className={`rounded-2xl shadow-2xl w-full max-w-md mx-4 p-6 transition-colors duration-300 ${
+            isDark ? 'bg-slate-800' : 'bg-white'
+          }`}>
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-bold text-slate-900">⚠️ 确认切换</h3>
+              <h3 className={`text-xl font-bold ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>⚠️ 确认切换</h3>
               <button
                 onClick={() => setShowVerifyDialog(false)}
-                className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
+                className={`p-2 rounded-lg transition-colors ${
+                  isDark ? 'hover:bg-slate-700' : 'hover:bg-slate-100'
+                }`}
               >
-                <svg className="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className={`w-5 h-5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
             </div>
 
             <div className="space-y-4">
-              <div className="bg-amber-50 rounded-xl p-4 border border-amber-200">
-                <p className="text-amber-800 text-sm">
+              <div className={`rounded-xl p-4 border transition-colors duration-300 ${
+                isDark ? 'bg-amber-900/30 border-amber-700 text-amber-200' : 'bg-amber-50 border-amber-200 text-amber-800'
+              }`}>
+                <p className="text-sm">
                   为了提高专注力，切换题目类型需要验证。
                 </p>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
                   请输入以下文字以确认切换：
                 </label>
-                <div className="bg-slate-100 rounded-lg p-3 mb-2">
-                  <code className="text-slate-800 font-medium">我真的已经学会当前题型了</code>
+                <div className={`rounded-lg p-3 mb-2 ${
+                  isDark ? 'bg-slate-700 text-slate-200' : 'bg-slate-100 text-slate-800'
+                }`}>
+                  <code className="font-medium">我真的已经学会当前题型了</code>
                 </div>
                 <input
                   type="text"
                   value={verifyText}
                   onChange={(e) => setVerifyText(e.target.value)}
                   placeholder="请输入上方文字"
-                  className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                  className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all ${
+                    isDark
+                      ? 'bg-slate-700 border-slate-600 text-white placeholder-slate-400'
+                      : 'bg-white border-slate-300 text-slate-900'
+                  }`}
                 />
                 {verifyError && (
-                  <p className="text-red-500 text-sm mt-2">{verifyError}</p>
+                  <p className="text-red-400 text-sm mt-2">{verifyError}</p>
                 )}
               </div>
             </div>
@@ -546,7 +734,11 @@ function SettingsPage() {
             <div className="flex space-x-3 mt-6">
               <button
                 onClick={() => setShowVerifyDialog(false)}
-                className="flex-1 px-4 py-3 border border-slate-300 text-slate-700 rounded-xl hover:bg-slate-50 transition-colors font-medium"
+                className={`flex-1 px-4 py-3 border rounded-xl transition-colors font-medium ${
+                  isDark
+                    ? 'border-slate-600 text-slate-300 hover:bg-slate-700'
+                    : 'border-slate-300 text-slate-700 hover:bg-slate-50'
+                }`}
               >
                 取消
               </button>
@@ -564,14 +756,18 @@ function SettingsPage() {
       {/* AI 生成题目对话框 */}
       {showAIGenerateDialog && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 p-6">
+          <div className={`rounded-2xl shadow-2xl w-full max-w-md mx-4 p-6 transition-colors duration-300 ${
+            isDark ? 'bg-slate-800' : 'bg-white'
+          }`}>
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-bold text-slate-900">✨ AI 生成新题</h3>
+              <h3 className={`text-xl font-bold ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>✨ AI 生成新题</h3>
               <button
                 onClick={() => setShowAIGenerateDialog(false)}
-                className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
+                className={`p-2 rounded-lg transition-colors ${
+                  isDark ? 'hover:bg-slate-700' : 'hover:bg-slate-100'
+                }`}
               >
-                <svg className="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className={`w-5 h-5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
@@ -580,11 +776,15 @@ function SettingsPage() {
             <div className="space-y-4">
               {/* 题目类型 */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">题目类型</label>
+                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>题目类型</label>
                 <select
                   value={aiGenerateParams.topic}
                   onChange={(e) => setAiGenerateParams({ ...aiGenerateParams, topic: e.target.value })}
-                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent ${
+                    isDark
+                      ? 'bg-slate-700 border-slate-600 text-white'
+                      : 'bg-white border-slate-300'
+                  }`}
                 >
                   <option value="">随机类型</option>
                   {categories.topics.map((topic) => (
@@ -595,7 +795,7 @@ function SettingsPage() {
 
               {/* 难度 */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">难度</label>
+                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>难度</label>
                 <div className="flex space-x-2">
                   {['easy', 'medium', 'hard'].map((diff) => (
                     <button
@@ -604,7 +804,9 @@ function SettingsPage() {
                       className={`flex-1 px-4 py-2 rounded-lg border transition-colors ${
                         aiGenerateParams.difficulty === diff
                           ? 'bg-purple-600 text-white border-purple-600'
-                          : 'bg-white text-slate-700 border-slate-300 hover:border-purple-400'
+                          : isDark
+                            ? 'bg-slate-700 text-slate-300 border-slate-600 hover:border-purple-400'
+                            : 'bg-white text-slate-700 border-slate-300 hover:border-purple-400'
                       }`}
                     >
                       {diff === 'easy' ? '简单' : diff === 'medium' ? '中等' : '困难'}
@@ -615,13 +817,17 @@ function SettingsPage() {
 
               {/* 数量 */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">生成数量</label>
+                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>生成数量</label>
                 <div className="flex items-center space-x-3">
                   <button
                     onClick={() => setAiGenerateParams({ ...aiGenerateParams, count: Math.max(1, aiGenerateParams.count - 1) })}
-                    className="w-10 h-10 flex items-center justify-center border border-slate-300 rounded-lg hover:bg-slate-50"
+                    className={`w-10 h-10 flex items-center justify-center border rounded-lg transition-colors ${
+                      isDark
+                        ? 'border-slate-600 hover:bg-slate-700'
+                        : 'border-slate-300 hover:bg-slate-50'
+                    }`}
                   >
-                    <svg className="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className={`w-4 h-4 ${isDark ? 'text-slate-300' : 'text-slate-600'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
                     </svg>
                   </button>
@@ -631,30 +837,36 @@ function SettingsPage() {
                     max="10"
                     value={aiGenerateParams.count}
                     onChange={(e) => setAiGenerateParams({ ...aiGenerateParams, count: Math.min(10, Math.max(1, parseInt(e.target.value) || 1)) })}
-                    className="w-20 text-center px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    className={`w-20 text-center px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent ${
+                      isDark
+                        ? 'bg-slate-700 border-slate-600 text-white'
+                        : 'bg-white border-slate-300'
+                    }`}
                   />
                   <button
                     onClick={() => setAiGenerateParams({ ...aiGenerateParams, count: Math.min(10, aiGenerateParams.count + 1) })}
-                    className="w-10 h-10 flex items-center justify-center border border-slate-300 rounded-lg hover:bg-slate-50"
+                    className={`w-10 h-10 flex items-center justify-center border rounded-lg transition-colors ${
+                      isDark
+                        ? 'border-slate-600 hover:bg-slate-700'
+                        : 'border-slate-300 hover:bg-slate-50'
+                    }`}
                   >
-                    <svg className="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className={`w-4 h-4 ${isDark ? 'text-slate-300' : 'text-slate-600'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                     </svg>
                   </button>
                 </div>
-                <p className="text-xs text-slate-500 mt-1">最多可生成 10 道题目</p>
+                <p className={`text-xs mt-1 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>最多可生成 10 道题目</p>
               </div>
 
               {/* 生成结果 */}
               {aiGenerateResult && (
                 <div className={`p-4 rounded-xl border ${
                   aiGenerateResult.success
-                    ? 'bg-green-50 border-green-200'
-                    : 'bg-red-50 border-red-200'
+                    ? (isDark ? 'bg-green-900/30 border-green-700 text-green-200' : 'bg-green-50 border-green-200 text-green-700')
+                    : (isDark ? 'bg-red-900/30 border-red-700 text-red-200' : 'bg-red-50 border-red-200 text-red-700')
                 }`}>
-                  <p className={`text-sm ${
-                    aiGenerateResult.success ? 'text-green-700' : 'text-red-700'
-                  }`}>
+                  <p className="text-sm">
                     {aiGenerateResult.success ? '✅' : '❌'} {aiGenerateResult.message}
                   </p>
                 </div>
@@ -664,7 +876,11 @@ function SettingsPage() {
             <div className="flex space-x-3 mt-6">
               <button
                 onClick={() => setShowAIGenerateDialog(false)}
-                className="flex-1 px-4 py-2 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors"
+                className={`flex-1 px-4 py-2 border rounded-lg transition-colors ${
+                  isDark
+                    ? 'border-slate-600 text-slate-300 hover:bg-slate-700'
+                    : 'border-slate-300 text-slate-700 hover:bg-slate-50'
+                }`}
               >
                 取消
               </button>

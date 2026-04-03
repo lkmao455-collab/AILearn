@@ -1,10 +1,13 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
+import { useTheme } from '../contexts/ThemeContext'
 
 function Navbar() {
   const location = useLocation()
   const navigate = useNavigate()
   const { user, logout } = useAuth()
+  const { appliedTheme } = useTheme()
+  const isDark = appliedTheme === 'dark'
 
   const handleLogout = () => {
     logout()
@@ -18,7 +21,9 @@ function Navbar() {
   }
 
   return (
-    <nav className="bg-white shadow-md border-b border-slate-200">
+    <nav className={`shadow-md border-b transition-colors duration-300 ${
+      isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'
+    }`}>
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center space-x-8">
@@ -26,15 +31,17 @@ function Navbar() {
               <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-700 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-sm">CV</span>
               </div>
-              <span className="text-xl font-bold text-slate-800">CV Learn</span>
+              <span className={`text-xl font-bold transition-colors duration-300 ${
+                isDark ? 'text-slate-100' : 'text-slate-800'
+              }`}>CV Learn</span>
             </Link>
             <div className="flex space-x-2">
               <Link
                 to="/"
                 className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
                   location.pathname === '/'
-                    ? 'bg-blue-50 text-blue-600'
-                    : 'text-slate-600 hover:bg-slate-50'
+                    ? (isDark ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-50 text-blue-600')
+                    : (isDark ? 'text-slate-300 hover:bg-slate-700' : 'text-slate-600 hover:bg-slate-50')
                 }`}
               >
                 📚 刷题练习
@@ -43,8 +50,8 @@ function Navbar() {
                 to="/wrong"
                 className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
                   location.pathname === '/wrong'
-                    ? 'bg-blue-50 text-blue-600'
-                    : 'text-slate-600 hover:bg-slate-50'
+                    ? (isDark ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-50 text-blue-600')
+                    : (isDark ? 'text-slate-300 hover:bg-slate-700' : 'text-slate-600 hover:bg-slate-50')
                 }`}
               >
                 📖 错题本
@@ -53,8 +60,8 @@ function Navbar() {
                 to="/rank"
                 className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
                   location.pathname === '/rank'
-                    ? 'bg-blue-50 text-blue-600'
-                    : 'text-slate-600 hover:bg-slate-50'
+                    ? (isDark ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-50 text-blue-600')
+                    : (isDark ? 'text-slate-300 hover:bg-slate-700' : 'text-slate-600 hover:bg-slate-50')
                 }`}
               >
                 🏆 排行榜
@@ -63,8 +70,8 @@ function Navbar() {
                 to="/settings"
                 className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
                   location.pathname === '/settings'
-                    ? 'bg-purple-50 text-purple-600'
-                    : 'text-slate-600 hover:bg-slate-50'
+                    ? (isDark ? 'bg-purple-500/20 text-purple-400' : 'bg-purple-50 text-purple-600')
+                    : (isDark ? 'text-slate-300 hover:bg-slate-700' : 'text-slate-600 hover:bg-slate-50')
                 }`}
               >
                 ⚙️ 设置
@@ -79,13 +86,21 @@ function Navbar() {
                     {getAvatarLetter()}
                   </div>
                   <div className="text-sm">
-                    <p className="font-medium text-slate-700">{user.username}</p>
-                    <p className="text-xs text-slate-400">在线学习</p>
+                    <p className={`font-medium transition-colors duration-300 ${
+                      isDark ? 'text-slate-200' : 'text-slate-700'
+                    }`}>{user.username}</p>
+                    <p className={`text-xs transition-colors duration-300 ${
+                      isDark ? 'text-slate-400' : 'text-slate-400'
+                    }`}>在线学习</p>
                   </div>
                 </div>
                 <button
                   onClick={handleLogout}
-                  className="px-4 py-2 text-sm text-slate-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                  className={`px-4 py-2 text-sm rounded-lg transition-colors ${
+                    isDark
+                      ? 'text-slate-300 hover:text-red-400 hover:bg-red-900/30'
+                      : 'text-slate-600 hover:text-red-600 hover:bg-red-50'
+                  }`}
                 >
                   退出
                 </button>
@@ -94,7 +109,11 @@ function Navbar() {
               <div className="flex items-center space-x-2">
                 <Link
                   to="/login"
-                  className="px-4 py-2 text-sm text-slate-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                  className={`px-4 py-2 text-sm rounded-lg transition-colors ${
+                    isDark
+                      ? 'text-slate-300 hover:text-blue-400 hover:bg-blue-900/30'
+                      : 'text-slate-600 hover:text-blue-600 hover:bg-blue-50'
+                  }`}
                 >
                   登录
                 </Link>

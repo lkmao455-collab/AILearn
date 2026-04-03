@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider, useAuth } from './contexts/AuthContext'
+import { ThemeProvider, useTheme } from './contexts/ThemeContext'
 import Navbar from './components/Navbar'
 import QuizPage from './pages/QuizPage'
 import WrongQuestionsPage from './pages/WrongQuestionsPage'
@@ -12,13 +13,16 @@ import AIExplanationPage from './pages/AIExplanationPage'
 // 需要登录的路由包装器
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth()
+  const { appliedTheme } = useTheme()
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">
+      <div className={`min-h-screen flex items-center justify-center transition-colors duration-300 ${
+        appliedTheme === 'dark' ? 'bg-slate-900' : 'bg-gradient-to-br from-slate-50 to-slate-100'
+      }`}>
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-          <p className="text-slate-500">加载中...</p>
+          <p className={`${appliedTheme === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>加载中...</p>
         </div>
       </div>
     )
@@ -33,6 +37,12 @@ function ProtectedRoute({ children }) {
 
 function AppContent() {
   const { login, user } = useAuth()
+  const { appliedTheme } = useTheme()
+
+  // 根据主题设置背景色
+  const pageBgClass = appliedTheme === 'dark'
+    ? 'min-h-screen bg-slate-900'
+    : 'min-h-screen bg-gradient-to-br from-slate-50 to-slate-100'
 
   return (
     <Routes>
@@ -45,7 +55,7 @@ function AppContent() {
         path="/"
         element={
           <ProtectedRoute>
-            <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+            <div className={pageBgClass}>
               <Navbar />
               <main className="container mx-auto px-4 py-8">
                 <QuizPage />
@@ -58,7 +68,7 @@ function AppContent() {
         path="/wrong"
         element={
           <ProtectedRoute>
-            <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+            <div className={pageBgClass}>
               <Navbar />
               <main className="container mx-auto px-4 py-8">
                 <WrongQuestionsPage />
@@ -71,7 +81,7 @@ function AppContent() {
         path="/rank"
         element={
           <ProtectedRoute>
-            <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+            <div className={pageBgClass}>
               <Navbar />
               <main className="container mx-auto px-4 py-8">
                 <RankPage />
@@ -84,7 +94,7 @@ function AppContent() {
         path="/settings"
         element={
           <ProtectedRoute>
-            <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+            <div className={pageBgClass}>
               <Navbar />
               <main className="container mx-auto px-4 py-8">
                 <SettingsPage />
@@ -97,7 +107,7 @@ function AppContent() {
         path="/ai-explanation"
         element={
           <ProtectedRoute>
-            <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+            <div className={pageBgClass}>
               <Navbar />
               <main className="container mx-auto px-4 py-8">
                 <AIExplanationPage />
@@ -112,9 +122,11 @@ function AppContent() {
 
 function App() {
   return (
-    <AuthProvider>
-      <AppContent />
-    </AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
+    </ThemeProvider>
   )
 }
 

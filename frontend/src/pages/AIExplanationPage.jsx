@@ -5,10 +5,13 @@ import remarkGfm from 'remark-gfm'
 import rehypeRaw from 'rehype-raw'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism'
+import { useTheme } from '../contexts/ThemeContext'
 
 function AIExplanationPage() {
   const [searchParams] = useSearchParams()
   const questionId = searchParams.get('id')
+  const { appliedTheme } = useTheme()
+  const isDark = appliedTheme === 'dark'
   
   const [apiKey, setApiKey] = useState('')
   const [error, setError] = useState(null)
@@ -283,9 +286,13 @@ function AIExplanationPage() {
   }
 
   return (
-    <div className="flex h-screen bg-white">
+    <div className={`flex h-screen transition-colors duration-300 ${
+      isDark ? 'bg-slate-900' : 'bg-white'
+    }`}>
       {/* 侧边栏 - DeepSeek 风格 */}
-      <div className="hidden md:flex flex-col w-56 bg-[#1a1a2e] text-white">
+      <div className={`hidden md:flex flex-col w-56 text-white ${
+        isDark ? 'bg-[#1a1a2e]' : 'bg-slate-800'
+      }`}>
         {/* Logo */}
         <div className="h-14 flex items-center px-4 border-b border-white/10">
           <div className="flex items-center space-x-2">
@@ -297,7 +304,7 @@ function AIExplanationPage() {
             <span className="font-semibold text-lg">AI 解析</span>
           </div>
         </div>
-        
+
         {/* 新对话按钮 */}
         <div className="p-3">
           <button
@@ -341,19 +348,27 @@ function AIExplanationPage() {
       </div>
 
       {/* 主内容区 - DeepSeek 风格 */}
-      <div className="flex-1 flex flex-col min-w-0 bg-white">
+      <div className={`flex-1 flex flex-col min-w-0 ${
+        isDark ? 'bg-slate-900' : 'bg-white'
+      }`}>
         {/* 顶部导航 */}
-        <div className="h-14 border-b border-slate-100 px-4 flex items-center justify-between bg-white">
+        <div className={`h-14 border-b px-4 flex items-center justify-between transition-colors duration-300 ${
+          isDark ? 'border-slate-700 bg-slate-900' : 'border-slate-100 bg-white'
+        }`}>
           <div className="flex items-center space-x-3">
-            <a href="/" className="p-2 hover:bg-slate-100 rounded-lg transition-colors" title="返回">
-              <svg className="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <a href="/" className={`p-2 rounded-lg transition-colors ${
+              isDark ? 'hover:bg-slate-800' : 'hover:bg-slate-100'
+            }`} title="返回">
+              <svg className={`w-5 h-5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
             </a>
             <div>
-              <h1 className="text-base font-semibold text-slate-900">AI 详细解析</h1>
+              <h1 className={`text-base font-semibold transition-colors duration-300 ${
+                isDark ? 'text-slate-100' : 'text-slate-900'
+              }`}>AI 详细解析</h1>
               {(isGenerating || isChatGenerating) && (
-                <span className="text-xs text-blue-600 flex items-center">
+                <span className="text-xs text-blue-500 flex items-center">
                   <svg className="w-3 h-3 mr-1 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -366,27 +381,37 @@ function AIExplanationPage() {
         </div>
 
         {/* 聊天内容框 */}
-        <div className="flex-1 overflow-y-auto bg-white">
+        <div className={`flex-1 overflow-y-auto transition-colors duration-300 ${
+          isDark ? 'bg-slate-900' : 'bg-white'
+        }`}>
           {(isGenerating || isChatGenerating) && messages.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full">
-              <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mb-4">
+              <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-4 ${
+                isDark ? 'bg-blue-900/30' : 'bg-blue-50'
+              }`}>
                 <svg className="w-8 h-8 text-blue-500 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
               </div>
-              <h2 className="text-xl font-semibold text-slate-800 mb-2">AI 正在思考中...</h2>
-              <p className="text-slate-400 text-sm">正在为您生成详细的题目解析</p>
+              <h2 className={`text-xl font-semibold mb-2 transition-colors duration-300 ${
+                isDark ? 'text-slate-100' : 'text-slate-800'
+              }`}>AI 正在思考中...</h2>
+              <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-slate-400'}`}>正在为您生成详细的题目解析</p>
             </div>
           ) : error ? (
             <div className="flex flex-col items-center justify-center h-full">
-              <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mb-4">
+              <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-4 ${
+                isDark ? 'bg-red-900/30' : 'bg-red-50'
+              }`}>
                 <svg className="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <h2 className="text-xl font-semibold text-slate-800 mb-2">生成失败</h2>
-              <p className="text-slate-400 text-sm mb-4">{error}</p>
+              <h2 className={`text-xl font-semibold mb-2 transition-colors duration-300 ${
+                isDark ? 'text-slate-100' : 'text-slate-800'
+              }`}>生成失败</h2>
+              <p className={`text-sm mb-4 ${isDark ? 'text-slate-400' : 'text-slate-400'}`}>{error}</p>
               <button
                 onClick={handleRegenerate}
                 className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700 transition-colors"
@@ -401,14 +426,20 @@ function AIExplanationPage() {
                 {messages.map((message, index) => (
                   <div
                     key={index}
-                    className={`px-4 ${message.role === 'user' ? 'bg-slate-50' : 'bg-white'}`}
+                    className={`px-4 ${
+                      message.role === 'user'
+                        ? (isDark ? 'bg-slate-800/50' : 'bg-slate-50')
+                        : (isDark ? 'bg-slate-900' : 'bg-white')
+                    }`}
                   >
                     <div className="max-w-3xl mx-auto flex space-x-4">
                       {/* 头像 */}
                       <div className="flex-shrink-0">
                         {message.role === 'user' ? (
-                          <div className="w-8 h-8 bg-slate-200 rounded-full flex items-center justify-center">
-                            <svg className="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                            isDark ? 'bg-slate-700' : 'bg-slate-200'
+                          }`}>
+                            <svg className={`w-4 h-4 ${isDark ? 'text-slate-300' : 'text-slate-600'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                             </svg>
                           </div>
@@ -420,18 +451,22 @@ function AIExplanationPage() {
                           </div>
                         )}
                       </div>
-                      
+
                       {/* 内容 */}
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center space-x-2 mb-1">
-                          <span className="font-medium text-sm text-slate-900">
+                          <span className={`font-medium text-sm transition-colors duration-300 ${
+                            isDark ? 'text-slate-200' : 'text-slate-900'
+                          }`}>
                             {message.role === 'user' ? '你' : 'AI 助手'}
                           </span>
-                          <span className="text-xs text-slate-400">
+                          <span className={`text-xs ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
                             {message.timestamp?.toLocaleTimeString()}
                           </span>
                         </div>
-                        <div className="text-slate-700 leading-relaxed">
+                        <div className={`leading-relaxed transition-colors duration-300 ${
+                          isDark ? 'text-slate-300' : 'text-slate-700'
+                        }`}>
                           {message.role === 'assistant' ? renderMarkdown(message.content) : (
                             <div className="whitespace-pre-wrap">{message.content}</div>
                           )}
@@ -440,10 +475,10 @@ function AIExplanationPage() {
                     </div>
                   </div>
                 ))}
-                
+
                 {/* 加载中 */}
                 {isChatGenerating && (
-                  <div className="px-4 bg-white">
+                  <div className={`px-4 ${isDark ? 'bg-slate-900' : 'bg-white'}`}>
                     <div className="max-w-3xl mx-auto flex space-x-4">
                       <div className="flex-shrink-0">
                         <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
@@ -454,18 +489,18 @@ function AIExplanationPage() {
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center space-x-2 mb-1">
-                          <span className="font-medium text-sm text-slate-900">AI 助手</span>
+                          <span className={`font-medium text-sm ${isDark ? 'text-slate-200' : 'text-slate-900'}`}>AI 助手</span>
                         </div>
                         <div className="flex space-x-1">
-                          <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                          <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                          <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                          <div className={`w-2 h-2 rounded-full animate-bounce ${isDark ? 'bg-slate-500' : 'bg-slate-400'}`} style={{ animationDelay: '0ms' }} />
+                          <div className={`w-2 h-2 rounded-full animate-bounce ${isDark ? 'bg-slate-500' : 'bg-slate-400'}`} style={{ animationDelay: '150ms' }} />
+                          <div className={`w-2 h-2 rounded-full animate-bounce ${isDark ? 'bg-slate-500' : 'bg-slate-400'}`} style={{ animationDelay: '300ms' }} />
                         </div>
                       </div>
                     </div>
                   </div>
                 )}
-                
+
                 <div ref={messagesEndRef} />
               </div>
             </div>
@@ -473,9 +508,15 @@ function AIExplanationPage() {
         </div>
 
         {/* 输入框 - DeepSeek 风格 */}
-        <div className="border-t border-slate-100 bg-white p-4">
+        <div className={`border-t p-4 transition-colors duration-300 ${
+          isDark ? 'border-slate-700 bg-slate-900' : 'border-slate-100 bg-white'
+        }`}>
           <div className="max-w-3xl mx-auto">
-            <div className="relative flex items-end space-x-2 bg-slate-50 rounded-2xl border border-slate-200 p-2">
+            <div className={`relative flex items-end space-x-2 rounded-2xl border p-2 transition-colors duration-300 ${
+              isDark
+                ? 'bg-slate-800 border-slate-600'
+                : 'bg-slate-50 border-slate-200'
+            }`}>
               <textarea
                 ref={inputRef}
                 value={input}
@@ -489,7 +530,9 @@ function AIExplanationPage() {
                 placeholder="输入消息..."
                 disabled={isChatGenerating}
                 rows={1}
-                className="flex-1 px-3 py-2 bg-transparent border-0 focus:ring-0 resize-none max-h-32 text-slate-700 placeholder-slate-400"
+                className={`flex-1 px-3 py-2 bg-transparent border-0 focus:ring-0 resize-none max-h-32 placeholder-slate-400 transition-colors duration-300 ${
+                  isDark ? 'text-slate-200' : 'text-slate-700'
+                }`}
                 style={{ minHeight: '24px' }}
               />
               <button
@@ -503,7 +546,7 @@ function AIExplanationPage() {
               </button>
             </div>
             <div className="text-center mt-2">
-              <span className="text-xs text-slate-400">按 Enter 发送，Shift+Enter 换行</span>
+              <span className={`text-xs ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>按 Enter 发送，Shift+Enter 换行</span>
             </div>
           </div>
         </div>
