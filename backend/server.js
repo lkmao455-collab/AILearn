@@ -17,8 +17,10 @@ const PORT = process.env.PORT || 3001;
 // CORS 配置
 const allowedOrigins = process.env.NODE_ENV === 'production'
   ? [
-      'https://cv-learn-frontend.onrender.com', // 默认Render前端域名
-      process.env.FRONTEND_URL, // 从环境变量读取
+      'https://cv-learn-frontend.onrender.com',
+      'https://ailearn-8p3f.onrender.com',
+      'https://ailearn-frontend.onrender.com',
+      process.env.FRONTEND_URL,
     ].filter(Boolean)
   : ['http://localhost:5173', 'http://localhost:3000', 'http://127.0.0.1:5173'];
 
@@ -64,8 +66,8 @@ app.get('/api/health', (req, res) => {
   }
 })();
 
-// 启动服务器
-app.listen(PORT, () => {
+// 启动服务器 - 绑定到 0.0.0.0 以支持 Render 等云平台
+app.listen(PORT, '0.0.0.0', () => {
   const baseUrl = process.env.RENDER_EXTERNAL_URL || `http://localhost:${PORT}`;
   console.log('');
   console.log('╔══════════════════════════════════════════════════════════╗');
