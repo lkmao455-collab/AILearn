@@ -66,8 +66,8 @@ const getUpsertStatsSQL = () => {
     VALUES (?, 1, ?, ?)
     ON CONFLICT(user_id) DO UPDATE SET
       total_count = total_count + 1,
-      correct_count = correct_count + excluded.correct_count,
-      wrong_count = wrong_count + excluded.wrong_count,
+      correct_count = correct_count + ?,
+      wrong_count = wrong_count + ?,
       updated_at = datetime('now')
   `;
 };
@@ -249,7 +249,7 @@ const checkAnswer = async (req, res) => {
       const wrongIncrement = isCorrect ? 0 : 1;
       const statsSQL = getUpsertStatsSQL();
       const statsStmt = db.prepare(statsSQL);
-      await runQuery(statsStmt, userId, correctIncrement, wrongIncrement);
+      await runQuery(statsStmt, userId, correctIncrement, wrongIncrement, correctIncrement, wrongIncrement);
 
       // 如果答错，自动添加到错题本
       if (!isCorrect) {
@@ -380,6 +380,26 @@ const testConnection = async (req, res) => {
   }
 };
 
+// 定义题目大类分组
+const CATEGORY_GROUPS = {
+  '计算机类': [
+    'Agent开发', 'Bash脚本', 'C++', 'CNN', 'C语言', 'DeepLearning', 
+    'Go语言', 'HALCON', 'Java', 'KET', 'Linux系统', 'OpenCV', 
+    'PyTorch', 'Python', 'QT开发', 'YOLO', '人工智能', '前端开发', 
+    '图像处理', '大数据分析', '大模型应用开发', '机器学习', '设计模式',
+    '通用', '阿里云ACA-AI'
+  ],
+  '小学类': [
+    '小学英语'
+  ],
+  '初中类': [
+    '初中数学', '初中英语'
+  ],
+  '高中类': [
+    '高中数学', '高中英语'
+  ]
+};
+
 // 获取所有分类
 const getCategories = async (req, res) => {
   try {
@@ -426,9 +446,44 @@ const getCategories = async (req, res) => {
     const totalResult = await getQuery(totalStmt);
     const total = totalResult.count;
 
+    // 按大类分组组织 topics
+    const groupedTopics = {};
+    const otherTopics = [];
+
+    // 初始化分组
+    Object.keys(CATEGORY_GROUPS).forEach(group => {
+      groupedTopics[group] = [];
+    });
+
+    // 将 topics 分配到对应分组
+    topics.forEach(t => {
+      let assigned = false;
+      for (const [group, groupTopics] of Object.entries(CATEGORY_GROUPS)) {
+        if (groupTopics.includes(t.topic)) {
+          groupedTopics[group].push(t);
+          assigned = true;
+          break;
+        }
+      }
+      if (!assigned) {
+        otherTopics.push(t);
+      }
+    });
+
+    // 如果有未分类的 topic，添加到"其他"分组
+    if (otherTopics.length > 0) {
+      groupedTopics['其他'] = otherTopics;
+    }
+
     res.json({
       success: true,
-      data: { topics, subtopics, difficulties, total }
+      data: { 
+        topics, 
+        groupedTopics,
+        subtopics, 
+        difficulties, 
+        total 
+      }
     });
   } catch (error) {
     res.status(500).json({

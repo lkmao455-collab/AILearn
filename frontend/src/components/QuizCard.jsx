@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'
@@ -10,6 +10,7 @@ import 'katex/dist/katex.min.css'
 
 function QuizCard({ question, selectedIndex, result, onSelect, onSubmit, onAIExplain, onNext }) {
   const [copied, setCopied] = useState(false)
+  const [reported, setReported] = useState(false)
   // 从 localStorage 读取字体大小，默认 18px
   const [explanationFontSize, setExplanationFontSize] = useState(() => {
     const saved = localStorage.getItem('quiz_explanation_font_size')
@@ -17,6 +18,100 @@ function QuizCard({ question, selectedIndex, result, onSelect, onSubmit, onAIExp
   })
   const { appliedTheme } = useTheme()
   const isDark = appliedTheme === 'dark'
+
+  // 检测题目是否完整
+  const checkQuestionIntegrity = useCallback((q) => {
+    if (!q) return { isValid: false, reason: '题目为空' }
+    
+    // 检查题目内容
+    if (!q.question || q.question.trim().length < 5) {
+      return { isValid: false, reason: '题目内容过短或为空' }
+    }
+    
+    // 检查选项
+    if (!q.options || !Array.isArray(q.options) || q.options.length < 4) {
+      return { isValid: false, reason: '选项不完整' }
+    }
+    
+    // 检查是否有空选项
+    const hasEmptyOption = q.options.some(opt => !opt || opt.trim().length < 2)
+    if (hasEmptyOption) {
+      return { isValid: false, reason: '存在空选项' }
+    }
+    
+    // 检查题目是否包含选项引用标记（如"A."、"B."等）
+    const questionText = q.question
+    const hasOptionReference = /[A-D][\.．、]/.test(questionText)
+    
+    // 检查题目是否以问号结尾（选择题通常应该这样）
+    const endsWithQuestionMark = /[?？]$/.test(questionText.trim())
+    
+    // 如果题目不包含选项引用且不以问号结尾，可能不完整
+    if (!hasOptionReference && !endsWithQuestionMark && questionText.length < 20) {
+      return { isValid: false, reason: '题目可能不完整（缺少问号或选项引用）' }
+    }
+    
+    return { isValid: true, reason: '' }
+  }, [])
+
+  // 记录报错日志到 localStorage
+  const logErrorReport = useCallback((q, errorReason) => {
+    const report = {
+      id: q?.id || 'unknown',
+      topic: q?.topic || 'unknown',
+      subtopic: q?.subtopic || '',
+      question: q?.question || '',
+      errorReason: errorReason,
+      timestamp: new Date().toISOString(),
+      userAgent: navigator.userAgent
+    }
+    
+    // 获取已有的报错记录
+    const existingReports = JSON.parse(localStorage.getItem('quiz_error_reports') || '[]')
+    existingReports.push(report)
+    
+    // 最多保存100条记录
+    if (existingReports.length > 100) {
+      existingReports.shift()
+    }
+    
+    localStorage.setItem('quiz_error_reports', JSON.stringify(existingReports))
+    console.log('题目报错已记录:', report)
+  }, [])
+
+  // 处理报错按钮点击
+  const handleReportError = useCallback(() => {
+    if (!question) return
+    
+    logErrorReport(question, '用户手动报错')
+    setReported(true)
+    setTimeout(() => setReported(false), 2000)
+    
+    // 自动跳转到下一题
+    if (onNext) {
+      onNext()
+    }
+  }, [question, onNext, logErrorReport])
+
+  // 检测题目完整性，如果不完整则自动跳过
+  useEffect(() => {
+    if (!question) return
+    
+    const integrity = checkQuestionIntegrity(question)
+    if (!integrity.isValid) {
+      console.warn(`题目 ${question.id} 不完整: ${integrity.reason}`, question)
+      logErrorReport(question, `自动检测: ${integrity.reason}`)
+      
+      // 延迟一点再跳过，让用户看到提示
+      const timer = setTimeout(() => {
+        if (onNext) {
+          onNext()
+        }
+      }, 500)
+      
+      return () => clearTimeout(timer)
+    }
+  }, [question, onNext, checkQuestionIntegrity, logErrorReport])
 
   // 字体大小变化时保存到 localStorage
   useEffect(() => {
@@ -33,6 +128,49 @@ function QuizCard({ question, selectedIndex, result, onSelect, onSubmit, onAIExp
     setExplanationFontSize(prev => Math.max(prev - 2, 10))
   }
 
+  // 清理题目内容，去除混入的选项
+  const cleanQuestionText = (questionText, options) => {
+    if (!questionText || !options || options.length === 0) {
+      return questionText
+    }
+    
+    let cleaned = questionText
+    
+    // 提取选项内容（去除前缀如 "A. "）
+    const optionContents = options.map(opt => {
+      // 去除 "A. ", "B. ", "C. ", "D. " 前缀
+      return opt.replace(/^[A-D]\.\s*/, '').trim()
+    })
+    
+    // 从题目中移除每个选项内容
+    optionContents.forEach(content => {
+      if (content && content.length > 5) { // 只处理较长的内容，避免误删
+        // 使用正则表达式移除选项内容，考虑各种格式
+        const escapedContent = content.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+        // 匹配 "A. 内容" 或 "内容" 后跟标点或空格的情况
+        const patterns = [
+          new RegExp(`\\s*[A-D][.．]\\s*${escapedContent}`, 'g'),
+          new RegExp(`${escapedContent}[,，.。;；!！?？]`, 'g'),
+        ]
+        
+        patterns.forEach(pattern => {
+          cleaned = cleaned.replace(pattern, '')
+        })
+      }
+    })
+    
+    // 清理多余的空格和换行
+    cleaned = cleaned.replace(/\s+/g, ' ').trim()
+    
+    // 如果题目以问号结尾，确保后面没有多余内容
+    const questionMarkIndex = cleaned.lastIndexOf('？')
+    if (questionMarkIndex > 0) {
+      cleaned = cleaned.substring(0, questionMarkIndex + 1)
+    }
+    
+    return cleaned
+  }
+
   if (!question) {
     return (
       <div className={`rounded-2xl shadow-lg p-8 text-center transition-colors duration-300 ${
@@ -42,6 +180,9 @@ function QuizCard({ question, selectedIndex, result, onSelect, onSubmit, onAIExp
       </div>
     )
   }
+
+  // 清理后的题目内容
+  const cleanedQuestion = cleanQuestionText(question.question, question.options)
 
   const difficultyColors = {
     easy: isDark ? 'bg-green-900/40 text-green-300 border-green-700' : 'bg-green-100 text-green-700 border-green-200',
@@ -100,39 +241,130 @@ ${optionsText}`
         </div>
       </div>
 
-      {/* 题目内容 */}
-      <div className="p-6">
-        <div className="flex items-start justify-between gap-4 mb-6">
-          <h2 className={`text-xl font-semibold leading-relaxed flex-1 transition-colors duration-300 ${
-            isDark ? 'text-slate-100' : 'text-slate-800'
-          }`}>
-            {question.question}
-          </h2>
-          <button
-            onClick={handleCopy}
-            className={`flex-shrink-0 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center space-x-1 border ${
-              copied
-                ? (isDark ? 'bg-green-900/40 text-green-300 border-green-700' : 'bg-green-100 text-green-700 border-green-300')
-                : (isDark ? 'bg-slate-700 text-slate-300 border-slate-600 hover:bg-slate-600 hover:text-slate-200' : 'bg-slate-100 text-slate-600 border-slate-300 hover:bg-slate-200 hover:text-slate-800')
-            }`}
-            title="复制题目和选项"
-          >
-            {copied ? (
-              <>
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-                <span>已复制</span>
-              </>
-            ) : (
-              <>
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                </svg>
-                <span>复制</span>
-              </>
-            )}
-          </button>
+        {/* 题目内容 */}
+        <div className="p-6">
+          {/* 图片显示区域 */}
+          {question.image && (
+            <div className="mb-6">
+              <div className={`rounded-xl overflow-hidden border-2 ${
+                isDark ? 'border-slate-600 bg-slate-700/50' : 'border-slate-200 bg-slate-50'
+              }`}>
+                <img 
+                  src={question.image} 
+                  alt="题目配图"
+                  className="w-full max-h-80 object-contain mx-auto"
+                  onError={(e) => {
+                    console.error('图片加载失败:', question.image);
+                    e.target.style.display = 'none';
+                  }}
+                />
+              </div>
+              <p className={`text-center text-sm mt-2 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                👆 请观察上图，然后回答问题
+              </p>
+            </div>
+          )}
+          
+          <div className="flex items-start justify-between gap-4 mb-6">
+            <div className={`text-xl font-semibold leading-relaxed flex-1 transition-colors duration-300 ${
+              isDark ? 'text-slate-100' : 'text-slate-800'
+            }`}>
+              <ReactMarkdown
+                remarkPlugins={[remarkGfm, remarkMath]}
+                rehypePlugins={[rehypeKatex]}
+                components={{
+                  code({ node, inline, className, children, ...props }) {
+                    const match = /language-(\w+)/.exec(className || '')
+                    return inline ? (
+                      <code className={`${className} px-1.5 py-0.5 rounded font-mono ${
+                        isDark ? 'bg-slate-700 text-pink-300' : 'bg-slate-100 text-pink-600'
+                      }`} {...props}>
+                        {children}
+                      </code>
+                    ) : (
+                      <div className={`my-3 rounded-lg overflow-hidden border ${
+                        isDark ? 'border-slate-600' : 'border-slate-200'
+                      }`}>
+                        <div className={`px-3 py-1.5 text-xs font-mono border-b flex justify-between items-center ${
+                          isDark ? 'bg-slate-700 text-slate-300 border-slate-600' : 'bg-slate-100 text-slate-600 border-slate-200'
+                        }`}>
+                          <span>{match?.[1] || 'code'}</span>
+                        </div>
+                        <SyntaxHighlighter
+                          language={match?.[1] || 'text'}
+                          style={atomDark}
+                          PreTag="div"
+                          className="!m-0 !p-3"
+                          {...props}
+                        >
+                          {String(children).replace(/\n$/, '')}
+                        </SyntaxHighlighter>
+                      </div>
+                    )
+                  },
+                  p({ children }) {
+                    return <div className="mb-2">{children}</div>
+                  },
+                  pre({ children }) {
+                    return <pre className="m-0">{children}</pre>
+                  }
+                }}
+              >
+                {cleanedQuestion}
+              </ReactMarkdown>
+            </div>
+          <div className="flex items-center space-x-2 flex-shrink-0">
+            <button
+              onClick={handleCopy}
+              className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center space-x-1 border ${
+                copied
+                  ? (isDark ? 'bg-green-900/40 text-green-300 border-green-700' : 'bg-green-100 text-green-700 border-green-300')
+                  : (isDark ? 'bg-slate-700 text-slate-300 border-slate-600 hover:bg-slate-600 hover:text-slate-200' : 'bg-slate-100 text-slate-600 border-slate-300 hover:bg-slate-200 hover:text-slate-800')
+              }`}
+              title="复制题目和选项"
+            >
+              {copied ? (
+                <>
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>已复制</span>
+                </>
+              ) : (
+                <>
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                  </svg>
+                  <span>复制</span>
+                </>
+              )}
+            </button>
+            <button
+              onClick={handleReportError}
+              className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center space-x-1 border ${
+                reported
+                  ? (isDark ? 'bg-orange-900/40 text-orange-300 border-orange-700' : 'bg-orange-100 text-orange-700 border-orange-300')
+                  : (isDark ? 'bg-red-900/30 text-red-300 border-red-700 hover:bg-red-900/50 hover:text-red-200' : 'bg-red-50 text-red-600 border-red-300 hover:bg-red-100 hover:text-red-800')
+              }`}
+              title="报错：题目有问题，记录并跳过"
+            >
+              {reported ? (
+                <>
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>已记录</span>
+                </>
+              ) : (
+                <>
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  </svg>
+                  <span>报错</span>
+                </>
+              )}
+            </button>
+          </div>
         </div>
 
         {/* 选项 */}
@@ -171,7 +403,51 @@ ${optionsText}`
                 className={`w-full p-4 text-left rounded-xl border-2 transition-all duration-200 ${buttonClass}`}
               >
                 <span className="font-medium">{optionLabel}. </span>
-                <span className={isDark ? 'text-slate-300' : 'text-slate-700'}>{option.substring(3)}</span>
+                <span className={`${isDark ? 'text-slate-300' : 'text-slate-700'} inline`}>
+                  <ReactMarkdown
+                    remarkPlugins={[remarkGfm, remarkMath]}
+                    rehypePlugins={[rehypeKatex]}
+                    components={{
+                      code({ node, inline, className, children, ...props }) {
+                        const match = /language-(\w+)/.exec(className || '')
+                        return inline ? (
+                          <code className={`${className} px-1.5 py-0.5 rounded font-mono text-sm ${
+                            isDark ? 'bg-slate-700 text-pink-300' : 'bg-slate-100 text-pink-600'
+                          }`} {...props}>
+                            {children}
+                          </code>
+                        ) : (
+                          <div className={`my-2 rounded-lg overflow-hidden border ${
+                            isDark ? 'border-slate-600' : 'border-slate-200'
+                          }`}>
+                            <div className={`px-2 py-1 text-xs font-mono border-b flex justify-between items-center ${
+                              isDark ? 'bg-slate-700 text-slate-300 border-slate-600' : 'bg-slate-100 text-slate-600 border-slate-200'
+                            }`}>
+                              <span>{match?.[1] || 'code'}</span>
+                            </div>
+                            <SyntaxHighlighter
+                              language={match?.[1] || 'text'}
+                              style={atomDark}
+                              PreTag="div"
+                              className="!m-0 !p-2 !text-sm"
+                              {...props}
+                            >
+                              {String(children).replace(/\n$/, '')}
+                            </SyntaxHighlighter>
+                          </div>
+                        )
+                      },
+                      p({ children }) {
+                        return <span className="inline">{children}</span>
+                      },
+                      pre({ children }) {
+                        return <pre className="m-0">{children}</pre>
+                      }
+                    }}
+                  >
+                    {option.substring(3).replace(/\\n/g, '\n')}
+                  </ReactMarkdown>
+                </span>
               </button>
             )
           })}

@@ -21,29 +21,47 @@ function QuizPage() {
   const [totalQuestions, setTotalQuestions] = useState(0)
   const [categoryStats, setCategoryStats] = useState({ topics: [], difficulties: [] })
 
-  // 做题统计 - 从 localStorage 读取
-  const [stats, setStats] = useState(() => {
-    const saved = localStorage.getItem('quiz_stats')
-    return saved ? JSON.parse(saved) : { correct: 0, wrong: 0, total: 0 }
-  })
-
-  // 做题统计变化时保存到 localStorage
-  useEffect(() => {
-    localStorage.setItem('quiz_stats', JSON.stringify(stats))
-  }, [stats])
-
-  // 错题本变化时保存到 localStorage
-  useEffect(() => {
-    localStorage.setItem('quiz_wrong_questions', JSON.stringify(wrongQuestions))
-  }, [wrongQuestions])
-
-  // 分类筛选状态 - 从 localStorage 读取
+  // 分类筛选状态 - 从 localStorage 读取（必须在使用前定义）
   const [selectedTopic, setSelectedTopic] = useState(() => {
     return localStorage.getItem('quiz_selected_topic') || null
   })
   const [selectedDifficulty, setSelectedDifficulty] = useState(() => {
     return localStorage.getItem('quiz_selected_difficulty') || null
   })
+
+  // 做题统计 - 按分类存储，从 localStorage 读取
+  const [statsByCategory, setStatsByCategory] = useState(() => {
+    const saved = localStorage.getItem('quiz_stats_by_category')
+    return saved ? JSON.parse(saved) : {}
+  })
+
+  // 已做题目记录 - 按分类+难度存储，防止重复做题
+  const [answeredQuestionsByCategory, setAnsweredQuestionsByCategory] = useState(() => {
+    const saved = localStorage.getItem('quiz_answered_questions_by_category')
+    return saved ? JSON.parse(saved) : {}
+  })
+
+  // 获取当前分类的统计（如果没有则返回默认值）
+  const currentCategoryKey = selectedTopic || 'all'
+  const currentDifficultyKey = selectedDifficulty || 'all'
+  const fullCategoryKey = `${currentCategoryKey}_${currentDifficultyKey}`
+  const stats = statsByCategory[fullCategoryKey] || { correct: 0, wrong: 0, total: 0 }
+  const answeredQuestionIds = answeredQuestionsByCategory[fullCategoryKey] || []
+
+  // 做题统计变化时保存到 localStorage
+  useEffect(() => {
+    localStorage.setItem('quiz_stats_by_category', JSON.stringify(statsByCategory))
+  }, [statsByCategory])
+
+  // 已做题目记录变化时保存到 localStorage
+  useEffect(() => {
+    localStorage.setItem('quiz_answered_questions_by_category', JSON.stringify(answeredQuestionsByCategory))
+  }, [answeredQuestionsByCategory])
+
+  // 错题本变化时保存到 localStorage
+  useEffect(() => {
+    localStorage.setItem('quiz_wrong_questions', JSON.stringify(wrongQuestions))
+  }, [wrongQuestions])
   const [filteredQuestions, setFilteredQuestions] = useState([])
 
   // 加载错题本（从后端）和总题数
@@ -101,7 +119,7 @@ function QuizPage() {
     }
   }, [selectedTopic, selectedDifficulty])
 
-  // 从过滤后的题目中随机选择
+  // 从过滤后的题目中随机选择（排除已做题目）
   const fetchQuestion = useCallback(async () => {
     if (filteredQuestions.length === 0) {
       try {
@@ -115,11 +133,25 @@ function QuizPage() {
       return
     }
 
-    const randomIndex = Math.floor(Math.random() * filteredQuestions.length)
-    setCurrentQuestion(filteredQuestions[randomIndex])
+    // 过滤掉已做的题目
+    const unansweredQuestions = filteredQuestions.filter(
+      q => !answeredQuestionIds.includes(q.id)
+    )
+
+    // 如果当前分类下所有题目都已做完
+    if (unansweredQuestions.length === 0) {
+      setCurrentQuestion(null)
+      setSelectedIndex(null)
+      setResult(null)
+      alert(`当前分类（${selectedTopic || '全部'} / ${selectedDifficulty || '全部难度'}）的题目已全部做完！\n\n您可以选择：\n1. 清理做题记录重新开始\n2. 切换其他分类继续做题`)
+      return
+    }
+
+    const randomIndex = Math.floor(Math.random() * unansweredQuestions.length)
+    setCurrentQuestion(unansweredQuestions[randomIndex])
     setSelectedIndex(null)
     setResult(null)
-  }, [filteredQuestions])
+  }, [filteredQuestions, answeredQuestionIds, selectedTopic, selectedDifficulty])
 
   // 筛选条件变化时重新获取题目列表
   useEffect(() => {
@@ -147,12 +179,32 @@ function QuizPage() {
       const userAnswer = ['A', 'B', 'C', 'D'][selectedIndex]
       const res = await checkAnswer(currentQuestion.id, userAnswer)
       setResult(res.data)
-      setStats(prev => ({
-        ...prev,
-        total: prev.total + 1,
-        correct: res.data.isCorrect ? prev.correct + 1 : prev.correct,
-        wrong: !res.data.isCorrect ? prev.wrong + 1 : prev.wrong
-      }))
+      
+      // 更新当前分类的统计
+      setStatsByCategory(prev => {
+        const currentStats = prev[fullCategoryKey] || { correct: 0, wrong: 0, total: 0 }
+        return {
+          ...prev,
+          [fullCategoryKey]: {
+            ...currentStats,
+            total: currentStats.total + 1,
+            correct: res.data.isCorrect ? currentStats.correct + 1 : currentStats.correct,
+            wrong: !res.data.isCorrect ? currentStats.wrong + 1 : currentStats.wrong
+          }
+        }
+      })
+
+      // 记录已做题目ID（按分类+难度）
+      setAnsweredQuestionsByCategory(prev => {
+        const currentAnswered = prev[fullCategoryKey] || []
+        if (currentAnswered.includes(currentQuestion.id)) {
+          return prev
+        }
+        return {
+          ...prev,
+          [fullCategoryKey]: [...currentAnswered, currentQuestion.id]
+        }
+      })
 
       // 后端已自动记录错题和做题记录
       // 前端只需更新本地显示
@@ -230,6 +282,7 @@ function QuizPage() {
           />
         </div>
         <div className="space-y-4">
+          {/* 错题本已隐藏 - 保留状态逻辑但不在UI显示
           <WrongQuestionsBook
             wrongQuestions={wrongQuestions}
             onRemove={handleRemoveFromWrong}
@@ -240,7 +293,8 @@ function QuizPage() {
               window.scrollTo({ top: 0, behavior: 'smooth' })
             }}
           />
-          {/* 统计信息 - 放在错题本下面 */}
+          */}
+          {/* 统计信息 */}
           <div className={`rounded-xl shadow-md p-4 border transition-colors duration-300 ${
             isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'
           }`}>

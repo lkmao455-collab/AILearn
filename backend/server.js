@@ -39,6 +39,10 @@ app.use(cors({
   credentials: true
 }));
 
+// Body parser 中间件
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
 // 请求日志
 app.use((req, res, next) => {
   console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);

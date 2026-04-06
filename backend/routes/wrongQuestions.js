@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const wrongQuestionsController = require('../controllers/wrongQuestionsController');
-const authMiddleware = require('../middleware/auth');
+const { requireAuth } = require('../middleware/auth');
 
 // 所有路由都需要登录认证
-router.use(authMiddleware);
+router.use(requireAuth);
 
 // GET /api/wrong-questions - 获取错题列表
 router.get('/', wrongQuestionsController.getWrongQuestions);

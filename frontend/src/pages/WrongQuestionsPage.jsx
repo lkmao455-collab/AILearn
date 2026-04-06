@@ -274,7 +274,7 @@ function WrongQuestionsPage() {
               {wrongQuestions[currentQuestionIndex] && (
                 <div>
                   {/* 题目信息 */}
-                  <div className="flex items-center space-x-3 mb-4">
+                  <div className="flex items-center space-x-3 mb-4 flex-wrap gap-y-2">
                     <span className={`px-3 py-1 rounded-full text-sm ${
                       isDark ? 'bg-slate-700 text-slate-300' : 'bg-slate-100 text-slate-600'
                     }`}>
@@ -295,6 +295,13 @@ function WrongQuestionsPage() {
                     }`}>
                       {wrongQuestions[currentQuestionIndex].topic}
                     </span>
+                    {wrongQuestions[currentQuestionIndex].subtopic && (
+                      <span className={`px-3 py-1 rounded-full text-sm ${
+                        isDark ? 'bg-purple-500/20 text-purple-300' : 'bg-purple-100 text-purple-700'
+                      }`}>
+                        {wrongQuestions[currentQuestionIndex].subtopic}
+                      </span>
+                    )}
                   </div>
 
                   {/* 题目内容 */}
@@ -440,7 +447,7 @@ function WrongQuestionsPage() {
               }`}>
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
-                    <div className="flex items-center space-x-3 mb-3">
+                    <div className="flex items-center space-x-3 mb-3 flex-wrap gap-y-2">
                       <span className={`px-3 py-1 rounded-full text-sm ${
                         isDark ? 'bg-slate-700 text-slate-300' : 'bg-slate-100 text-slate-600'
                       }`}>
@@ -460,6 +467,13 @@ function WrongQuestionsPage() {
                       }`}>
                         {q.topic}
                       </span>
+                      {q.subtopic && (
+                        <span className={`px-3 py-1 rounded-full text-sm ${
+                          isDark ? 'bg-purple-500/20 text-purple-300' : 'bg-purple-100 text-purple-700'
+                        }`}>
+                          {q.subtopic}
+                        </span>
+                      )}
                     </div>
                     <h3 className={`text-lg font-medium mb-4 transition-colors duration-300 ${
                       isDark ? 'text-slate-100' : 'text-slate-800'

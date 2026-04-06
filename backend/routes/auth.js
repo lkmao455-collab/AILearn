@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const authController = require('../controllers/authController');
-const authMiddleware = require('../middleware/auth');
+const { requireAuth } = require('../middleware/auth');
 
 // POST /api/auth/register - 用户注册
 router.post('/register', authController.register);
@@ -10,6 +10,6 @@ router.post('/register', authController.register);
 router.post('/login', authController.login);
 
 // GET /api/auth/profile - 获取用户信息（需要登录）
-router.get('/profile', authMiddleware, authController.getProfile);
+router.get('/profile', requireAuth, authController.getProfile);
 
 module.exports = router;

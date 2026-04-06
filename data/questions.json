@@ -1,0 +1,3002 @@
+[
+  {
+    "id": 1,
+    "question": "YOLO 算法的主要特点是什么？",
+    "options": [
+      "A. 两阶段检测",
+      "B. 单阶段检测",
+      "C. 只用于分类",
+      "D. 只能处理视频"
+    ],
+    "answer": "B",
+    "explanation": "YOLO (You Only Look Once) 是单阶段目标检测算法，将目标检测转化为回归问题，直接从输入图像到边界框坐标和类别概率。",
+    "topic": "YOLO",
+    "subtopic": "YOLO",
+    "difficulty": "easy"
+  },
+  {
+    "id": 2,
+    "question": "在卷积神经网络中，卷积层的主要作用是什么？",
+    "options": [
+      "A. 降低数据维度",
+      "B. 提取局部特征",
+      "C. 增加非线性",
+      "D. 归一化数据"
+    ],
+    "answer": "B",
+    "explanation": "卷积层通过卷积核（滤波器）在输入图像上滑动，提取边缘、纹理等局部特征。",
+    "topic": "CNN",
+    "subtopic": "卷积层",
+    "difficulty": "easy"
+  },
+  {
+    "id": 3,
+    "question": "下列哪个池化方法最常用？",
+    "options": [
+      "A. 平均池化",
+      "B. 最大池化",
+      "C. 随机池化",
+      "D. 全局池化"
+    ],
+    "answer": "B",
+    "explanation": "最大池化（Max Pooling）是最常用的池化方法，它取窗口内的最大值，能保留最显著的特征。",
+    "topic": "CNN",
+    "subtopic": "池化",
+    "difficulty": "easy"
+  },
+  {
+    "id": 4,
+    "question": "OpenCV 中读取图像的函数是？",
+    "options": [
+      "A. cv2.read()",
+      "B. cv2.load()",
+      "C. cv2.imread()",
+      "D. cv2.open()"
+    ],
+    "answer": "C",
+    "explanation": "cv2.imread() 是 OpenCV 中用于读取图像的函数，返回一个 numpy 数组。",
+    "topic": "OpenCV",
+    "subtopic": "基础操作",
+    "difficulty": "easy"
+  },
+  {
+    "id": 5,
+    "question": "RGB 图像的色彩通道顺序是？",
+    "options": [
+      "A. 红绿蓝",
+      "B. 蓝绿红",
+      "C. 绿红蓝",
+      "D. 蓝红绿"
+    ],
+    "answer": "A",
+    "explanation": "RGB 表示红绿蓝三原色，这是最常见的色彩空间表示方法。OpenCV 默认使用 BGR 顺序。",
+    "topic": "图像处理",
+    "subtopic": "色彩空间",
+    "difficulty": "easy"
+  },
+  {
+    "id": 6,
+    "question": "在 OpenCV 中，图像的默认颜色空间是？",
+    "options": [
+      "A. RGB",
+      "B. HSV",
+      "C. BGR",
+      "D. Gray"
+    ],
+    "answer": "C",
+    "explanation": "OpenCV 默认使用 BGR（蓝绿红）颜色空间读取和存储图像，这与常见的 RGB 顺序相反。",
+    "topic": "OpenCV",
+    "subtopic": "色彩空间",
+    "difficulty": "easy"
+  },
+  {
+    "id": 7,
+    "question": "卷积操作中的 stride 指的是？",
+    "options": [
+      "A. 卷积核大小",
+      "B. 填充大小",
+      "C. 滑动步长",
+      "D. 输出大小"
+    ],
+    "answer": "C",
+    "explanation": "Stride（步长）指卷积核在输入图像上滑动的距离，步长越大输出尺寸越小。",
+    "topic": "CNN",
+    "subtopic": "卷积层",
+    "difficulty": "easy"
+  },
+  {
+    "id": 8,
+    "question": "下列哪个不是激活函数？",
+    "options": [
+      "A. ReLU",
+      "B. Sigmoid",
+      "C. Dropout",
+      "D. Tanh"
+    ],
+    "answer": "C",
+    "explanation": "Dropout 是一种正则化技术，不是激活函数。ReLU、Sigmoid、Tanh 都是常用的激活函数。",
+    "topic": "CNN",
+    "subtopic": "激活函数",
+    "difficulty": "easy"
+  },
+  {
+    "id": 9,
+    "question": "YOLOv5 中使用的骨干网络是？",
+    "options": [
+      "A. ResNet",
+      "B. VGG",
+      "C. CSPDarknet",
+      "D. EfficientNet"
+    ],
+    "answer": "C",
+    "explanation": "YOLOv5 使用 CSPDarknet 作为骨干网络，结合了 CSP（Cross Stage Partial）结构提高效率。",
+    "topic": "YOLO",
+    "subtopic": "YOLO",
+    "difficulty": "medium"
+  },
+  {
+    "id": 10,
+    "question": "高斯模糊的主要作用是？",
+    "options": [
+      "A. 增强边缘",
+      "B. 去除噪声",
+      "C. 改变亮度",
+      "D. 增加对比度"
+    ],
+    "answer": "B",
+    "explanation": "高斯模糊使用高斯函数作为卷积核，主要用于平滑图像、去除噪声。",
+    "topic": "图像处理",
+    "subtopic": "滤波",
+    "difficulty": "easy"
+  },
+  {
+    "id": 11,
+    "question": "在 CNN 中，padding 的主要作用是？",
+    "options": [
+      "A. 增加非线性",
+      "B. 保持输出尺寸",
+      "C. 减少参数",
+      "D. 加速计算"
+    ],
+    "answer": "B",
+    "explanation": "Padding（填充）通过在输入边界添加像素，可以控制输出特征图的尺寸，常用的是零填充。",
+    "topic": "CNN",
+    "subtopic": "卷积层",
+    "difficulty": "easy"
+  },
+  {
+    "id": 12,
+    "question": "Canny 边缘检测算法中，需要设置几个阈值？",
+    "options": [
+      "A. 1 个",
+      "B. 2 个",
+      "C. 3 个",
+      "D. 4 个"
+    ],
+    "answer": "B",
+    "explanation": "Canny 边缘检测使用双阈值（高阈值和低阈值）来确定强边缘、弱边缘和非边缘。",
+    "topic": "图像处理",
+    "subtopic": "边缘检测",
+    "difficulty": "medium"
+  },
+  {
+    "id": 13,
+    "question": "ResNet 网络的核心创新是？",
+    "options": [
+      "A. 深度可分离卷积",
+      "B. 残差连接",
+      "C. 注意力机制",
+      "D. 密集连接"
+    ],
+    "answer": "B",
+    "explanation": "ResNet 引入了残差连接（skip connection），解决了深度网络的退化问题，使得训练超深网络成为可能。",
+    "topic": "CNN",
+    "subtopic": "网络架构",
+    "difficulty": "medium"
+  },
+  {
+    "id": 14,
+    "question": "图像二值化中，OTSU 方法的主要特点是？",
+    "options": [
+      "A. 手动设置阈值",
+      "B. 自动计算最优阈值",
+      "C. 只适用于彩色图像",
+      "D. 不能处理噪声"
+    ],
+    "answer": "B",
+    "explanation": "OTSU 方法是一种自适应阈值分割算法，通过最大化类间方差自动确定最优阈值。",
+    "topic": "图像处理",
+    "subtopic": "阈值分割",
+    "difficulty": "medium"
+  },
+  {
+    "id": 15,
+    "question": "在目标检测中，IoU 指的是？",
+    "options": [
+      "A. 输入输出比率",
+      "B. 交并比",
+      "C. 图像优化单元",
+      "D. 内部输出单元"
+    ],
+    "answer": "B",
+    "explanation": "IoU (Intersection over Union) 交并比，是预测框与真实框的交集除以并集，用于评估检测精度。",
+    "topic": "YOLO",
+    "subtopic": "评估指标",
+    "difficulty": "easy"
+  },
+  {
+    "id": 16,
+    "question": "下列哪个算法是两阶段目标检测算法？",
+    "options": [
+      "A. YOLO",
+      "B. SSD",
+      "C. Faster R-CNN",
+      "D. RetinaNet"
+    ],
+    "answer": "C",
+    "explanation": "Faster R-CNN 是两阶段检测算法，先生成候选区域（RPN），再进行分类和回归。YOLO 和 SSD 是单阶段算法。",
+    "topic": "YOLO",
+    "subtopic": "R-CNN",
+    "difficulty": "medium"
+  },
+  {
+    "id": 17,
+    "question": "在 OpenCV 中，用于显示图像的函数是？",
+    "options": [
+      "A. cv2.show()",
+      "B. cv2.display()",
+      "C. cv2.imshow()",
+      "D. cv2.view()"
+    ],
+    "answer": "C",
+    "explanation": "cv2.imshow() 用于在指定窗口显示图像，需要配合 cv2.waitKey() 使用。",
+    "topic": "OpenCV",
+    "subtopic": "基础操作",
+    "difficulty": "easy"
+  },
+  {
+    "id": 18,
+    "question": "Batch Normalization 的主要作用是？",
+    "options": [
+      "A. 增加网络深度",
+      "B. 加速训练收敛",
+      "C. 减少参数量",
+      "D. 提高准确率"
+    ],
+    "answer": "B",
+    "explanation": "BatchNorm 通过对每批数据进行归一化，缓解梯度消失/爆炸问题，加速训练收敛。",
+    "topic": "CNN",
+    "subtopic": "归一化",
+    "difficulty": "medium"
+  },
+  {
+    "id": 19,
+    "question": "形态学操作中的开运算是？",
+    "options": [
+      "A. 先膨胀后腐蚀",
+      "B. 先腐蚀后膨胀",
+      "C. 只腐蚀",
+      "D. 只膨胀"
+    ],
+    "answer": "B",
+    "explanation": "开运算是先腐蚀后膨胀，用于去除小物体、平滑轮廓、断开狭窄连接。",
+    "topic": "图像处理",
+    "subtopic": "形态学",
+    "difficulty": "medium"
+  },
+  {
+    "id": 20,
+    "question": "YOLO 算法中，损失函数通常不包含？",
+    "options": [
+      "A. 定位损失",
+      "B. 置信度损失",
+      "C. 分类损失",
+      "D. 重构损失"
+    ],
+    "answer": "D",
+    "explanation": "YOLO 的损失函数包含定位损失（边界框回归）、置信度损失和分类损失，不包含重构损失。",
+    "topic": "YOLO",
+    "subtopic": "YOLO",
+    "difficulty": "hard"
+  },
+  {
+    "id": 21,
+    "question": "Sobel 算子主要用于？",
+    "options": [
+      "A. 图像平滑",
+      "B. 边缘检测",
+      "C. 图像增强",
+      "D. 色彩转换"
+    ],
+    "answer": "B",
+    "explanation": "Sobel 算子是一种离散微分算子，通过计算图像亮度的空间梯度来检测边缘。",
+    "topic": "图像处理",
+    "subtopic": "边缘检测",
+    "difficulty": "easy"
+  },
+  {
+    "id": 22,
+    "question": "在 CNN 中，1x1 卷积的主要作用是？",
+    "options": [
+      "A. 提取空间特征",
+      "B. 增加感受野",
+      "C. 降维/升维和增加非线性",
+      "D. 减少计算量"
+    ],
+    "answer": "C",
+    "explanation": "1x1 卷积不改变空间尺寸，主要用于通道维度的变换（降维/升维）和增加网络非线性。",
+    "topic": "CNN",
+    "subtopic": "卷积层",
+    "difficulty": "medium"
+  },
+  {
+    "id": 23,
+    "question": "HSV 色彩空间中，S 表示？",
+    "options": [
+      "A. 色调",
+      "B. 饱和度",
+      "C. 亮度",
+      "D. 色度"
+    ],
+    "answer": "B",
+    "explanation": "HSV 中 H=Hue(色调), S=Saturation(饱和度), V=Value(亮度)。",
+    "topic": "图像处理",
+    "subtopic": "色彩空间",
+    "difficulty": "easy"
+  },
+  {
+    "id": 24,
+    "question": "Dropout 技术在训练时的作用是？",
+    "options": [
+      "A. 加速训练",
+      "B. 防止过拟合",
+      "C. 提高精度",
+      "D. 减少参数"
+    ],
+    "answer": "B",
+    "explanation": "Dropout 在训练时随机丢弃部分神经元，减少神经元之间的共适应，有效防止过拟合。",
+    "topic": "CNN",
+    "subtopic": "正则化",
+    "difficulty": "easy"
+  },
+  {
+    "id": 25,
+    "question": "在 OpenCV 中，用于保存图像的函数是？",
+    "options": [
+      "A. cv2.save()",
+      "B. cv2.write()",
+      "C. cv2.imwrite()",
+      "D. cv2.store()"
+    ],
+    "answer": "C",
+    "explanation": "cv2.imwrite() 用于将图像保存到文件，支持多种格式如 JPG、PNG 等。",
+    "topic": "OpenCV",
+    "subtopic": "基础操作",
+    "difficulty": "easy"
+  },
+  {
+    "id": 26,
+    "question": "Faster R-CNN 中 RPN 的全称是？",
+    "options": [
+      "A. Region Proposal Network",
+      "B. Regional Processing Network",
+      "C. Region Position Network",
+      "D. Recursive Proposal Network"
+    ],
+    "answer": "A",
+    "explanation": "RPN (Region Proposal Network) 区域提议网络，用于生成候选目标区域。",
+    "topic": "YOLO",
+    "subtopic": "R-CNN",
+    "difficulty": "medium"
+  },
+  {
+    "id": 27,
+    "question": "图像金字塔的主要用途是？",
+    "options": [
+      "A. 图像压缩",
+      "B. 多尺度检测",
+      "C. 色彩增强",
+      "D. 噪声去除"
+    ],
+    "answer": "B",
+    "explanation": "图像金字塔通过构建不同分辨率的图像序列，用于多尺度目标检测。",
+    "topic": "图像处理",
+    "subtopic": "图像变换",
+    "difficulty": "medium"
+  },
+  {
+    "id": 28,
+    "question": "ReLU 激活函数的数学表达式是？",
+    "options": [
+      "A. f(x) = x",
+      "B. f(x) = max(0, x)",
+      "C. f(x) = 1/(1+e^-x)",
+      "D. f(x) = (e^x - e^-x)/(e^x + e^-x)"
+    ],
+    "answer": "B",
+    "explanation": "ReLU (Rectified Linear Unit) 的表达式是 f(x) = max(0, x)，将负值置为 0。",
+    "topic": "CNN",
+    "subtopic": "激活函数",
+    "difficulty": "easy"
+  },
+  {
+    "id": 29,
+    "question": "在目标检测中，mAP 指的是？",
+    "options": [
+      "A. 平均精度",
+      "B. 最大精度",
+      "C. 最小精度",
+      "D. 中值精度"
+    ],
+    "answer": "A",
+    "explanation": "mAP (mean Average Precision) 是各类别 AP 的平均值，是目标检测的主要评价指标。",
+    "topic": "YOLO",
+    "subtopic": "评估指标",
+    "difficulty": "medium"
+  },
+  {
+    "id": 30,
+    "question": "霍夫变换主要用于检测？",
+    "options": [
+      "A. 角点",
+      "B. 直线",
+      "C. 颜色",
+      "D. 纹理"
+    ],
+    "answer": "B",
+    "explanation": "霍夫变换是一种在图像中寻找直线、圆等几何形状的方法，最常用于直线检测。",
+    "topic": "图像处理",
+    "subtopic": "特征检测",
+    "difficulty": "medium"
+  },
+  {
+    "id": 31,
+    "question": "VGG 网络的特点是使用小的卷积核，其大小通常是？",
+    "options": [
+      "A. 1x1",
+      "B. 3x3",
+      "C. 5x5",
+      "D. 7x7"
+    ],
+    "answer": "B",
+    "explanation": "VGG 网络统一使用 3x3 的小卷积核，通过堆叠多个小卷积核来增大感受野。",
+    "topic": "CNN",
+    "subtopic": "网络架构",
+    "difficulty": "easy"
+  },
+  {
+    "id": 32,
+    "question": "在 OpenCV 中，cv2.cvtColor() 函数用于？",
+    "options": [
+      "A. 改变图像大小",
+      "B. 转换颜色空间",
+      "C. 旋转图像",
+      "D. 裁剪图像"
+    ],
+    "answer": "B",
+    "explanation": "cv2.cvtColor() 用于在不同颜色空间之间转换图像，如 BGR 转 Gray、BGR 转 HSV 等。",
+    "topic": "OpenCV",
+    "subtopic": "色彩空间",
+    "difficulty": "easy"
+  },
+  {
+    "id": 33,
+    "question": "Attention 机制的核心思想是？",
+    "options": [
+      "A. 增加网络深度",
+      "B. 关注重要信息",
+      "C. 减少参数量",
+      "D. 加速训练"
+    ],
+    "answer": "B",
+    "explanation": "注意力机制让模型学会关注输入中的重要部分，忽略不相关信息。",
+    "topic": "CNN",
+    "subtopic": "注意力机制",
+    "difficulty": "medium"
+  },
+  {
+    "id": 34,
+    "question": "透视变换需要至少几个点来计算变换矩阵？",
+    "options": [
+      "A. 3 个",
+      "B. 4 个",
+      "C. 5 个",
+      "D. 8 个"
+    ],
+    "answer": "B",
+    "explanation": "透视变换需要 4 对对应点（源图像和目标图像各 4 个点）来计算 3x3 的变换矩阵。",
+    "topic": "图像处理",
+    "subtopic": "几何变换",
+    "difficulty": "medium"
+  },
+  {
+    "id": 35,
+    "question": "YOLOv3 使用了多少个尺度进行预测？",
+    "options": [
+      "A. 1 个",
+      "B. 2 个",
+      "C. 3 个",
+      "D. 4 个"
+    ],
+    "answer": "C",
+    "explanation": "YOLOv3 在 3 个不同尺度的特征图上进行预测，分别检测大、中、小目标。",
+    "topic": "YOLO",
+    "subtopic": "YOLO",
+    "difficulty": "medium"
+  },
+  {
+    "id": 36,
+    "question": "拉普拉斯算子是一种？",
+    "options": [
+      "A. 一阶微分算子",
+      "B. 二阶微分算子",
+      "C. 三阶微分算子",
+      "D. 积分算子"
+    ],
+    "answer": "B",
+    "explanation": "拉普拉斯算子是二阶微分算子，对边缘和噪声都很敏感，常用于边缘检测。",
+    "topic": "图像处理",
+    "subtopic": "边缘检测",
+    "difficulty": "medium"
+  },
+  {
+    "id": 37,
+    "question": "在 CNN 中，感受野（Receptive Field）指的是？",
+    "options": [
+      "A. 输入图像大小",
+      "B. 输出特征图大小",
+      "C. 神经元能看到的输入区域",
+      "D. 卷积核大小"
+    ],
+    "answer": "C",
+    "explanation": "感受野指特征图上的一个点在输入图像上对应的区域大小。",
+    "topic": "CNN",
+    "subtopic": "基础概念",
+    "difficulty": "medium"
+  },
+  {
+    "id": 38,
+    "question": "NMS（非极大值抑制）的作用是？",
+    "options": [
+      "A. 增加检测框",
+      "B. 去除冗余检测框",
+      "C. 提高分类精度",
+      "D. 加速训练"
+    ],
+    "answer": "B",
+    "explanation": "NMS 通过抑制非极大值的检测框，去除重复的边界框，保留最优检测结果。",
+    "topic": "YOLO",
+    "subtopic": "后处理",
+    "difficulty": "medium"
+  },
+  {
+    "id": 39,
+    "question": "在 OpenCV 中，用于检测人脸的预训练模型是？",
+    "options": [
+      "A. Haar Cascades",
+      "B. SIFT",
+      "C. ORB",
+      "D. SURF"
+    ],
+    "answer": "A",
+    "explanation": "Haar Cascades 是 OpenCV 中经典的人脸检测方法，基于 Haar 特征和级联分类器。",
+    "topic": "OpenCV",
+    "subtopic": "目标检测",
+    "difficulty": "easy"
+  },
+  {
+    "id": 40,
+    "question": "数据增强的主要目的是？",
+    "options": [
+      "A. 减少数据量",
+      "B. 增加训练数据多样性",
+      "C. 提高测试速度",
+      "D. 减少模型大小"
+    ],
+    "answer": "B",
+    "explanation": "数据增强通过对训练数据进行变换（旋转、翻转等）增加数据多样性，提高模型泛化能力。",
+    "topic": "CNN",
+    "subtopic": "数据增强",
+    "difficulty": "easy"
+  },
+  {
+    "id": 41,
+    "question": "在 OpenCV 中，用于创建窗口的函数是？",
+    "options": [
+      "A. cv2.createWindow()",
+      "B. cv2.namedWindow()",
+      "C. cv2.makeWindow()",
+      "D. cv2.newWindow()"
+    ],
+    "answer": "B",
+    "explanation": "cv2.namedWindow() 用于创建命名窗口，可用于显示图像。",
+    "topic": "OpenCV",
+    "subtopic": "基础操作",
+    "difficulty": "easy"
+  },
+  {
+    "id": 42,
+    "question": "MobileNet 网络的核心创新是？",
+    "options": [
+      "A. 残差连接",
+      "B. 深度可分离卷积",
+      "C. 密集连接",
+      "D. 注意力机制"
+    ],
+    "answer": "B",
+    "explanation": "MobileNet 使用深度可分离卷积，大幅减少参数量和计算量，适合移动端部署。",
+    "topic": "CNN",
+    "subtopic": "网络架构",
+    "difficulty": "medium"
+  },
+  {
+    "id": 43,
+    "question": "形态学操作中的闭运算是？",
+    "options": [
+      "A. 先膨胀后腐蚀",
+      "B. 先腐蚀后膨胀",
+      "C. 只膨胀",
+      "D. 只腐蚀"
+    ],
+    "answer": "A",
+    "explanation": "闭运算是先膨胀后腐蚀，用于填充小孔洞、连接相邻物体。",
+    "topic": "图像处理",
+    "subtopic": "形态学",
+    "difficulty": "medium"
+  },
+  {
+    "id": 44,
+    "question": "SSD 算法的全称是？",
+    "options": [
+      "A. Single Shot Detector",
+      "B. Simple宋宋 Detector",
+      "C. Spatial宋宋 Detection",
+      "D. Scale宋宋 Detector"
+    ],
+    "answer": "A",
+    "explanation": "SSD (Single Shot MultiBox Detector) 是单阶段多框检测器。",
+    "topic": "YOLO",
+    "subtopic": "SSD",
+    "difficulty": "medium"
+  },
+  {
+    "id": 45,
+    "question": "在 OpenCV 中，用于调整图像大小的函数是？",
+    "options": [
+      "A. cv2.transform()",
+      "B. cv2.resize()",
+      "C. cv2.scale()",
+      "D. cv2.changeSize()"
+    ],
+    "answer": "B",
+    "explanation": "cv2.resize() 用于调整图像大小，可指定输出尺寸或缩放因子。",
+    "topic": "OpenCV",
+    "subtopic": "几何变换",
+    "difficulty": "easy"
+  },
+  {
+    "id": 46,
+    "question": "LeNet-5 网络主要用于？",
+    "options": [
+      "A. 图像分类",
+      "B. 目标检测",
+      "C. 图像分割",
+      "D. 人脸识别"
+    ],
+    "answer": "A",
+    "explanation": "LeNet-5 是最早的 CNN 之一，由 Yann LeCun 提出，主要用于手写数字识别。",
+    "topic": "CNN",
+    "subtopic": "网络架构",
+    "difficulty": "easy"
+  },
+  {
+    "id": 47,
+    "question": "直方图均衡化的主要作用是？",
+    "options": [
+      "A. 减少噪声",
+      "B. 增强对比度",
+      "C. 平滑图像",
+      "D. 锐化边缘"
+    ],
+    "answer": "B",
+    "explanation": "直方图均衡化通过重新分配像素值，扩展动态范围，增强图像对比度。",
+    "topic": "图像处理",
+    "subtopic": "图像增强",
+    "difficulty": "medium"
+  },
+  {
+    "id": 48,
+    "question": "YOLOv4 中不包含以下哪个组件？",
+    "options": [
+      "A. Mosaic 数据增强",
+      "B. SAM 注意力模块",
+      "C. PANet 结构",
+      "D. Transformer 编码器"
+    ],
+    "answer": "D",
+    "explanation": "YOLOv4 使用 Mosaic、SAM、PANet 等，但不包含 Transformer 组件。",
+    "topic": "YOLO",
+    "subtopic": "YOLO",
+    "difficulty": "hard"
+  },
+  {
+    "id": 49,
+    "question": "在 OpenCV 中，用于绘制矩形的函数是？",
+    "options": [
+      "A. cv2.drawRectangle()",
+      "B. cv2.rectangle()",
+      "C. cv2.box()",
+      "D. cv2.drawRect()"
+    ],
+    "answer": "B",
+    "explanation": "cv2.rectangle() 用于在图像上绘制矩形框。",
+    "topic": "OpenCV",
+    "subtopic": "绘图功能",
+    "difficulty": "easy"
+  },
+  {
+    "id": 50,
+    "question": "梯度消失问题最可能出现在哪种网络中？",
+    "options": [
+      "A. 浅层网络",
+      "B. 深层网络",
+      "C. 单层网络",
+      "D. 循环神经网络"
+    ],
+    "answer": "B",
+    "explanation": "梯度消失问题主要出现在深层网络中，梯度在反向传播时逐渐变小。",
+    "topic": "CNN",
+    "subtopic": "训练问题",
+    "difficulty": "medium"
+  },
+  {
+    "id": 51,
+    "question": "傅里叶变换在图像处理中主要用于？",
+    "options": [
+      "A. 空间域分析",
+      "B. 频域分析",
+      "C. 色彩分析",
+      "D. 形状分析"
+    ],
+    "answer": "B",
+    "explanation": "傅里叶变换将图像从空间域转换到频域，用于滤波、压缩等操作。",
+    "topic": "图像处理",
+    "subtopic": "频域处理",
+    "difficulty": "hard"
+  },
+  {
+    "id": 52,
+    "question": "Inception 网络的核心思想是？",
+    "options": [
+      "A. 增加网络深度",
+      "B. 多尺度特征融合",
+      "C. 残差连接",
+      "D. 注意力机制"
+    ],
+    "answer": "B",
+    "explanation": "Inception 模块并行使用不同尺寸的卷积核，捕获多尺度特征。",
+    "topic": "CNN",
+    "subtopic": "网络架构",
+    "difficulty": "medium"
+  },
+  {
+    "id": 53,
+    "question": "在目标检测中，Anchor 的作用是？",
+    "options": [
+      "A. 固定网络结构",
+      "B. 预定义边界框尺寸",
+      "C. 减少计算量",
+      "D. 增加数据量"
+    ],
+    "answer": "B",
+    "explanation": "Anchor 是预定义的边界框模板，用于生成候选检测框。",
+    "topic": "YOLO",
+    "subtopic": "基础概念",
+    "difficulty": "medium"
+  },
+  {
+    "id": 54,
+    "question": "OpenCV 中，用于视频捕获的类是？",
+    "options": [
+      "A. cv2.VideoCapture",
+      "B. cv2.VideoReader",
+      "C. cv2.Capture",
+      "D. cv2.VideoSource"
+    ],
+    "answer": "A",
+    "explanation": "cv2.VideoCapture 用于从摄像头或视频文件捕获视频流。",
+    "topic": "OpenCV",
+    "subtopic": "视频处理",
+    "difficulty": "easy"
+  },
+  {
+    "id": 55,
+    "question": "以下哪种损失函数常用于分类问题？",
+    "options": [
+      "A. MSE",
+      "B. MAE",
+      "C. 交叉熵",
+      "D. Huber"
+    ],
+    "answer": "C",
+    "explanation": "交叉熵损失是分类问题中最常用的损失函数。",
+    "topic": "CNN",
+    "subtopic": "损失函数",
+    "difficulty": "easy"
+  },
+  {
+    "id": 56,
+    "question": "中值滤波最适合去除哪种噪声？",
+    "options": [
+      "A. 高斯噪声",
+      "B. 椒盐噪声",
+      "C. 泊松噪声",
+      "D. 乘性噪声"
+    ],
+    "answer": "B",
+    "explanation": "中值滤波对椒盐噪声特别有效，同时能保持边缘。",
+    "topic": "图像处理",
+    "subtopic": "滤波",
+    "difficulty": "medium"
+  },
+  {
+    "id": 57,
+    "question": "RetinaNet 引入的核心损失函数是？",
+    "options": [
+      "A. Focal Loss",
+      "B. Dice Loss",
+      "C. Triplet Loss",
+      "D. Contrastive Loss"
+    ],
+    "answer": "A",
+    "explanation": "RetinaNet 引入 Focal Loss 解决正负样本不平衡问题。",
+    "topic": "YOLO",
+    "subtopic": "损失函数",
+    "difficulty": "medium"
+  },
+  {
+    "id": 58,
+    "question": "在 OpenCV 中，用于读取视频的函数是？",
+    "options": [
+      "A. cv2.read()",
+      "B. cap.read()",
+      "C. cv2.capture()",
+      "D. cap.get()"
+    ],
+    "answer": "B",
+    "explanation": "使用 VideoCapture 对象时，调用 read() 方法读取视频帧。",
+    "topic": "OpenCV",
+    "subtopic": "视频处理",
+    "difficulty": "easy"
+  },
+  {
+    "id": 59,
+    "question": "Softmax 函数主要用于？",
+    "options": [
+      "A. 二分类",
+      "B. 多分类",
+      "C. 回归",
+      "D. 聚类"
+    ],
+    "answer": "B",
+    "explanation": "Softmax 将输出转换为概率分布，常用于多分类问题。",
+    "topic": "CNN",
+    "subtopic": "激活函数",
+    "difficulty": "easy"
+  },
+  {
+    "id": 60,
+    "question": "图像配准的目的是？",
+    "options": [
+      "A. 增强图像对比度",
+      "B. 对齐多幅图像",
+      "C. 压缩图像",
+      "D. 分割图像"
+    ],
+    "answer": "B",
+    "explanation": "图像配准将不同时间、角度或设备获取的图像对齐。",
+    "topic": "图像处理",
+    "subtopic": "图像变换",
+    "difficulty": "medium"
+  },
+  {
+    "id": 61,
+    "question": "DenseNet 的核心特点是？",
+    "options": [
+      "A. 稀疏连接",
+      "B. 密集连接",
+      "C. 深度卷积",
+      "D. 逐点卷积"
+    ],
+    "answer": "B",
+    "explanation": "DenseNet 中每层与所有后续层直接连接，实现特征重用。",
+    "topic": "CNN",
+    "subtopic": "网络架构",
+    "difficulty": "medium"
+  },
+  {
+    "id": 62,
+    "question": "在 YOLO 中，网格（Grid）的作用是？",
+    "options": [
+      "A. 划分图像区域",
+      "B. 增加计算量",
+      "C. 减少参数量",
+      "D. 提高分辨率"
+    ],
+    "answer": "A",
+    "explanation": "YOLO 将图像划分为 SxS 网格，每个网格负责预测中心点落在其中的目标。",
+    "topic": "YOLO",
+    "subtopic": "YOLO",
+    "difficulty": "medium"
+  },
+  {
+    "id": 63,
+    "question": "OpenCV 中，用于等待按键的函数是？",
+    "options": [
+      "A. cv2.pressKey()",
+      "B. cv2.waitKey()",
+      "C. cv2.getKey()",
+      "D. cv2.checkKey()"
+    ],
+    "answer": "B",
+    "explanation": "cv2.waitKey() 等待键盘输入，参数为等待时间（毫秒）。",
+    "topic": "OpenCV",
+    "subtopic": "基础操作",
+    "difficulty": "easy"
+  },
+  {
+    "id": 64,
+    "question": "以下哪种优化器基于动量概念？",
+    "options": [
+      "A. SGD",
+      "B. Adam",
+      "C. RMSprop",
+      "D. Adagrad"
+    ],
+    "answer": "B",
+    "explanation": "Adam 结合了动量和自适应学习率，是最常用的优化器之一。",
+    "topic": "CNN",
+    "subtopic": "优化器",
+    "difficulty": "medium"
+  },
+  {
+    "id": 65,
+    "question": "Laplacian 金字塔用于？",
+    "options": [
+      "A. 图像压缩",
+      "B. 多尺度表示",
+      "C. 边缘检测",
+      "D. 以上都是"
+    ],
+    "answer": "D",
+    "explanation": "Laplacian 金字塔可用于多尺度表示、图像融合、压缩等。",
+    "topic": "图像处理",
+    "subtopic": "图像变换",
+    "difficulty": "hard"
+  },
+  {
+    "id": 66,
+    "question": "EfficientNet 的核心创新是？",
+    "options": [
+      "A. 复合缩放方法",
+      "B. 残差连接",
+      "C. 注意力机制",
+      "D. 密集连接"
+    ],
+    "answer": "A",
+    "explanation": "EfficientNet 使用复合缩放，同时调整深度、宽度和分辨率。",
+    "topic": "CNN",
+    "subtopic": "网络架构",
+    "difficulty": "medium"
+  },
+  {
+    "id": 67,
+    "question": "在目标检测中，Precision 指的是？",
+    "options": [
+      "A. 查全率",
+      "B. 查准率",
+      "C. 准确率",
+      "D. F1 分数"
+    ],
+    "answer": "B",
+    "explanation": "Precision 查准率，表示预测为正的样本中实际为正的比例。",
+    "topic": "YOLO",
+    "subtopic": "评估指标",
+    "difficulty": "medium"
+  },
+  {
+    "id": 68,
+    "question": "OpenCV 中，用于获取图像形状的属性是？",
+    "options": [
+      "A. img.size",
+      "B. img.shape",
+      "C. img.dimension",
+      "D. img.length"
+    ],
+    "answer": "B",
+    "explanation": "img.shape 返回图像的形状（高度，宽度，通道数）。",
+    "topic": "OpenCV",
+    "subtopic": "基础操作",
+    "difficulty": "easy"
+  },
+  {
+    "id": 69,
+    "question": "学习率衰减的目的是？",
+    "options": [
+      "A. 加速训练",
+      "B. 提高最终精度",
+      "C. 减少过拟合",
+      "D. 以上都是"
+    ],
+    "answer": "D",
+    "explanation": "学习率衰减可在训练初期快速收敛，后期精细调整，提高精度。",
+    "topic": "CNN",
+    "subtopic": "训练技巧",
+    "difficulty": "medium"
+  },
+  {
+    "id": 70,
+    "question": "图像分割与目标检测的主要区别是？",
+    "options": [
+      "A. 分割输出像素级掩码",
+      "B. 检测输出边界框",
+      "C. 分割更精细",
+      "D. 以上都是"
+    ],
+    "answer": "D",
+    "explanation": "图像分割提供像素级分类，目标检测输出边界框，分割粒度更细。",
+    "topic": "图像处理",
+    "subtopic": "图像分割",
+    "difficulty": "easy"
+  },
+  {
+    "id": 71,
+    "question": "SE-Net 引入的模块是？",
+    "options": [
+      "A. 空间注意力",
+      "B. 通道注意力",
+      "C. 时间注意力",
+      "D. 混合注意力"
+    ],
+    "answer": "B",
+    "explanation": "SE-Net 提出 Squeeze-and-Excitation 模块，实现通道注意力。",
+    "topic": "CNN",
+    "subtopic": "注意力机制",
+    "difficulty": "medium"
+  },
+  {
+    "id": 72,
+    "question": "YOLOv7 相比前代的主要改进不包括？",
+    "options": [
+      "A. E-ELAN 结构",
+      "B. 模型重参数化",
+      "C. 辅助监督",
+      "D. Transformer 架构"
+    ],
+    "answer": "D",
+    "explanation": "YOLOv7 引入 E-ELAN、重参数化等，但仍基于 CNN 架构。",
+    "topic": "YOLO",
+    "subtopic": "YOLO",
+    "difficulty": "hard"
+  },
+  {
+    "id": 73,
+    "question": "在 OpenCV 中，用于绘制圆的函数是？",
+    "options": [
+      "A. cv2.circle()",
+      "B. cv2.ellipse()",
+      "C. cv2.disk()",
+      "D. cv2.drawCircle()"
+    ],
+    "answer": "A",
+    "explanation": "cv2.circle() 用于在图像上绘制圆形。",
+    "topic": "OpenCV",
+    "subtopic": "绘图功能",
+    "difficulty": "easy"
+  },
+  {
+    "id": 74,
+    "question": "迁移学习的主要优势是？",
+    "options": [
+      "A. 减少训练数据需求",
+      "B. 加速训练",
+      "C. 提高性能",
+      "D. 以上都是"
+    ],
+    "answer": "D",
+    "explanation": "迁移学习利用预训练模型，可减少数据需求、加速训练、提高性能。",
+    "topic": "CNN",
+    "subtopic": "迁移学习",
+    "difficulty": "easy"
+  },
+  {
+    "id": 75,
+    "question": "Gabor 滤波器主要用于？",
+    "options": [
+      "A. 边缘检测",
+      "B. 纹理分析",
+      "C. 图像去噪",
+      "D. 图像增强"
+    ],
+    "answer": "B",
+    "explanation": "Gabor 滤波器对纹理分析特别有效，可提取方向和尺度信息。",
+    "topic": "图像处理",
+    "subtopic": "滤波",
+    "difficulty": "hard"
+  },
+  {
+    "id": 76,
+    "question": "以下哪个不是常见的 CNN 框架？",
+    "options": [
+      "A. PyTorch",
+      "B. TensorFlow",
+      "C. Scikit-learn",
+      "D. Keras"
+    ],
+    "answer": "C",
+    "explanation": "Scikit-learn 是传统机器学习库，不专注于深度学习。",
+    "topic": "CNN",
+    "subtopic": "框架",
+    "difficulty": "easy"
+  },
+  {
+    "id": 77,
+    "question": "在实例分割中，每个目标实例有？",
+    "options": [
+      "A. 一个类别标签",
+      "B. 一个边界框",
+      "C. 一个像素级掩码",
+      "D. 以上都是"
+    ],
+    "answer": "D",
+    "explanation": "实例分割同时提供类别、边界框和像素级掩码。",
+    "topic": "YOLO",
+    "subtopic": "实例分割",
+    "difficulty": "medium"
+  },
+  {
+    "id": 78,
+    "question": "OpenCV 中，用于访问像素值的语法是？",
+    "options": [
+      "A. img[x,y]",
+      "B. img[y,x]",
+      "C. img[x][y]",
+      "D. img.get(x,y)"
+    ],
+    "answer": "B",
+    "explanation": "OpenCV 使用 img[y,x] 或 img[y][x] 访问像素，y 是行，x 是列。",
+    "topic": "OpenCV",
+    "subtopic": "基础操作",
+    "difficulty": "medium"
+  },
+  {
+    "id": 79,
+    "question": "Early Stopping 的作用是？",
+    "options": [
+      "A. 加速训练",
+      "B. 防止过拟合",
+      "C. 提高精度",
+      "D. 减少参数"
+    ],
+    "answer": "B",
+    "explanation": "Early Stopping 在验证集性能下降时停止训练，防止过拟合。",
+    "topic": "CNN",
+    "subtopic": "正则化",
+    "difficulty": "easy"
+  },
+  {
+    "id": 80,
+    "question": "仿射变换可以保持？",
+    "options": [
+      "A. 直线",
+      "B. 平行线",
+      "C. 比例",
+      "D. A 和 B"
+    ],
+    "answer": "D",
+    "explanation": "仿射变换保持直线和平行性，但不保持长度和角度。",
+    "topic": "图像处理",
+    "subtopic": "几何变换",
+    "difficulty": "medium"
+  },
+  {
+    "id": 81,
+    "question": "ResNeXt 的核心创新是？",
+    "options": [
+      "A. 分组卷积",
+      "B. 残差连接",
+      "C. 密集连接",
+      "D. 注意力机制"
+    ],
+    "answer": "A",
+    "explanation": "ResNeXt 引入分组卷积，增加模型的表达能力。",
+    "topic": "CNN",
+    "subtopic": "网络架构",
+    "difficulty": "medium"
+  },
+  {
+    "id": 82,
+    "question": "CornerNet 检测目标的方式是？",
+    "options": [
+      "A. 预测中心点",
+      "B. 预测角点",
+      "C. 预测边界",
+      "D. 预测掩码"
+    ],
+    "answer": "B",
+    "explanation": "CornerNet 通过检测目标框的左上角和右下角进行目标检测。",
+    "topic": "YOLO",
+    "subtopic": "Anchor-Free",
+    "difficulty": "hard"
+  },
+  {
+    "id": 83,
+    "question": "在 OpenCV 中，用于转换色彩空间的函数是？",
+    "options": [
+      "A. cv2.convertColor()",
+      "B. cv2.cvtColor()",
+      "C. cv2.changeColor()",
+      "D. cv2.transformColor()"
+    ],
+    "answer": "B",
+    "explanation": "cv2.cvtColor() 用于在不同色彩空间之间转换。",
+    "topic": "OpenCV",
+    "subtopic": "色彩空间",
+    "difficulty": "easy"
+  },
+  {
+    "id": 84,
+    "question": "权重初始化的重要性在于？",
+    "options": [
+      "A. 影响收敛速度",
+      "B. 避免梯度消失",
+      "C. 避免梯度爆炸",
+      "D. 以上都是"
+    ],
+    "answer": "D",
+    "explanation": "好的权重初始化可加速收敛，避免梯度问题。",
+    "topic": "CNN",
+    "subtopic": "初始化",
+    "difficulty": "medium"
+  },
+  {
+    "id": 85,
+    "question": "图像增强中，gamma 校正用于？",
+    "options": [
+      "A. 调整亮度",
+      "B. 调整对比度",
+      "C. 调整色彩",
+      "D. 调整清晰度"
+    ],
+    "answer": "A",
+    "explanation": "Gamma 校正通过非线性变换调整图像亮度。",
+    "topic": "图像处理",
+    "subtopic": "图像增强",
+    "difficulty": "medium"
+  },
+  {
+    "id": 86,
+    "question": "以下哪种池化可以保留更多纹理信息？",
+    "options": [
+      "A. 最大池化",
+      "B. 平均池化",
+      "C. 随机池化",
+      "D. 全局池化"
+    ],
+    "answer": "B",
+    "explanation": "平均池化保留更多背景/纹理信息，最大池化更关注显著特征。",
+    "topic": "CNN",
+    "subtopic": "池化",
+    "difficulty": "medium"
+  },
+  {
+    "id": 87,
+    "question": "FCOS 是什么类型的检测器？",
+    "options": [
+      "A. Anchor-based",
+      "B. Anchor-Free",
+      "C. 两阶段",
+      "D. 基于 Transformer"
+    ],
+    "answer": "B",
+    "explanation": "FCOS (Fully Convolutional One-Stage) 是无锚框的单阶段检测器。",
+    "topic": "YOLO",
+    "subtopic": "Anchor-Free",
+    "difficulty": "medium"
+  },
+  {
+    "id": 88,
+    "question": "OpenCV 中，用于检测角点的函数是？",
+    "options": [
+      "A. cv2.findCorners()",
+      "B. cv2.goodFeaturesToTrack()",
+      "C. cv2.detectCorners()",
+      "D. cv2.cornerDetect()"
+    ],
+    "answer": "B",
+    "explanation": "cv2.goodFeaturesToTrack() 使用 Shi-Tomasi 方法检测角点。",
+    "topic": "OpenCV",
+    "subtopic": "特征检测",
+    "difficulty": "medium"
+  },
+  {
+    "id": 89,
+    "question": "Layer Normalization 主要用于？",
+    "options": [
+      "A. CNN",
+      "B. RNN/Transformer",
+      "C. GAN",
+      "D. AE"
+    ],
+    "answer": "B",
+    "explanation": "LayerNorm 在 RNN 和 Transformer 中广泛使用，效果优于 BatchNorm。",
+    "topic": "CNN",
+    "subtopic": "归一化",
+    "difficulty": "medium"
+  },
+  {
+    "id": 90,
+    "question": "图像复原与图像增强的区别是？",
+    "options": [
+      "A. 复原基于退化模型",
+      "B. 增强更主观",
+      "C. 复原更客观",
+      "D. 以上都是"
+    ],
+    "answer": "D",
+    "explanation": "图像复原基于退化模型的逆过程，增强更主观地改善视觉效果。",
+    "topic": "图像处理",
+    "subtopic": "图像复原",
+    "difficulty": "medium"
+  },
+  {
+    "id": 91,
+    "question": "ShuffleNet 的核心操作是？",
+    "options": [
+      "A. 通道混洗",
+      "B. 深度卷积",
+      "C. 分组卷积",
+      "D. 逐点卷积"
+    ],
+    "answer": "A",
+    "explanation": "ShuffleNet 引入通道混洗，促进组间信息交流。",
+    "topic": "CNN",
+    "subtopic": "网络架构",
+    "difficulty": "medium"
+  },
+  {
+    "id": 92,
+    "question": "CenterNet 将目标表示为？",
+    "options": [
+      "A. 边界框",
+      "B. 中心点",
+      "C. 角点",
+      "D. 掩码"
+    ],
+    "answer": "B",
+    "explanation": "CenterNet 将目标表示为中心点，通过关键点检测实现。",
+    "topic": "YOLO",
+    "subtopic": "Anchor-Free",
+    "difficulty": "medium"
+  },
+  {
+    "id": 93,
+    "question": "OpenCV 中，用于计算图像梯度的函数是？",
+    "options": [
+      "A. cv2.gradient()",
+      "B. cv2.Sobel()",
+      "C. cv2.edge()",
+      "D. cv2.diff()"
+    ],
+    "answer": "B",
+    "explanation": "cv2.Sobel() 计算图像梯度，用于边缘检测。",
+    "topic": "OpenCV",
+    "subtopic": "边缘检测",
+    "difficulty": "easy"
+  },
+  {
+    "id": 94,
+    "question": "以下哪种情况适合使用较大的学习率？",
+    "options": [
+      "A. 训练初期",
+      "B. 训练后期",
+      "C. 小数据集",
+      "D. 小模型"
+    ],
+    "answer": "A",
+    "explanation": "训练初期可用较大学习率快速收敛，后期减小学习率精细调整。",
+    "topic": "CNN",
+    "subtopic": "训练技巧",
+    "difficulty": "easy"
+  },
+  {
+    "id": 95,
+    "question": "Wiener 滤波是一种？",
+    "options": [
+      "A. 线性滤波",
+      "B. 非线性滤波",
+      "C. 频域滤波",
+      "D. 空域滤波"
+    ],
+    "answer": "A",
+    "explanation": "Wiener 滤波是最优线性滤波，基于信号和噪声的统计特性。",
+    "topic": "图像处理",
+    "subtopic": "滤波",
+    "difficulty": "hard"
+  },
+  {
+    "id": 96,
+    "question": "GhostNet 的核心思想是？",
+    "options": [
+      "A. 生成幽灵特征",
+      "B. 减少冗余特征",
+      "C. 增加网络深度",
+      "D. 使用注意力"
+    ],
+    "answer": "A",
+    "explanation": "GhostNet 通过廉价操作生成幽灵特征，减少计算量。",
+    "topic": "CNN",
+    "subtopic": "网络架构",
+    "difficulty": "hard"
+  },
+  {
+    "id": 97,
+    "question": "DETR 使用什么架构进行目标检测？",
+    "options": [
+      "A. CNN",
+      "B. RNN",
+      "C. Transformer",
+      "D. GAN"
+    ],
+    "answer": "C",
+    "explanation": "DETR 首次将 Transformer 成功应用于端到端目标检测。",
+    "topic": "YOLO",
+    "subtopic": "Transformer",
+    "difficulty": "medium"
+  },
+  {
+    "id": 98,
+    "question": "OpenCV 中，用于匹配特征点的函数是？",
+    "options": [
+      "A. cv2.matchFeatures()",
+      "B. cv2.BFMatcher()",
+      "C. cv2.findMatches()",
+      "D. cv2.compare()"
+    ],
+    "answer": "B",
+    "explanation": "cv2.BFMatcher() 创建暴力匹配器，用于特征点匹配。",
+    "topic": "OpenCV",
+    "subtopic": "特征匹配",
+    "difficulty": "medium"
+  },
+  {
+    "id": 99,
+    "question": "Label Smoothing 的作用是？",
+    "options": [
+      "A. 加速训练",
+      "B. 防止过拟合",
+      "C. 减少内存",
+      "D. 提高学习率"
+    ],
+    "answer": "B",
+    "explanation": "Label Smoothing 软化硬标签，防止模型过度自信，减少过拟合。",
+    "topic": "CNN",
+    "subtopic": "正则化",
+    "difficulty": "medium"
+  },
+  {
+    "id": 100,
+    "question": "图像压缩中，有损压缩与无损压缩的区别是？",
+    "options": [
+      "A. 有损压缩不可逆",
+      "B. 无损压缩保留全部信息",
+      "C. 有损压缩率更高",
+      "D. 以上都是"
+    ],
+    "answer": "D",
+    "explanation": "有损压缩丢弃部分信息但压缩率高，无损压缩可完全还原。",
+    "topic": "图像处理",
+    "subtopic": "图像压缩",
+    "difficulty": "easy"
+  },
+  {
+    "id": 101,
+    "question": "YOLOv8 引入的新特性是？",
+    "options": [
+      "A. Anchor-Free 检测",
+      "B. 解耦头",
+      "C. C2f 模块",
+      "D. 以上都是"
+    ],
+    "answer": "D",
+    "explanation": "YOLOv8 引入 Anchor-Free、解耦头、C2f 等多项改进。",
+    "topic": "YOLO",
+    "subtopic": "YOLO",
+    "difficulty": "medium"
+  },
+  {
+    "id": 102,
+    "question": "在 OpenCV 中，用于计算直方图的函数是？",
+    "options": [
+      "A. cv2.calcHist()",
+      "B. cv2.histogram()",
+      "C. cv2.countHist()",
+      "D. cv2.plotHist()"
+    ],
+    "answer": "A",
+    "explanation": "cv2.calcHist() 计算并返回图像直方图。",
+    "topic": "OpenCV",
+    "subtopic": "图像分析",
+    "difficulty": "medium"
+  },
+  {
+    "id": 103,
+    "question": "以下哪种激活函数没有梯度消失问题？",
+    "options": [
+      "A. Sigmoid",
+      "B. Tanh",
+      "C. ReLU",
+      "D. Softmax"
+    ],
+    "answer": "C",
+    "explanation": "ReLU 在正区间梯度为 1，缓解了梯度消失问题。",
+    "topic": "CNN",
+    "subtopic": "激活函数",
+    "difficulty": "easy"
+  },
+  {
+    "id": 104,
+    "question": "形态学梯度是指？",
+    "options": [
+      "A. 膨胀减腐蚀",
+      "B. 腐蚀减膨胀",
+      "C. 开运算减闭运算",
+      "D. 原始减开运算"
+    ],
+    "answer": "A",
+    "explanation": "形态学梯度 = 膨胀 - 腐蚀，用于提取边缘。",
+    "topic": "图像处理",
+    "subtopic": "形态学",
+    "difficulty": "medium"
+  },
+  {
+    "id": 105,
+    "question": "ResNet-50 有多少层？",
+    "options": [
+      "A. 18",
+      "B. 34",
+      "C. 50",
+      "D. 101"
+    ],
+    "answer": "C",
+    "explanation": "ResNet-50 有 50 层，是 ResNet 系列中的中等规模模型。",
+    "topic": "CNN",
+    "subtopic": "网络架构",
+    "difficulty": "easy"
+  },
+  {
+    "id": 106,
+    "question": "在目标跟踪中，IoU 阈值用于？",
+    "options": [
+      "A. 判断跟踪成功",
+      "B. 计算精度",
+      "C. 筛选检测框",
+      "D. 以上都是"
+    ],
+    "answer": "D",
+    "explanation": "IoU 阈值在跟踪中用于多方面评估和筛选。",
+    "topic": "YOLO",
+    "subtopic": "目标跟踪",
+    "difficulty": "medium"
+  },
+  {
+    "id": 107,
+    "question": "OpenCV 中，用于应用掩码的函数是？",
+    "options": [
+      "A. cv2.applyMask()",
+      "B. cv2.bitwise_and()",
+      "C. cv2.mask()",
+      "D. cv2.cover()"
+    ],
+    "answer": "B",
+    "explanation": "cv2.bitwise_and() 配合掩码可提取感兴趣区域。",
+    "topic": "OpenCV",
+    "subtopic": "图像操作",
+    "difficulty": "medium"
+  },
+  {
+    "id": 108,
+    "question": "以下哪种方法可以计算梯度？",
+    "options": [
+      "A. Sobel",
+      "B. Scharr",
+      "C. Laplacian",
+      "D. 以上都是"
+    ],
+    "answer": "D",
+    "explanation": "Sobel、Scharr、Laplacian 都可用于梯度计算。",
+    "topic": "图像处理",
+    "subtopic": "边缘检测",
+    "difficulty": "easy"
+  },
+  {
+    "id": 109,
+    "question": "Warmup 训练策略的目的是？",
+    "options": [
+      "A. 稳定训练初期",
+      "B. 加速收敛",
+      "C. 避免陷入局部最优",
+      "D. 以上都是"
+    ],
+    "answer": "D",
+    "explanation": "Warmup 在训练初期使用较小学习率，逐步增大，有助于稳定训练。",
+    "topic": "CNN",
+    "subtopic": "训练技巧",
+    "difficulty": "medium"
+  },
+  {
+    "id": 110,
+    "question": "以下哪个是语义分割的评价指标？",
+    "options": [
+      "A. mIoU",
+      "B. PixAcc",
+      "C. F1-Score",
+      "D. 以上都是"
+    ],
+    "answer": "D",
+    "explanation": "mIoU、PixAcc、F1-Score 都是语义分割的常用评价指标。",
+    "topic": "图像处理",
+    "subtopic": "图像分割",
+    "difficulty": "medium"
+  },
+  {
+    "id": 111,
+    "question": "Vision Transformer (ViT) 将图像视为？",
+    "options": [
+      "A. 像素矩阵",
+      "B. 序列",
+      "C. 图结构",
+      "D. 张量"
+    ],
+    "answer": "B",
+    "explanation": "ViT 将图像切分为 patch 序列，输入 Transformer 编码器。",
+    "topic": "CNN",
+    "subtopic": "Transformer",
+    "difficulty": "medium"
+  },
+  {
+    "id": 112,
+    "question": "Swin Transformer 的核心创新是？",
+    "options": [
+      "A. 全局注意力",
+      "B. 滑动窗口注意力",
+      "C. 稀疏注意力",
+      "D. 局部注意力"
+    ],
+    "answer": "B",
+    "explanation": "Swin Transformer 引入滑动窗口注意力，实现层次化特征学习。",
+    "topic": "YOLO",
+    "subtopic": "Transformer",
+    "difficulty": "hard"
+  },
+  {
+    "id": 113,
+    "question": "OpenCV 中，用于查找轮廓的函数是？",
+    "options": [
+      "A. cv2.findContours()",
+      "B. cv2.detectContours()",
+      "C. cv2.getContours()",
+      "D. cv2.extractContours()"
+    ],
+    "answer": "A",
+    "explanation": "cv2.findContours() 用于查找二值图像中的轮廓。",
+    "topic": "OpenCV",
+    "subtopic": "轮廓检测",
+    "difficulty": "medium"
+  },
+  {
+    "id": 114,
+    "question": "在 CNN 中，全局平均池化的作用是？",
+    "options": [
+      "A. 替代全连接层",
+      "B. 减少参数",
+      "C. 防止过拟合",
+      "D. 以上都是"
+    ],
+    "answer": "D",
+    "explanation": "全局平均池化替代全连接层，减少参数，防止过拟合。",
+    "topic": "CNN",
+    "subtopic": "池化",
+    "difficulty": "medium"
+  },
+  {
+    "id": 115,
+    "question": "以下哪种颜色空间最适合肤色检测？",
+    "options": [
+      "A. RGB",
+      "B. HSV",
+      "C. YUV",
+      "D. Lab"
+    ],
+    "answer": "B",
+    "explanation": "HSV 空间将亮度和色度分离，更适合肤色检测。",
+    "topic": "图像处理",
+    "subtopic": "色彩空间",
+    "difficulty": "medium"
+  },
+  {
+    "id": 116,
+    "question": "YOLO-Pose 用于？",
+    "options": [
+      "A. 目标检测",
+      "B. 姿态估计",
+      "C. 图像分割",
+      "D. 人脸识别"
+    ],
+    "answer": "B",
+    "explanation": "YOLO-Pose 是基于 YOLO 的人体姿态估计模型。",
+    "topic": "YOLO",
+    "subtopic": "姿态估计",
+    "difficulty": "medium"
+  },
+  {
+    "id": 117,
+    "question": "OpenCV 中，用于透视变换的函数是？",
+    "options": [
+      "A. cv2.perspectiveTransform()",
+      "B. cv2.warpPerspective()",
+      "C. cv2.transform()",
+      "D. cv2.warpAffine()"
+    ],
+    "answer": "B",
+    "explanation": "cv2.warpPerspective() 应用透视变换到图像。",
+    "topic": "OpenCV",
+    "subtopic": "几何变换",
+    "difficulty": "medium"
+  },
+  {
+    "id": 118,
+    "question": "以下哪种方法用于特征点检测？",
+    "options": [
+      "A. SIFT",
+      "B. SURF",
+      "C. ORB",
+      "D. 以上都是"
+    ],
+    "answer": "D",
+    "explanation": "SIFT、SURF、ORB 都是经典的特征点检测算法。",
+    "topic": "图像处理",
+    "subtopic": "特征检测",
+    "difficulty": "easy"
+  },
+  {
+    "id": 119,
+    "question": "在深度学习中，epoch 指的是？",
+    "options": [
+      "A. 一次前向传播",
+      "B. 一次反向传播",
+      "C. 遍历整个训练集",
+      "D. 一次迭代"
+    ],
+    "answer": "C",
+    "explanation": "一个 epoch 表示模型遍历了整个训练数据集一次。",
+    "topic": "CNN",
+    "subtopic": "基础概念",
+    "difficulty": "easy"
+  },
+  {
+    "id": 120,
+    "question": "图像融合的目的是？",
+    "options": [
+      "A. 合成新图像",
+      "B. 结合多源信息",
+      "C. 提高图像质量",
+      "D. 以上都是"
+    ],
+    "answer": "D",
+    "explanation": "图像融合将多幅图像的信息整合，生成更高质量的图像。",
+    "topic": "图像处理",
+    "subtopic": "图像融合",
+    "difficulty": "medium"
+  },
+  {
+    "id": 121,
+    "question": "以下哪个是 YOLOv5 的模型尺寸？",
+    "options": [
+      "A. YOLOv5n",
+      "B. YOLOv5s",
+      "C. YOLOv5m",
+      "D. 以上都是"
+    ],
+    "answer": "D",
+    "explanation": "YOLOv5 提供 n/s/m/l/x 等多种模型尺寸。",
+    "topic": "YOLO",
+    "subtopic": "YOLO",
+    "difficulty": "easy"
+  },
+  {
+    "id": 122,
+    "question": "在 OpenCV 中，用于旋转图像的函数是？",
+    "options": [
+      "A. cv2.rotate()",
+      "B. cv2.getRotationMatrix2D()",
+      "C. cv2.warpAffine()",
+      "D. 以上组合使用"
+    ],
+    "answer": "D",
+    "explanation": "旋转图像需要获取旋转矩阵并使用 warpAffine 变换。",
+    "topic": "OpenCV",
+    "subtopic": "几何变换",
+    "difficulty": "medium"
+  },
+  {
+    "id": 123,
+    "question": "以下哪种损失函数用于回归问题？",
+    "options": [
+      "A. 交叉熵",
+      "B. MSE",
+      "C. 焦点损失",
+      "D. 对比损失"
+    ],
+    "answer": "B",
+    "explanation": "MSE (均方误差) 是最常用的回归损失函数。",
+    "topic": "CNN",
+    "subtopic": "损失函数",
+    "difficulty": "easy"
+  },
+  {
+    "id": 124,
+    "question": "顶帽变换是指？",
+    "options": [
+      "A. 原始减开运算",
+      "B. 闭运算减原始",
+      "C. 开运算减闭运算",
+      "D. 膨胀减腐蚀"
+    ],
+    "answer": "A",
+    "explanation": "顶帽变换 = 原始图像 - 开运算，用于提取亮细节。",
+    "topic": "图像处理",
+    "subtopic": "形态学",
+    "difficulty": "hard"
+  },
+  {
+    "id": 125,
+    "question": "以下哪个模型使用瓶颈结构？",
+    "options": [
+      "A. VGG",
+      "B. ResNet",
+      "C. LeNet",
+      "D. AlexNet"
+    ],
+    "answer": "B",
+    "explanation": "ResNet 使用 1x1-3x3-1x1的瓶颈结构减少计算量。",
+    "topic": "CNN",
+    "subtopic": "网络架构",
+    "difficulty": "medium"
+  },
+  {
+    "id": 126,
+    "question": "在目标检测中，FPN 指的是？",
+    "options": [
+      "A. Feature Pyramid Network",
+      "B. Feature Processing Network",
+      "C. Full Pyramid Network",
+      "D. Fast Pyramid Network"
+    ],
+    "answer": "A",
+    "explanation": "FPN 特征金字塔网络，用于多尺度特征融合。",
+    "topic": "YOLO",
+    "subtopic": "特征融合",
+    "difficulty": "medium"
+  },
+  {
+    "id": 127,
+    "question": "OpenCV 中，用于填充多边形区域的函数是？",
+    "options": [
+      "A. cv2.fillPoly()",
+      "B. cv2.drawPoly()",
+      "C. cv2.polygon()",
+      "D. cv2.coverPoly()"
+    ],
+    "answer": "A",
+    "explanation": "cv2.fillPoly() 用于填充多边形区域。",
+    "topic": "OpenCV",
+    "subtopic": "绘图功能",
+    "difficulty": "medium"
+  },
+  {
+    "id": 128,
+    "question": "以下哪种方法可以加速 CNN 训练？",
+    "options": [
+      "A. 混合精度训练",
+      "B. 数据并行",
+      "C. 梯度累积",
+      "D. 以上都是"
+    ],
+    "answer": "D",
+    "explanation": "这些都是常用的加速训练方法。",
+    "topic": "CNN",
+    "subtopic": "训练优化",
+    "difficulty": "medium"
+  },
+  {
+    "id": 129,
+    "question": "图像超分辨率的目的是？",
+    "options": [
+      "A. 提高图像分辨率",
+      "B. 恢复细节",
+      "C. 放大图像",
+      "D. 以上都是"
+    ],
+    "answer": "D",
+    "explanation": "超分辨率从低分辨率图像重建高分辨率图像。",
+    "topic": "图像处理",
+    "subtopic": "超分辨率",
+    "difficulty": "easy"
+  },
+  {
+    "id": 130,
+    "question": "以下哪个是实例分割模型？",
+    "options": [
+      "A. Faster R-CNN",
+      "B. Mask R-CNN",
+      "C. YOLO",
+      "D. SSD"
+    ],
+    "answer": "B",
+    "explanation": "Mask R-CNN 在 Faster R-CNN 基础上增加掩码预测分支。",
+    "topic": "YOLO",
+    "subtopic": "实例分割",
+    "difficulty": "easy"
+  },
+  {
+    "id": 131,
+    "question": "在 OpenCV 中，用于计算两个图像差异的函数是？",
+    "options": [
+      "A. cv2.difference()",
+      "B. cv2.absdiff()",
+      "C. cv2.subtract()",
+      "D. cv2.compare()"
+    ],
+    "answer": "B",
+    "explanation": "cv2.absdiff() 计算两幅图像的绝对差值。",
+    "topic": "OpenCV",
+    "subtopic": "图像操作",
+    "difficulty": "medium"
+  },
+  {
+    "id": 132,
+    "question": "以下哪种正则化技术通过添加噪声实现？",
+    "options": [
+      "A. Dropout",
+      "B. DropConnect",
+      "C. Input Noise",
+      "D. 以上都是"
+    ],
+    "answer": "D",
+    "explanation": "这些都是通过引入噪声/随机性实现正则化。",
+    "topic": "CNN",
+    "subtopic": "正则化",
+    "difficulty": "medium"
+  },
+  {
+    "id": 133,
+    "question": "CLAHE 是指？",
+    "options": [
+      "A. 自适应直方图均衡化",
+      "B. 限制对比度自适应直方图均衡化",
+      "C. 彩色直方图均衡化",
+      "D. 局部直方图均衡化"
+    ],
+    "answer": "B",
+    "explanation": "CLAHE (Contrast Limited Adaptive Histogram Equalization) 限制对比度的自适应直方图均衡化。",
+    "topic": "图像处理",
+    "subtopic": "图像增强",
+    "difficulty": "medium"
+  },
+  {
+    "id": 134,
+    "question": "以下哪个是 Transformer 在视觉中的优势？",
+    "options": [
+      "A. 全局感受野",
+      "B. 并行计算",
+      "C. 强大的建模能力",
+      "D. 以上都是"
+    ],
+    "answer": "D",
+    "explanation": "Transformer 具有全局感受野、并行计算和强大建模能力。",
+    "topic": "CNN",
+    "subtopic": "Transformer",
+    "difficulty": "medium"
+  },
+  {
+    "id": 135,
+    "question": "在 YOLO 中，CIoU 损失考虑了？",
+    "options": [
+      "A. 重叠面积",
+      "B. 中心点距离",
+      "C. 宽高比",
+      "D. 以上都是"
+    ],
+    "answer": "D",
+    "explanation": "CIoU 综合考虑重叠面积、中心点距离和宽高比。",
+    "topic": "YOLO",
+    "subtopic": "损失函数",
+    "difficulty": "hard"
+  },
+  {
+    "id": 136,
+    "question": "OpenCV 中，用于创建跟踪器的函数是？",
+    "options": [
+      "A. cv2.Tracker_create()",
+      "B. cv2.TrackerKCF_create()",
+      "C. cv2.createTracker()",
+      "D. cv2.track_create()"
+    ],
+    "answer": "B",
+    "explanation": "cv2.TrackerKCF_create() 创建 KCF 跟踪器。",
+    "topic": "OpenCV",
+    "subtopic": "目标跟踪",
+    "difficulty": "medium"
+  },
+  {
+    "id": 137,
+    "question": "以下哪种池化没有可学习参数？",
+    "options": [
+      "A. 最大池化",
+      "B. 平均池化",
+      "C. 自适应池化",
+      "D. 以上都是"
+    ],
+    "answer": "D",
+    "explanation": "所有池化操作都是固定的，没有可学习参数。",
+    "topic": "CNN",
+    "subtopic": "池化",
+    "difficulty": "easy"
+  },
+  {
+    "id": 138,
+    "question": "图像去雾的目的是？",
+    "options": [
+      "A. 去除雾气影响",
+      "B. 提高对比度",
+      "C. 恢复清晰图像",
+      "D. 以上都是"
+    ],
+    "answer": "D",
+    "explanation": "图像去雾消除大气散射影响，恢复清晰图像。",
+    "topic": "图像处理",
+    "subtopic": "图像复原",
+    "difficulty": "medium"
+  },
+  {
+    "id": 139,
+    "question": "以下哪个不是 YOLO 系列？",
+    "options": [
+      "A. YOLOX",
+      "B. YOLOv6",
+      "C. YOLO-MS",
+      "D. R-CNN"
+    ],
+    "answer": "D",
+    "explanation": "R-CNN 是另一类检测框架，不属于 YOLO 系列。",
+    "topic": "YOLO",
+    "subtopic": "YOLO",
+    "difficulty": "easy"
+  },
+  {
+    "id": 140,
+    "question": "OpenCV 中，用于计算最小外接矩形的函数是？",
+    "options": [
+      "A. cv2.minAreaRect()",
+      "B. cv2.boundingRect()",
+      "C. cv2.minRect()",
+      "D. cv2外接矩形 ()"
+    ],
+    "answer": "A",
+    "explanation": "cv2.minAreaRect() 计算点集的最小面积外接矩形。",
+    "topic": "OpenCV",
+    "subtopic": "轮廓分析",
+    "difficulty": "medium"
+  },
+  {
+    "id": 141,
+    "question": "在 CNN 中，可变形卷积的特点是？",
+    "options": [
+      "A. 固定采样网格",
+      "B. 可学习采样位置",
+      "C. 固定卷积核",
+      "D. 固定步长"
+    ],
+    "answer": "B",
+    "explanation": "可变形卷积允许学习空间采样位置，增强几何建模能力。",
+    "topic": "CNN",
+    "subtopic": "卷积层",
+    "difficulty": "hard"
+  },
+  {
+    "id": 142,
+    "question": "以下哪种方法用于背景建模？",
+    "options": [
+      "A. 高斯混合模型",
+      "B. 帧差法",
+      "C. 光流法",
+      "D. 以上都是"
+    ],
+    "answer": "D",
+    "explanation": "这些都可用于运动检测和背景建模。",
+    "topic": "图像处理",
+    "subtopic": "背景建模",
+    "difficulty": "medium"
+  },
+  {
+    "id": 143,
+    "question": "以下哪个注意力机制用于空间维度？",
+    "options": [
+      "A. SE",
+      "B. CBAM",
+      "C. SAM",
+      "D. B 和 C"
+    ],
+    "answer": "D",
+    "explanation": "CBAM 和 SAM 都包含空间注意力模块。",
+    "topic": "CNN",
+    "subtopic": "注意力机制",
+    "difficulty": "medium"
+  },
+  {
+    "id": 144,
+    "question": "在目标检测中，软 NMS 与硬 NMS 的区别是？",
+    "options": [
+      "A. 降低分数而非删除",
+      "B. 更平滑",
+      "C. 保留更多候选框",
+      "D. 以上都是"
+    ],
+    "answer": "D",
+    "explanation": "软 NMS 降低重叠框分数而非直接删除，更平滑。",
+    "topic": "YOLO",
+    "subtopic": "后处理",
+    "difficulty": "hard"
+  },
+  {
+    "id": 145,
+    "question": "OpenCV 中，用于计算凸包的函数是？",
+    "options": [
+      "A. cv2.convexHull()",
+      "B. cv2.hull()",
+      "C. cv2.convex()",
+      "D. cv2.findHull()"
+    ],
+    "answer": "A",
+    "explanation": "cv2.convexHull() 计算点集的凸包。",
+    "topic": "OpenCV",
+    "subtopic": "轮廓分析",
+    "difficulty": "medium"
+  },
+  {
+    "id": 146,
+    "question": "以下哪种优化器适合稀疏数据？",
+    "options": [
+      "A. SGD",
+      "B. Adam",
+      "C. Adagrad",
+      "D. RMSprop"
+    ],
+    "answer": "C",
+    "explanation": "Adagrad 对稀疏数据表现良好，自适应调整学习率。",
+    "topic": "CNN",
+    "subtopic": "优化器",
+    "difficulty": "medium"
+  },
+  {
+    "id": 147,
+    "question": "图像风格迁移的核心思想是？",
+    "options": [
+      "A. 内容重建",
+      "B. 风格重建",
+      "C. 结合内容和风格",
+      "D. 以上都是"
+    ],
+    "answer": "D",
+    "explanation": "风格迁移同时优化内容损失和风格损失。",
+    "topic": "图像处理",
+    "subtopic": "风格迁移",
+    "difficulty": "medium"
+  },
+  {
+    "id": 148,
+    "question": "以下哪个是单阶段检测器？",
+    "options": [
+      "A. Faster R-CNN",
+      "B. R-FCN",
+      "C. YOLO",
+      "D. Mask R-CNN"
+    ],
+    "answer": "C",
+    "explanation": "YOLO 是单阶段检测器，其他是两阶段。",
+    "topic": "YOLO",
+    "subtopic": "基础概念",
+    "difficulty": "easy"
+  },
+  {
+    "id": 149,
+    "question": "OpenCV 中，用于计算图像矩的函数是？",
+    "options": [
+      "A. cv2.moments()",
+      "B. cv2.moment()",
+      "C. cv2.imageMoment()",
+      "D. cv2.calcMoment()"
+    ],
+    "answer": "A",
+    "explanation": "cv2.moments() 计算轮廓矩，用于形状分析。",
+    "topic": "OpenCV",
+    "subtopic": "轮廓分析",
+    "difficulty": "medium"
+  },
+  {
+    "id": 150,
+    "question": "以下哪种方法可以减少过拟合？",
+    "options": [
+      "A. 增加训练数据",
+      "B. 数据增强",
+      "C. 正则化",
+      "D. 以上都是"
+    ],
+    "answer": "D",
+    "explanation": "这些都是减少过拟合的有效方法。",
+    "topic": "CNN",
+    "subtopic": "正则化",
+    "difficulty": "easy"
+  },
+  {
+    "id": 151,
+    "question": "在图像拼接中，特征匹配后需要计算？",
+    "options": [
+      "A. 单应性矩阵",
+      "B. 仿射矩阵",
+      "C. 透视矩阵",
+      "D. 旋转矩阵"
+    ],
+    "answer": "A",
+    "explanation": "单应性矩阵用于将图像对齐到同一平面。",
+    "topic": "图像处理",
+    "subtopic": "图像拼接",
+    "difficulty": "hard"
+  },
+  {
+    "id": 152,
+    "question": "以下哪个是 YOLOv2 引入的特性？",
+    "options": [
+      "A. Anchor Box",
+      "B. 多尺度训练",
+      "C. 高分辨率分类器",
+      "D. 以上都是"
+    ],
+    "answer": "D",
+    "explanation": "YOLOv2 引入了 Anchor Box、多尺度训练等多项改进。",
+    "topic": "YOLO",
+    "subtopic": "YOLO",
+    "difficulty": "medium"
+  },
+  {
+    "id": 153,
+    "question": "OpenCV 中，用于形态学操作的函数是？",
+    "options": [
+      "A. cv2.morphologyEx()",
+      "B. cv2.morph()",
+      "C. cv2.erode_dilate()",
+      "D. cv2.morphOp()"
+    ],
+    "answer": "A",
+    "explanation": "cv2.morphologyEx() 执行高级形态学操作如开闭运算。",
+    "topic": "OpenCV",
+    "subtopic": "形态学",
+    "difficulty": "medium"
+  },
+  {
+    "id": 154,
+    "question": "以下哪种激活函数输出范围是 (0,1)？",
+    "options": [
+      "A. ReLU",
+      "B. Sigmoid",
+      "C. Tanh",
+      "D. Leaky ReLU"
+    ],
+    "answer": "B",
+    "explanation": "Sigmoid 函数输出范围是 (0,1)。",
+    "topic": "CNN",
+    "subtopic": "激活函数",
+    "difficulty": "easy"
+  },
+  {
+    "id": 155,
+    "question": "在立体视觉中，视差图用于计算？",
+    "options": [
+      "A. 深度信息",
+      "B. 颜色信息",
+      "C. 纹理信息",
+      "D. 运动信息"
+    ],
+    "answer": "A",
+    "explanation": "视差与深度成反比，用于重建 3D 结构。",
+    "topic": "图像处理",
+    "subtopic": "立体视觉",
+    "difficulty": "medium"
+  },
+  {
+    "id": 156,
+    "question": "以下哪个模型最适合移动端部署？",
+    "options": [
+      "A. ResNet-101",
+      "B. MobileNet",
+      "C. VGG-16",
+      "D. Inception-v3"
+    ],
+    "answer": "B",
+    "explanation": "MobileNet 专为移动端设计，轻量高效。",
+    "topic": "CNN",
+    "subtopic": "网络架构",
+    "difficulty": "easy"
+  },
+  {
+    "id": 157,
+    "question": "在目标检测中，Recall 指的是？",
+    "options": [
+      "A. 查准率",
+      "B. 查全率",
+      "C. 准确率",
+      "D. F1 分数"
+    ],
+    "answer": "B",
+    "explanation": "Recall 查全率，表示实际为正的样本中被正确预测的比例。",
+    "topic": "YOLO",
+    "subtopic": "评估指标",
+    "difficulty": "medium"
+  },
+  {
+    "id": 158,
+    "question": "OpenCV 中，用于计算光流的函数是？",
+    "options": [
+      "A. cv2.calcOpticalFlowFarneback()",
+      "B. cv2.opticalFlow()",
+      "C. cv2.flowCalc()",
+      "D. cv2.computeFlow()"
+    ],
+    "answer": "A",
+    "explanation": "cv2.calcOpticalFlowFarneback() 计算稠密光流。",
+    "topic": "OpenCV",
+    "subtopic": "光流",
+    "difficulty": "hard"
+  },
+  {
+    "id": 159,
+    "question": "以下哪种方法用于生成对抗网络？",
+    "options": [
+      "A. 生成器",
+      "B. 判别器",
+      "C. 对抗训练",
+      "D. 以上都是"
+    ],
+    "answer": "D",
+    "explanation": "GAN 由生成器和判别器组成，通过对抗训练学习。",
+    "topic": "CNN",
+    "subtopic": "GAN",
+    "difficulty": "medium"
+  },
+  {
+    "id": 160,
+    "question": "图像阈值化中，自适应阈值的特点是？",
+    "options": [
+      "A. 全局统一阈值",
+      "B. 局部计算阈值",
+      "C. 手动设置阈值",
+      "D. 固定阈值"
+    ],
+    "answer": "B",
+    "explanation": "自适应阈值根据局部邻域计算，适合光照不均的图像。",
+    "topic": "图像处理",
+    "subtopic": "阈值分割",
+    "difficulty": "medium"
+  },
+  {
+    "id": 161,
+    "question": "以下哪个是 YOLOv3 的骨干网络？",
+    "options": [
+      "A. Darknet-53",
+      "B. ResNet-53",
+      "C. VGG-53",
+      "D. DenseNet-53"
+    ],
+    "answer": "A",
+    "explanation": "YOLOv3 使用 Darknet-53 作为骨干网络。",
+    "topic": "YOLO",
+    "subtopic": "YOLO",
+    "difficulty": "medium"
+  },
+  {
+    "id": 162,
+    "question": "OpenCV 中，用于创建掩码的函数是？",
+    "options": [
+      "A. cv2.createMask()",
+      "B. cv2.makeMask()",
+      "C. cv2.generateMask()",
+      "D. 通常手动创建"
+    ],
+    "answer": "D",
+    "explanation": "掩码通常通过阈值或其他操作手动创建。",
+    "topic": "OpenCV",
+    "subtopic": "图像操作",
+    "difficulty": "medium"
+  },
+  {
+    "id": 163,
+    "question": "以下哪种损失函数对异常值不敏感？",
+    "options": [
+      "A. MSE",
+      "B. MAE",
+      "C. Huber",
+      "D. B 和 C"
+    ],
+    "answer": "D",
+    "explanation": "MAE 和 Huber 对异常值比 MSE 更鲁棒。",
+    "topic": "CNN",
+    "subtopic": "损失函数",
+    "difficulty": "hard"
+  },
+  {
+    "id": 164,
+    "question": "在图像修复中，用于填充缺失区域的技术是？",
+    "options": [
+      "A. Inpainting",
+      "B. Denoising",
+      "C. Deblurring",
+      "D. Super-resolution"
+    ],
+    "answer": "A",
+    "explanation": "Inpainting 图像修复技术用于填补缺失区域。",
+    "topic": "图像处理",
+    "subtopic": "图像修复",
+    "difficulty": "medium"
+  },
+  {
+    "id": 165,
+    "question": "以下哪个是目标检测的数据集？",
+    "options": [
+      "A. ImageNet",
+      "B. COCO",
+      "C. PASCAL VOC",
+      "D. 以上都是"
+    ],
+    "answer": "D",
+    "explanation": "这些都是常用的目标检测数据集。",
+    "topic": "YOLO",
+    "subtopic": "数据集",
+    "difficulty": "easy"
+  },
+  {
+    "id": 166,
+    "question": "OpenCV 中，用于计算图像 pyramids 的函数是？",
+    "options": [
+      "A. cv2.pyrDown()",
+      "B. cv2.pyrUp()",
+      "C. cv2.buildPyramid()",
+      "D. A 和 B"
+    ],
+    "answer": "D",
+    "explanation": "pyrDown 降采样，pyrUp 上采样。",
+    "topic": "OpenCV",
+    "subtopic": "图像变换",
+    "difficulty": "medium"
+  },
+  {
+    "id": 167,
+    "question": "以下哪种方法用于模型压缩？",
+    "options": [
+      "A. 剪枝",
+      "B. 量化",
+      "C. 知识蒸馏",
+      "D. 以上都是"
+    ],
+    "answer": "D",
+    "explanation": "这些都是常用的模型压缩技术。",
+    "topic": "CNN",
+    "subtopic": "模型压缩",
+    "difficulty": "medium"
+  },
+  {
+    "id": 168,
+    "question": "图像配准中，特征点匹配的常用算法是？",
+    "options": [
+      "A. SIFT",
+      "B. SURF",
+      "C. ORB",
+      "D. 以上都是"
+    ],
+    "answer": "D",
+    "explanation": "这些算法都可提取和匹配特征点用于配准。",
+    "topic": "图像处理",
+    "subtopic": "图像配准",
+    "difficulty": "medium"
+  },
+  {
+    "id": 169,
+    "question": "以下哪个是 Anchor-Free 检测器？",
+    "options": [
+      "A. FCOS",
+      "B. CenterNet",
+      "C. CornerNet",
+      "D. 以上都是"
+    ],
+    "answer": "D",
+    "explanation": "这些都是无锚框的目标检测器。",
+    "topic": "YOLO",
+    "subtopic": "Anchor-Free",
+    "difficulty": "medium"
+  },
+  {
+    "id": 170,
+    "question": "OpenCV 中，用于计算两帧之间差异的方法是？",
+    "options": [
+      "A. 帧差法",
+      "B. 光流法",
+      "C. 背景减除",
+      "D. 以上都是"
+    ],
+    "answer": "D",
+    "explanation": "这些都可用于运动检测。",
+    "topic": "OpenCV",
+    "subtopic": "运动检测",
+    "difficulty": "medium"
+  },
+  {
+    "id": 171,
+    "question": "以下哪种归一化方法在 batch 维度上进行？",
+    "options": [
+      "A. BatchNorm",
+      "B. LayerNorm",
+      "C. InstanceNorm",
+      "D. GroupNorm"
+    ],
+    "answer": "A",
+    "explanation": "BatchNorm 在 batch 维度计算均值和方差。",
+    "topic": "CNN",
+    "subtopic": "归一化",
+    "difficulty": "easy"
+  },
+  {
+    "id": 172,
+    "question": "在 SAR 图像中， speckle 噪声是？",
+    "options": [
+      "A. 加性噪声",
+      "B. 乘性噪声",
+      "C. 高斯噪声",
+      "D. 椒盐噪声"
+    ],
+    "answer": "B",
+    "explanation": "SAR 图像的 speckle 噪声是乘性的。",
+    "topic": "图像处理",
+    "subtopic": "噪声",
+    "difficulty": "hard"
+  },
+  {
+    "id": 173,
+    "question": "以下哪个是 YOLOv4 的改进？",
+    "options": [
+      "A. Bag of Freebies",
+      "B. Bag of Specials",
+      "C. Mish 激活",
+      "D. 以上都是"
+    ],
+    "answer": "D",
+    "explanation": "YOLOv4 综合了大量技巧提升性能。",
+    "topic": "YOLO",
+    "subtopic": "YOLO",
+    "difficulty": "medium"
+  },
+  {
+    "id": 174,
+    "question": "OpenCV 中，用于保存视频的类是？",
+    "options": [
+      "A. cv2.VideoWriter",
+      "B. cv2.VideoSave",
+      "C. cv2.SaveVideo",
+      "D. cv2.WriteVideo"
+    ],
+    "answer": "A",
+    "explanation": "cv2.VideoWriter 用于将帧写入视频文件。",
+    "topic": "OpenCV",
+    "subtopic": "视频处理",
+    "difficulty": "easy"
+  },
+  {
+    "id": 175,
+    "question": "以下哪种方法可以提高模型泛化能力？",
+    "options": [
+      "A. 数据增强",
+      "B. 正则化",
+      "C. Dropout",
+      "D. 以上都是"
+    ],
+    "answer": "D",
+    "explanation": "这些都是提高泛化能力的有效方法。",
+    "topic": "CNN",
+    "subtopic": "泛化",
+    "difficulty": "easy"
+  },
+  {
+    "id": 176,
+    "question": "图像分割中，U-Net 主要用于？",
+    "options": [
+      "A. 自然图像分割",
+      "B. 医学图像分割",
+      "C. 遥感图像分割",
+      "D. 视频分割"
+    ],
+    "answer": "B",
+    "explanation": "U-Net 最初为医学图像分割设计。",
+    "topic": "图像处理",
+    "subtopic": "图像分割",
+    "difficulty": "easy"
+  },
+  {
+    "id": 177,
+    "question": "在目标检测中，AP50 指的是？",
+    "options": [
+      "A. IoU=0.5 时的 AP",
+      "B. IoU=0.5:0.95 的 AP",
+      "C. 50 类的 AP",
+      "D. 50%Recall 时的 AP"
+    ],
+    "answer": "A",
+    "explanation": "AP50 表示 IoU 阈值为 0.5 时的平均精度。",
+    "topic": "YOLO",
+    "subtopic": "评估指标",
+    "difficulty": "medium"
+  },
+  {
+    "id": 178,
+    "question": "OpenCV 中，用于计算图像傅里叶变换的函数是？",
+    "options": [
+      "A. cv2.dft()",
+      "B. cv2.fft()",
+      "C. cv2.fourier()",
+      "D. cv2.transform()"
+    ],
+    "answer": "A",
+    "explanation": "cv2.dft() 执行离散傅里叶变换。",
+    "topic": "OpenCV",
+    "subtopic": "频域处理",
+    "difficulty": "hard"
+  },
+  {
+    "id": 179,
+    "question": "以下哪种激活函数有负半轴响应？",
+    "options": [
+      "A. ReLU",
+      "B. Leaky ReLU",
+      "C. ELU",
+      "D. B 和 C"
+    ],
+    "answer": "D",
+    "explanation": "Leaky ReLU 和 ELU 在负半轴都有响应。",
+    "topic": "CNN",
+    "subtopic": "激活函数",
+    "difficulty": "medium"
+  },
+  {
+    "id": 180,
+    "question": "图像复原中，逆滤波的问题是？",
+    "options": [
+      "A. 放大噪声",
+      "B. 计算复杂",
+      "C. 效果不好",
+      "D. 速度慢"
+    ],
+    "answer": "A",
+    "explanation": "逆滤波会放大高频噪声，导致结果不稳定。",
+    "topic": "图像处理",
+    "subtopic": "图像复原",
+    "difficulty": "hard"
+  },
+  {
+    "id": 181,
+    "question": "以下哪个模型使用 depthwise 卷积？",
+    "options": [
+      "A. MobileNet",
+      "B. Xception",
+      "C. MobileNetV2",
+      "D. 以上都是"
+    ],
+    "answer": "D",
+    "explanation": "这些模型都使用了深度可分离卷积。",
+    "topic": "CNN",
+    "subtopic": "网络架构",
+    "difficulty": "medium"
+  },
+  {
+    "id": 182,
+    "question": "在行人检测中，常用的特征是？",
+    "options": [
+      "A. HOG",
+      "B. SIFT",
+      "C. SURF",
+      "D. ORB"
+    ],
+    "answer": "A",
+    "explanation": "HOG 特征在行人检测中效果很好。",
+    "topic": "YOLO",
+    "subtopic": "特征",
+    "difficulty": "medium"
+  },
+  {
+    "id": 183,
+    "question": "OpenCV 中，用于计算图像 Laplacian 的函数是？",
+    "options": [
+      "A. cv2.Laplacian()",
+      "B. cv2.laplace()",
+      "C. cv2.edgeLaplacian()",
+      "D. cv2.calcLaplacian()"
+    ],
+    "answer": "A",
+    "explanation": "cv2.Laplacian() 计算图像的 Laplacian 算子。",
+    "topic": "OpenCV",
+    "subtopic": "边缘检测",
+    "difficulty": "medium"
+  },
+  {
+    "id": 184,
+    "question": "以下哪种方法用于解释深度学习模型？",
+    "options": [
+      "A. Grad-CAM",
+      "B. LIME",
+      "C. SHAP",
+      "D. 以上都是"
+    ],
+    "answer": "D",
+    "explanation": "这些都是模型可解释性方法。",
+    "topic": "CNN",
+    "subtopic": "可解释性",
+    "difficulty": "medium"
+  },
+  {
+    "id": 185,
+    "question": "图像压缩标准 JPEG 使用？",
+    "options": [
+      "A. DCT 变换",
+      "B. 小波变换",
+      "C. 傅里叶变换",
+      "D. KLT 变换"
+    ],
+    "answer": "A",
+    "explanation": "JPEG 使用离散余弦变换进行压缩。",
+    "topic": "图像处理",
+    "subtopic": "图像压缩",
+    "difficulty": "medium"
+  },
+  {
+    "id": 186,
+    "question": "以下哪个是语义分割模型？",
+    "options": [
+      "A. DeepLab",
+      "B. PSPNet",
+      "C. FCN",
+      "D. 以上都是"
+    ],
+    "answer": "D",
+    "explanation": "这些都是经典的语义分割模型。",
+    "topic": "图像处理",
+    "subtopic": "图像分割",
+    "difficulty": "medium"
+  },
+  {
+    "id": 187,
+    "question": "在 YOLO 中，Mosaic 增强的作用是？",
+    "options": [
+      "A. 拼接 4 张图像",
+      "B. 增加小目标",
+      "C. 丰富背景",
+      "D. 以上都是"
+    ],
+    "answer": "D",
+    "explanation": "Mosaic 数据增强拼接 4 张图，增加小目标和背景多样性。",
+    "topic": "YOLO",
+    "subtopic": "YOLO",
+    "difficulty": "medium"
+  },
+  {
+    "id": 188,
+    "question": "OpenCV 中，用于计算图像梯度的方向使用？",
+    "options": [
+      "A. atan2()",
+      "B. arctan()",
+      "C. phase()",
+      "D. angle()"
+    ],
+    "answer": "A",
+    "explanation": "使用 atan2(y, x) 计算梯度方向。",
+    "topic": "OpenCV",
+    "subtopic": "边缘检测",
+    "difficulty": "medium"
+  },
+  {
+    "id": 189,
+    "question": "以下哪种损失函数适合类别不平衡？",
+    "options": [
+      "A. 交叉熵",
+      "B. Focal Loss",
+      "C. Dice Loss",
+      "D. B 和 C"
+    ],
+    "answer": "D",
+    "explanation": "Focal Loss 和 Dice Loss 都适合处理类别不平衡。",
+    "topic": "CNN",
+    "subtopic": "损失函数",
+    "difficulty": "medium"
+  },
+  {
+    "id": 190,
+    "question": "图像融合中，多尺度融合通常使用？",
+    "options": [
+      "A. 拉普拉斯金字塔",
+      "B. 高斯金字塔",
+      "C. 小波变换",
+      "D. 以上都是"
+    ],
+    "answer": "D",
+    "explanation": "这些多尺度表示都可用于图像融合。",
+    "topic": "图像处理",
+    "subtopic": "图像融合",
+    "difficulty": "hard"
+  },
+  {
+    "id": 191,
+    "question": "以下哪个是 3D 目标检测数据集？",
+    "options": [
+      "A. KITTI",
+      "B. Waymo",
+      "C. nuScenes",
+      "D. 以上都是"
+    ],
+    "answer": "D",
+    "explanation": "这些都是常用的 3D 检测数据集。",
+    "topic": "YOLO",
+    "subtopic": "3D 检测",
+    "difficulty": "medium"
+  },
+  {
+    "id": 192,
+    "question": "OpenCV 中，用于计算图像均值和标准差的函数是？",
+    "options": [
+      "A. cv2.meanStdDev()",
+      "B. cv2.mean()",
+      "C. cv2.stdDev()",
+      "D. cv2.stats()"
+    ],
+    "answer": "A",
+    "explanation": "cv2.meanStdDev() 同时计算均值和标准差。",
+    "topic": "OpenCV",
+    "subtopic": "图像分析",
+    "difficulty": "medium"
+  },
+  {
+    "id": 193,
+    "question": "以下哪种方法可以加速推理？",
+    "options": [
+      "A. TensorRT",
+      "B. OpenVINO",
+      "C. ONNX Runtime",
+      "D. 以上都是"
+    ],
+    "answer": "D",
+    "explanation": "这些都是常用的推理加速框架。",
+    "topic": "CNN",
+    "subtopic": "推理优化",
+    "difficulty": "medium"
+  },
+  {
+    "id": 194,
+    "question": "在光学流计算中，亮度恒定假设是指？",
+    "options": [
+      "A. 像素值不变",
+      "B. 像素值随时间线性变化",
+      "C. 同一像素在不同帧亮度相同",
+      "D. 以上都不是"
+    ],
+    "answer": "C",
+    "explanation": "亮度恒定假设同一物理点在不同帧中亮度相同。",
+    "topic": "图像处理",
+    "subtopic": "光流",
+    "difficulty": "hard"
+  },
+  {
+    "id": 195,
+    "question": "以下哪个是 Transformer 检测器？",
+    "options": [
+      "A. DETR",
+      "B. Deformable DETR",
+      "C. Swin Transformer",
+      "D. 以上都是"
+    ],
+    "answer": "D",
+    "explanation": "这些都是基于 Transformer 的检测方法。",
+    "topic": "YOLO",
+    "subtopic": "Transformer",
+    "difficulty": "medium"
+  },
+  {
+    "id": 196,
+    "question": "OpenCV 中，用于计算两个轮廓相似度的方法是？",
+    "options": [
+      "A. 形状匹配",
+      "B. 轮廓距离",
+      "C. Hu 矩",
+      "D. 以上都是"
+    ],
+    "answer": "D",
+    "explanation": "这些方法都可用于轮廓相似度计算。",
+    "topic": "OpenCV",
+    "subtopic": "轮廓分析",
+    "difficulty": "hard"
+  },
+  {
+    "id": 197,
+    "question": "以下哪种初始化方法适合 ReLU 激活？",
+    "options": [
+      "A. Xavier",
+      "B. He",
+      "C. LeCun",
+      "D. 正态分布"
+    ],
+    "answer": "B",
+    "explanation": "He 初始化专为 ReLU 类激活函数设计。",
+    "topic": "CNN",
+    "subtopic": "初始化",
+    "difficulty": "medium"
+  },
+  {
+    "id": 198,
+    "question": "图像去噪中，非局部均值方法的核心是？",
+    "options": [
+      "A. 利用图像自相似性",
+      "B. 空间邻域平均",
+      "C. 频域滤波",
+      "D. 小波阈值"
+    ],
+    "answer": "A",
+    "explanation": "非局部均值利用图像中相似块进行去噪。",
+    "topic": "图像处理",
+    "subtopic": "图像去噪",
+    "difficulty": "hard"
+  },
+  {
+    "id": 199,
+    "question": "在姿态估计中，自顶向下方法？",
+    "options": [
+      "A. 先检测人，再估计姿态",
+      "B. 直接回归关键点",
+      "C. 使用热力图",
+      "D. 端到端预测"
+    ],
+    "answer": "A",
+    "explanation": "自顶向下先检测人体框，再在框内估计姿态。",
+    "topic": "YOLO",
+    "subtopic": "姿态估计",
+    "difficulty": "medium"
+  },
+  {
+    "id": 200,
+    "question": "OpenCV 的_contrib 模块包含？",
+    "options": [
+      "A. 贡献者代码",
+      "B. 额外算法",
+      "C. 实验性功能",
+      "D. 以上都是"
+    ],
+    "answer": "D",
+    "explanation": "opencv_contrib 包含额外算法和实验性功能。",
+    "topic": "OpenCV",
+    "subtopic": "模块",
+    "difficulty": "medium"
+  }
+]

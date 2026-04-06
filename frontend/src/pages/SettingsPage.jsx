@@ -68,6 +68,22 @@ function SettingsPage() {
   const [pendingTopic, setPendingTopic] = useState(null)
   const [pendingDifficulty, setPendingDifficulty] = useState(null)
 
+  // 清理记录验证对话框状态
+  const [showClearVerifyDialog, setShowClearVerifyDialog] = useState(false)
+  const [clearVerifyText, setClearVerifyText] = useState('')
+  const [clearVerifyError, setClearVerifyError] = useState('')
+  const [clearType, setClearType] = useState(null) // 'current' 或 'all'
+
+  // 做题记录数据
+  const [answeredQuestionsByCategory, setAnsweredQuestionsByCategory] = useState(() => {
+    const saved = localStorage.getItem('quiz_answered_questions_by_category')
+    return saved ? JSON.parse(saved) : {}
+  })
+  const [statsByCategory, setStatsByCategory] = useState(() => {
+    const saved = localStorage.getItem('quiz_stats_by_category')
+    return saved ? JSON.parse(saved) : {}
+  })
+
   // AI 生成新题状态
   const [aiGenerateLoading, setAiGenerateLoading] = useState(false)
   const [showAIGenerateDialog, setShowAIGenerateDialog] = useState(false)
@@ -280,6 +296,54 @@ function SettingsPage() {
     } finally {
       setAiGenerateLoading(false)
     }
+  }
+
+  // 打开清理验证对话框
+  const openClearVerifyDialog = (type) => {
+    setClearType(type)
+    setClearVerifyText('')
+    setClearVerifyError('')
+    setShowClearVerifyDialog(true)
+  }
+
+  // 验证并清理做题记录
+  const handleVerifyAndClear = () => {
+    const requiredText = '我确定要重新学习一遍'
+    if (clearVerifyText.trim() !== requiredText) {
+      setClearVerifyError('输入不正确，请重新输入')
+      return
+    }
+
+    const currentCategoryKey = selectedTopic || 'all'
+    const currentDifficultyKey = selectedDifficulty || 'all'
+    const fullCategoryKey = `${currentCategoryKey}_${currentDifficultyKey}`
+
+    if (clearType === 'current') {
+      // 清理当前分类的记录
+      const newAnswered = { ...answeredQuestionsByCategory }
+      delete newAnswered[fullCategoryKey]
+      setAnsweredQuestionsByCategory(newAnswered)
+      localStorage.setItem('quiz_answered_questions_by_category', JSON.stringify(newAnswered))
+
+      const newStats = { ...statsByCategory }
+      delete newStats[fullCategoryKey]
+      setStatsByCategory(newStats)
+      localStorage.setItem('quiz_stats_by_category', JSON.stringify(newStats))
+
+      alert(`已清理当前分类（${selectedTopic || '全部'} / ${selectedDifficulty || '全部难度'}）的做题记录`)
+    } else if (clearType === 'all') {
+      // 清理所有记录
+      setAnsweredQuestionsByCategory({})
+      setStatsByCategory({})
+      localStorage.removeItem('quiz_answered_questions_by_category')
+      localStorage.removeItem('quiz_stats_by_category')
+      alert('已清理所有做题记录')
+    }
+
+    setShowClearVerifyDialog(false)
+    setClearVerifyText('')
+    setClearVerifyError('')
+    setClearType(null)
   }
 
   const difficultyColors = {
@@ -676,6 +740,80 @@ function SettingsPage() {
         </div>
       </div>
 
+      {/* 数据管理 */}
+      <div className={`rounded-2xl shadow-lg border overflow-hidden transition-colors duration-300 ${
+        isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'
+      }`}>
+        {/* 头部 */}
+        <div className="bg-gradient-to-r from-orange-500 to-red-500 px-6 py-4">
+          <h1 className="text-2xl font-bold text-white">🗑️ 数据管理</h1>
+          <p className="text-orange-100 text-sm mt-1">管理做题记录和学习进度</p>
+        </div>
+
+        {/* 内容 */}
+        <div className="p-6 space-y-6">
+          {/* 当前记录统计 */}
+          <div className={`rounded-xl p-4 border transition-colors duration-300 ${
+            isDark ? 'bg-slate-700/50 border-slate-600' : 'bg-slate-50 border-slate-200'
+          }`}>
+            <h3 className={`font-medium mb-3 ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>当前记录</h3>
+            <div className="grid grid-cols-2 gap-3">
+              <div className={`rounded-lg p-3 text-center ${
+                isDark ? 'bg-slate-700' : 'bg-white'
+              }`}>
+                <div className={`text-xs mb-1 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>已记录分类数</div>
+                <div className={`text-xl font-bold ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
+                  {Object.keys(answeredQuestionsByCategory).length}
+                </div>
+              </div>
+              <div className={`rounded-lg p-3 text-center ${
+                isDark ? 'bg-slate-700' : 'bg-white'
+              }`}>
+                <div className={`text-xs mb-1 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>当前分类已做题数</div>
+                <div className={`text-xl font-bold ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
+                  {(answeredQuestionsByCategory[`${selectedTopic || 'all'}_${selectedDifficulty || 'all'}`] || []).length}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* 清理按钮 */}
+          <div className="space-y-3">
+            <button
+              onClick={() => openClearVerifyDialog('current')}
+              className={`w-full px-4 py-3 rounded-xl font-medium transition-all duration-200 ${
+                isDark
+                  ? 'bg-orange-600/20 text-orange-400 hover:bg-orange-600/30 border border-orange-600/30'
+                  : 'bg-orange-50 text-orange-600 hover:bg-orange-100 border border-orange-200'
+              }`}
+            >
+              🗑️ 清理当前分类记录
+            </button>
+            <button
+              onClick={() => openClearVerifyDialog('all')}
+              className={`w-full px-4 py-3 rounded-xl font-medium transition-all duration-200 ${
+                isDark
+                  ? 'bg-red-600/20 text-red-400 hover:bg-red-600/30 border border-red-600/30'
+                  : 'bg-red-50 text-red-600 hover:bg-red-100 border border-red-200'
+              }`}
+            >
+              🗑️ 清理所有记录
+            </button>
+          </div>
+
+          {/* 提示信息 */}
+          <div className={`rounded-xl p-4 border transition-colors duration-300 ${
+            isDark ? 'bg-amber-900/30 border-amber-700 text-amber-200' : 'bg-amber-50 border-amber-200 text-amber-800'
+          }`}>
+            <h3 className="font-medium mb-2">⚠️ 清理提示</h3>
+            <p className="text-sm">
+              清理做题记录需要验证，请输入"我确定要重新学习一遍"才能清理。
+              清理后该分类的做题记录将被重置，您可以重新开始做题。
+            </p>
+          </div>
+        </div>
+      </div>
+
       {/* 验证对话框 */}
       {showVerifyDialog && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
@@ -890,6 +1028,88 @@ function SettingsPage() {
                 className="flex-1 px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg hover:from-purple-600 hover:to-pink-600 transition-colors disabled:opacity-50"
               >
                 {aiGenerateLoading ? '生成中...' : '开始生成'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 清理记录验证对话框 */}
+      {showClearVerifyDialog && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className={`rounded-2xl shadow-2xl w-full max-w-md mx-4 p-6 transition-colors duration-300 ${
+            isDark ? 'bg-slate-800' : 'bg-white'
+          }`}>
+            <div className="flex items-center justify-between mb-6">
+              <h3 className={`text-xl font-bold ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>
+                {clearType === 'current' ? '🗑️ 清理当前分类记录' : '🗑️ 清理所有记录'}
+              </h3>
+              <button
+                onClick={() => setShowClearVerifyDialog(false)}
+                className={`p-2 rounded-lg transition-colors ${
+                  isDark ? 'hover:bg-slate-700' : 'hover:bg-slate-100'
+                }`}
+              >
+                <svg className={`w-5 h-5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <div className={`rounded-xl p-4 border transition-colors duration-300 ${
+                isDark ? 'bg-red-900/30 border-red-700 text-red-200' : 'bg-red-50 border-red-200 text-red-800'
+              }`}>
+                <p className="text-sm">
+                  {clearType === 'current' 
+                    ? `您即将清理当前分类（${selectedTopic || '全部'} / ${selectedDifficulty || '全部难度'}）的做题记录。此操作不可恢复！`
+                    : '您即将清理所有分类的做题记录。此操作不可恢复！'
+                  }
+                </p>
+              </div>
+
+              <div>
+                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                  请输入以下文字以确认清理：
+                </label>
+                <div className={`rounded-lg p-3 mb-2 ${
+                  isDark ? 'bg-slate-700 text-slate-200' : 'bg-slate-100 text-slate-800'
+                }`}>
+                  <code className="font-medium">我确定要重新学习一遍</code>
+                </div>
+                <input
+                  type="text"
+                  value={clearVerifyText}
+                  onChange={(e) => setClearVerifyText(e.target.value)}
+                  placeholder="请输入上方文字"
+                  className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none transition-all ${
+                    isDark
+                      ? 'bg-slate-700 border-slate-600 text-white placeholder-slate-400'
+                      : 'bg-white border-slate-300 text-slate-900'
+                  }`}
+                />
+                {clearVerifyError && (
+                  <p className="text-red-400 text-sm mt-2">{clearVerifyError}</p>
+                )}
+              </div>
+            </div>
+
+            <div className="flex space-x-3 mt-6">
+              <button
+                onClick={() => setShowClearVerifyDialog(false)}
+                className={`flex-1 px-4 py-3 border rounded-xl transition-colors font-medium ${
+                  isDark
+                    ? 'border-slate-600 text-slate-300 hover:bg-slate-700'
+                    : 'border-slate-300 text-slate-700 hover:bg-slate-50'
+                }`}
+              >
+                取消
+              </button>
+              <button
+                onClick={handleVerifyAndClear}
+                className="flex-1 px-4 py-3 bg-gradient-to-r from-red-500 to-orange-500 text-white rounded-xl hover:from-red-600 hover:to-orange-600 transition-colors font-medium"
+              >
+                确认清理
               </button>
             </div>
           </div>
