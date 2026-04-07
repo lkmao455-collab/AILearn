@@ -1,0 +1,286 @@
+{
+  "timestamp": "2026-04-07T00:34:06.290Z",
+  "summary": {
+    "totalTopics": 46,
+    "totalQuestions": 60833,
+    "outputDirectory": "e:\\学习项目\\cv-learn\\backend\\data\\topics"
+  },
+  "databases": [
+    {
+      "topic": "初中英语",
+      "count": 6844,
+      "fileSize": 4812800,
+      "path": "e:\\学习项目\\cv-learn\\backend\\data\\topics\\初中英语.db"
+    },
+    {
+      "topic": "初中数学",
+      "count": 6003,
+      "fileSize": 4050944,
+      "path": "e:\\学习项目\\cv-learn\\backend\\data\\topics\\初中数学.db"
+    },
+    {
+      "topic": "Agent开发",
+      "count": 4089,
+      "fileSize": 4169728,
+      "path": "e:\\学习项目\\cv-learn\\backend\\data\\topics\\Agent开发.db"
+    },
+    {
+      "topic": "高中数学",
+      "count": 3701,
+      "fileSize": 3899392,
+      "path": "e:\\学习项目\\cv-learn\\backend\\data\\topics\\高中数学.db"
+    },
+    {
+      "topic": "机器学习",
+      "count": 3549,
+      "fileSize": 4009984,
+      "path": "e:\\学习项目\\cv-learn\\backend\\data\\topics\\机器学习.db"
+    },
+    {
+      "topic": "高中英语",
+      "count": 3202,
+      "fileSize": 5156864,
+      "path": "e:\\学习项目\\cv-learn\\backend\\data\\topics\\高中英语.db"
+    },
+    {
+      "topic": "人工智能",
+      "count": 3193,
+      "fileSize": 3366912,
+      "path": "e:\\学习项目\\cv-learn\\backend\\data\\topics\\人工智能.db"
+    },
+    {
+      "topic": "高中语文",
+      "count": 3002,
+      "fileSize": 3563520,
+      "path": "e:\\学习项目\\cv-learn\\backend\\data\\topics\\高中语文.db"
+    },
+    {
+      "topic": "Python编程",
+      "count": 3001,
+      "fileSize": 3526656,
+      "path": "e:\\学习项目\\cv-learn\\backend\\data\\topics\\Python编程.db"
+    },
+    {
+      "topic": "初中语文",
+      "count": 3001,
+      "fileSize": 2727936,
+      "path": "e:\\学习项目\\cv-learn\\backend\\data\\topics\\初中语文.db"
+    },
+    {
+      "topic": "深度学习",
+      "count": 3001,
+      "fileSize": 3047424,
+      "path": "e:\\学习项目\\cv-learn\\backend\\data\\topics\\深度学习.db"
+    },
+    {
+      "topic": "高等数学",
+      "count": 2953,
+      "fileSize": 2678784,
+      "path": "e:\\学习项目\\cv-learn\\backend\\data\\topics\\高等数学.db"
+    },
+    {
+      "topic": "大模型",
+      "count": 1609,
+      "fileSize": 1703936,
+      "path": "e:\\学习项目\\cv-learn\\backend\\data\\topics\\大模型.db"
+    },
+    {
+      "topic": "线性代数",
+      "count": 1394,
+      "fileSize": 1024000,
+      "path": "e:\\学习项目\\cv-learn\\backend\\data\\topics\\线性代数.db"
+    },
+    {
+      "topic": "小学数学",
+      "count": 1203,
+      "fileSize": 651264,
+      "path": "e:\\学习项目\\cv-learn\\backend\\data\\topics\\小学数学.db"
+    },
+    {
+      "topic": "小学语文",
+      "count": 1001,
+      "fileSize": 892928,
+      "path": "e:\\学习项目\\cv-learn\\backend\\data\\topics\\小学语文.db"
+    },
+    {
+      "topic": "数据结构",
+      "count": 1001,
+      "fileSize": 1171456,
+      "path": "e:\\学习项目\\cv-learn\\backend\\data\\topics\\数据结构.db"
+    },
+    {
+      "topic": "小学英语",
+      "count": 990,
+      "fileSize": 1413120,
+      "path": "e:\\学习项目\\cv-learn\\backend\\data\\topics\\小学英语.db"
+    },
+    {
+      "topic": "阿里云ACA-AI",
+      "count": 935,
+      "fileSize": 1200128,
+      "path": "e:\\学习项目\\cv-learn\\backend\\data\\topics\\阿里云ACA-AI.db"
+    },
+    {
+      "topic": "Qt开发",
+      "count": 678,
+      "fileSize": 118784,
+      "path": "e:\\学习项目\\cv-learn\\backend\\data\\topics\\Qt开发.db"
+    },
+    {
+      "topic": "KET",
+      "count": 500,
+      "fileSize": 421888,
+      "path": "e:\\学习项目\\cv-learn\\backend\\data\\topics\\KET.db"
+    },
+    {
+      "topic": "通用",
+      "count": 499,
+      "fileSize": 499712,
+      "path": "e:\\学习项目\\cv-learn\\backend\\data\\topics\\通用.db"
+    },
+    {
+      "topic": "Java",
+      "count": 400,
+      "fileSize": 409600,
+      "path": "e:\\学习项目\\cv-learn\\backend\\data\\topics\\Java.db"
+    },
+    {
+      "topic": "Linux系统",
+      "count": 400,
+      "fileSize": 393216,
+      "path": "e:\\学习项目\\cv-learn\\backend\\data\\topics\\Linux系统.db"
+    },
+    {
+      "topic": "大模型应用开发",
+      "count": 398,
+      "fileSize": 831488,
+      "path": "e:\\学习项目\\cv-learn\\backend\\data\\topics\\大模型应用开发.db"
+    },
+    {
+      "topic": "DeepLearning",
+      "count": 397,
+      "fileSize": 598016,
+      "path": "e:\\学习项目\\cv-learn\\backend\\data\\topics\\DeepLearning.db"
+    },
+    {
+      "topic": "Python",
+      "count": 396,
+      "fileSize": 946176,
+      "path": "e:\\学习项目\\cv-learn\\backend\\data\\topics\\Python.db"
+    },
+    {
+      "topic": "Bash脚本",
+      "count": 360,
+      "fileSize": 356352,
+      "path": "e:\\学习项目\\cv-learn\\backend\\data\\topics\\Bash脚本.db"
+    },
+    {
+      "topic": "前端开发",
+      "count": 345,
+      "fileSize": 430080,
+      "path": "e:\\学习项目\\cv-learn\\backend\\data\\topics\\前端开发.db"
+    },
+    {
+      "topic": "OpenCV",
+      "count": 284,
+      "fileSize": 585728,
+      "path": "e:\\学习项目\\cv-learn\\backend\\data\\topics\\OpenCV.db"
+    },
+    {
+      "topic": "Go语言",
+      "count": 261,
+      "fileSize": 425984,
+      "path": "e:\\学习项目\\cv-learn\\backend\\data\\topics\\Go语言.db"
+    },
+    {
+      "topic": "YOLO",
+      "count": 247,
+      "fileSize": 245760,
+      "path": "e:\\学习项目\\cv-learn\\backend\\data\\topics\\YOLO.db"
+    },
+    {
+      "topic": "设计模式",
+      "count": 200,
+      "fileSize": 270336,
+      "path": "e:\\学习项目\\cv-learn\\backend\\data\\topics\\设计模式.db"
+    },
+    {
+      "topic": "HALCON",
+      "count": 196,
+      "fileSize": 282624,
+      "path": "e:\\学习项目\\cv-learn\\backend\\data\\topics\\HALCON.db"
+    },
+    {
+      "topic": "C++",
+      "count": 190,
+      "fileSize": 507904,
+      "path": "e:\\学习项目\\cv-learn\\backend\\data\\topics\\C__.db"
+    },
+    {
+      "topic": "大数据分析",
+      "count": 187,
+      "fileSize": 344064,
+      "path": "e:\\学习项目\\cv-learn\\backend\\data\\topics\\大数据分析.db"
+    },
+    {
+      "topic": "PyTorch",
+      "count": 182,
+      "fileSize": 331776,
+      "path": "e:\\学习项目\\cv-learn\\backend\\data\\topics\\PyTorch.db"
+    },
+    {
+      "topic": "C语言",
+      "count": 173,
+      "fileSize": 294912,
+      "path": "e:\\学习项目\\cv-learn\\backend\\data\\topics\\C语言.db"
+    },
+    {
+      "topic": "CNN",
+      "count": 162,
+      "fileSize": 266240,
+      "path": "e:\\学习项目\\cv-learn\\backend\\data\\topics\\CNN.db"
+    },
+    {
+      "topic": "图像处理",
+      "count": 139,
+      "fileSize": 249856,
+      "path": "e:\\学习项目\\cv-learn\\backend\\data\\topics\\图像处理.db"
+    },
+    {
+      "topic": "PROFINET工业以太网",
+      "count": 128,
+      "fileSize": 147456,
+      "path": "e:\\学习项目\\cv-learn\\backend\\data\\topics\\PROFINET工业以太网.db"
+    },
+    {
+      "topic": "统计学",
+      "count": 122,
+      "fileSize": 139264,
+      "path": "e:\\学习项目\\cv-learn\\backend\\data\\topics\\统计学.db"
+    },
+    {
+      "topic": "EtherNet/IP工业协议",
+      "count": 101,
+      "fileSize": 118784,
+      "path": "e:\\学习项目\\cv-learn\\backend\\data\\topics\\EtherNet_IP工业协议.db"
+    },
+    {
+      "topic": "Modbus通信协议",
+      "count": 101,
+      "fileSize": 102400,
+      "path": "e:\\学习项目\\cv-learn\\backend\\data\\topics\\Modbus通信协议.db"
+    },
+    {
+      "topic": "QT开发",
+      "count": 80,
+      "fileSize": 118784,
+      "path": "e:\\学习项目\\cv-learn\\backend\\data\\topics\\QT开发.db"
+    },
+    {
+      "topic": "数据库",
+      "count": 35,
+      "fileSize": 57344,
+      "path": "e:\\学习项目\\cv-learn\\backend\\data\\topics\\数据库.db"
+    }
+  ]
+}

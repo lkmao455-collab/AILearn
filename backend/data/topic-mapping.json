@@ -1,0 +1,236 @@
+{
+  "version": "1.0",
+  "createdAt": "2026-04-07T00:34:06.288Z",
+  "topics": {
+    "初中英语": {
+      "fileName": "初中英语.db",
+      "count": 6844,
+      "path": "data/topics/初中英语.db"
+    },
+    "初中数学": {
+      "fileName": "初中数学.db",
+      "count": 6003,
+      "path": "data/topics/初中数学.db"
+    },
+    "Agent开发": {
+      "fileName": "Agent开发.db",
+      "count": 4089,
+      "path": "data/topics/Agent开发.db"
+    },
+    "高中数学": {
+      "fileName": "高中数学.db",
+      "count": 3701,
+      "path": "data/topics/高中数学.db"
+    },
+    "机器学习": {
+      "fileName": "机器学习.db",
+      "count": 3549,
+      "path": "data/topics/机器学习.db"
+    },
+    "高中英语": {
+      "fileName": "高中英语.db",
+      "count": 3202,
+      "path": "data/topics/高中英语.db"
+    },
+    "人工智能": {
+      "fileName": "人工智能.db",
+      "count": 3193,
+      "path": "data/topics/人工智能.db"
+    },
+    "高中语文": {
+      "fileName": "高中语文.db",
+      "count": 3002,
+      "path": "data/topics/高中语文.db"
+    },
+    "Python编程": {
+      "fileName": "Python编程.db",
+      "count": 3001,
+      "path": "data/topics/Python编程.db"
+    },
+    "初中语文": {
+      "fileName": "初中语文.db",
+      "count": 3001,
+      "path": "data/topics/初中语文.db"
+    },
+    "深度学习": {
+      "fileName": "深度学习.db",
+      "count": 3001,
+      "path": "data/topics/深度学习.db"
+    },
+    "高等数学": {
+      "fileName": "高等数学.db",
+      "count": 2953,
+      "path": "data/topics/高等数学.db"
+    },
+    "大模型": {
+      "fileName": "大模型.db",
+      "count": 1609,
+      "path": "data/topics/大模型.db"
+    },
+    "线性代数": {
+      "fileName": "线性代数.db",
+      "count": 1394,
+      "path": "data/topics/线性代数.db"
+    },
+    "小学数学": {
+      "fileName": "小学数学.db",
+      "count": 1203,
+      "path": "data/topics/小学数学.db"
+    },
+    "小学语文": {
+      "fileName": "小学语文.db",
+      "count": 1001,
+      "path": "data/topics/小学语文.db"
+    },
+    "数据结构": {
+      "fileName": "数据结构.db",
+      "count": 1001,
+      "path": "data/topics/数据结构.db"
+    },
+    "小学英语": {
+      "fileName": "小学英语.db",
+      "count": 990,
+      "path": "data/topics/小学英语.db"
+    },
+    "阿里云ACA-AI": {
+      "fileName": "阿里云ACA-AI.db",
+      "count": 935,
+      "path": "data/topics/阿里云ACA-AI.db"
+    },
+    "Qt开发": {
+      "fileName": "Qt开发.db",
+      "count": 678,
+      "path": "data/topics/Qt开发.db"
+    },
+    "KET": {
+      "fileName": "KET.db",
+      "count": 500,
+      "path": "data/topics/KET.db"
+    },
+    "通用": {
+      "fileName": "通用.db",
+      "count": 499,
+      "path": "data/topics/通用.db"
+    },
+    "Java": {
+      "fileName": "Java.db",
+      "count": 400,
+      "path": "data/topics/Java.db"
+    },
+    "Linux系统": {
+      "fileName": "Linux系统.db",
+      "count": 400,
+      "path": "data/topics/Linux系统.db"
+    },
+    "大模型应用开发": {
+      "fileName": "大模型应用开发.db",
+      "count": 398,
+      "path": "data/topics/大模型应用开发.db"
+    },
+    "DeepLearning": {
+      "fileName": "DeepLearning.db",
+      "count": 397,
+      "path": "data/topics/DeepLearning.db"
+    },
+    "Python": {
+      "fileName": "Python.db",
+      "count": 396,
+      "path": "data/topics/Python.db"
+    },
+    "Bash脚本": {
+      "fileName": "Bash脚本.db",
+      "count": 360,
+      "path": "data/topics/Bash脚本.db"
+    },
+    "前端开发": {
+      "fileName": "前端开发.db",
+      "count": 345,
+      "path": "data/topics/前端开发.db"
+    },
+    "OpenCV": {
+      "fileName": "OpenCV.db",
+      "count": 284,
+      "path": "data/topics/OpenCV.db"
+    },
+    "Go语言": {
+      "fileName": "Go语言.db",
+      "count": 261,
+      "path": "data/topics/Go语言.db"
+    },
+    "YOLO": {
+      "fileName": "YOLO.db",
+      "count": 247,
+      "path": "data/topics/YOLO.db"
+    },
+    "设计模式": {
+      "fileName": "设计模式.db",
+      "count": 200,
+      "path": "data/topics/设计模式.db"
+    },
+    "HALCON": {
+      "fileName": "HALCON.db",
+      "count": 196,
+      "path": "data/topics/HALCON.db"
+    },
+    "C++": {
+      "fileName": "C++.db",
+      "count": 190,
+      "path": "data/topics/C++.db"
+    },
+    "大数据分析": {
+      "fileName": "大数据分析.db",
+      "count": 187,
+      "path": "data/topics/大数据分析.db"
+    },
+    "PyTorch": {
+      "fileName": "PyTorch.db",
+      "count": 182,
+      "path": "data/topics/PyTorch.db"
+    },
+    "C语言": {
+      "fileName": "C语言.db",
+      "count": 173,
+      "path": "data/topics/C语言.db"
+    },
+    "CNN": {
+      "fileName": "CNN.db",
+      "count": 162,
+      "path": "data/topics/CNN.db"
+    },
+    "图像处理": {
+      "fileName": "图像处理.db",
+      "count": 139,
+      "path": "data/topics/图像处理.db"
+    },
+    "PROFINET工业以太网": {
+      "fileName": "PROFINET工业以太网.db",
+      "count": 128,
+      "path": "data/topics/PROFINET工业以太网.db"
+    },
+    "统计学": {
+      "fileName": "统计学.db",
+      "count": 122,
+      "path": "data/topics/统计学.db"
+    },
+    "EtherNet/IP工业协议": {
+      "fileName": "EtherNet_IP工业协议.db",
+      "count": 101,
+      "path": "data/topics/EtherNet_IP工业协议.db"
+    },
+    "Modbus通信协议": {
+      "fileName": "Modbus通信协议.db",
+      "count": 101,
+      "path": "data/topics/Modbus通信协议.db"
+    },
+    "QT开发": {
+      "fileName": "QT开发.db",
+      "count": 80,
+      "path": "data/topics/QT开发.db"
+    },
+    "数据库": {
+      "fileName": "数据库.db",
+      "count": 35,
+      "path": "data/topics/数据库.db"
+    }
+  }
+}

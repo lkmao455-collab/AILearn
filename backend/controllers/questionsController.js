@@ -1,17 +1,26 @@
-const db = require('../config/database');
 const { getAIExplanationFromDashScope } = require('../services/dashscopeService');
 const axios = require('axios');
+const multiDb = require('../config/multiDatabase');
 
 // DashScope API URL (兼容 OpenAI 格式)
 const DASHSCOPE_API_URL = 'https://dashscope.aliyuncs.com/compatible-mode/v1';
 
-// 判断是否为 PostgreSQL 模式
-const isPostgres = require('../config/database').isPostgres;
+// 判断是否为 PostgreSQL 模式（生产环境使用单一数据库）
+const isPostgres = process.env.DATABASE_URL ? true : false;
+
+// 获取数据库连接（根据 topic 自动路由）
+const getDb = (topic) => {
+  if (isPostgres) {
+    // PostgreSQL 模式下使用原来的数据库配置
+    return require('../config/database');
+  }
+  // SQLite 模式下使用多数据库路由
+  return topic ? multiDb.getTopicDatabase(topic) : multiDb.getMainDatabase();
+};
 
 // 执行查询的辅助函数（处理同步/异步差异）
 const runQuery = async (stmt, ...params) => {
   const result = stmt.run(...params);
-  // PostgreSQL 返回 Promise，SQLite 返回同步结果
   return result instanceof Promise ? await result : result;
 };
 
@@ -23,21 +32,6 @@ const getQuery = async (stmt, ...params) => {
 const allQuery = async (stmt, ...params) => {
   const result = stmt.all(...params);
   return result instanceof Promise ? await result : result;
-};
-
-// 获取插入语句（处理 SQLite/PostgreSQL 差异）
-const getInsertQuestionSQL = () => {
-  if (isPostgres) {
-    return `
-      INSERT INTO questions (id, topic, subtopic, difficulty, question, options, answer, explanation)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-      ON CONFLICT (id) DO NOTHING
-    `;
-  }
-  return `
-    INSERT INTO questions (id, topic, subtopic, difficulty, question, options, answer, explanation)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-  `;
 };
 
 // 获取 upsert 用户统计的 SQL
@@ -69,58 +63,46 @@ const getRandomSQL = () => {
   return isPostgres ? 'RANDOM()' : 'RANDOM()';
 };
 
-// 初始化题库（从 JSON 文件导入）
-const initQuestions = async () => {
-  try {
-    const questionsData = require('../data/questions.json');
-
-    // 检查是否已存在题目
-    const checkStmt = db.prepare('SELECT COUNT(*) as count FROM questions');
-    const existingCount = await getQuery(checkStmt);
-
-    if (existingCount && existingCount.count > 0) {
-      console.log(`数据库中已有 ${existingCount.count} 道题目`);
-      return;
-    }
-
-    // 批量插入题目
-    const insertSQL = getInsertQuestionSQL();
-    const insertStmt = db.prepare(insertSQL);
-
-    let insertedCount = 0;
-    for (const q of questionsData) {
-      try {
-        await runQuery(
-          insertStmt,
-          q.id,
-          q.topic,
-          q.subtopic || null,
-          q.difficulty,
-          q.question,
-          JSON.stringify(q.options),
-          q.answer,
-          q.explanation
-        );
-        insertedCount++;
-      } catch (err) {
-        // 忽略重复插入错误
-        if (!err.message?.includes('unique constraint') && !err.message?.includes('UNIQUE')) {
-          console.error(`插入题目失败 (ID: ${q.id}):`, err.message);
-        }
-      }
-    }
-
-    console.log(`成功初始化 ${insertedCount} 道题目到数据库`);
-  } catch (error) {
-    console.error('初始化题库失败:', error);
-  }
+// 定义题目大类分组
+const CATEGORY_GROUPS = {
+  '计算机类': [
+    'Agent开发', 'Bash脚本', 'C++', 'CNN', 'C语言', 'DeepLearning', 
+    'Go语言', 'HALCON', 'Java', 'KET', 'Linux系统', 'OpenCV', 
+    'PyTorch', 'Python', 'QT开发', 'YOLO', '人工智能', '前端开发', 
+    '图像处理', '大数据分析', '大模型应用开发', '机器学习', '设计模式',
+    '通用', '阿里云ACA-AI', 'Python编程', '深度学习', '高等数学', '大模型', 
+    '线性代数', '数据结构', 'Qt开发', 'Java', 'Linux系统', 'DeepLearning', 
+    'Bash脚本', 'OpenCV', 'Go语言', 'HALCON', 'PyTorch', 'C语言', 
+    'PROFINET工业以太网', '统计学', 'EtherNet/IP工业协议', 'Modbus通信协议', 
+    'QT开发', '数据库'
+  ],
+  '小学类': [
+    '小学英语', '小学数学', '小学语文'
+  ],
+  '初中类': [
+    '初中数学', '初中英语', '初中语文'
+  ],
+  '高中类': [
+    '高中数学', '高中英语', '高中语文'
+  ]
 };
 
-// 获取所有题目
+// 获取所有题目（跨所有数据库）
 const getAllQuestions = async (req, res) => {
   try {
-    const stmt = db.prepare('SELECT * FROM questions');
-    const questions = await allQuery(stmt);
+    const { topic } = req.query;
+    const db = getDb(topic);
+    
+    let sql = 'SELECT * FROM questions';
+    const params = [];
+    
+    if (topic) {
+      sql += ' WHERE topic = ?';
+      params.push(topic);
+    }
+    
+    const stmt = db.prepare(sql);
+    const questions = await allQuery(stmt, ...params);
 
     res.json({
       success: true,
@@ -143,6 +125,9 @@ const getAllQuestions = async (req, res) => {
 const getQuestionById = async (req, res) => {
   try {
     const { id } = req.params;
+    const { topic } = req.query;
+    const db = getDb(topic);
+    
     const stmt = db.prepare('SELECT * FROM questions WHERE id = ?');
     const question = await getQuery(stmt, id);
 
@@ -169,12 +154,28 @@ const getQuestionById = async (req, res) => {
   }
 };
 
-// 获取随机题目
+// 获取随机题目（支持按 topic 筛选）
 const getRandomQuestion = async (req, res) => {
   try {
-    const randomSQL = `SELECT * FROM questions ORDER BY ${getRandomSQL()} LIMIT 1`;
-    const stmt = db.prepare(randomSQL);
-    const question = await getQuery(stmt);
+    const { topic, difficulty } = req.query;
+    const db = getDb(topic);
+    
+    let sql = 'SELECT * FROM questions WHERE 1=1';
+    const params = [];
+    
+    if (topic) {
+      sql += ' AND topic = ?';
+      params.push(topic);
+    }
+    if (difficulty) {
+      sql += ' AND difficulty = ?';
+      params.push(difficulty);
+    }
+    
+    sql += ` ORDER BY ${getRandomSQL()} LIMIT 1`;
+    
+    const stmt = db.prepare(sql);
+    const question = await getQuery(stmt, ...params);
 
     if (!question) {
       return res.status(404).json({
@@ -202,9 +203,11 @@ const getRandomQuestion = async (req, res) => {
 // 检查答案
 const checkAnswer = async (req, res) => {
   try {
-    const { questionId, userAnswer } = req.body;
+    const { questionId, userAnswer, topic } = req.body;
     const userId = req.userId;
-
+    
+    // 获取题目（优先从指定 topic 数据库）
+    const db = getDb(topic);
     const stmt = db.prepare('SELECT * FROM questions WHERE id = ?');
     const question = await getQuery(stmt, questionId);
 
@@ -227,10 +230,12 @@ const checkAnswer = async (req, res) => {
 
     console.log(`[checkAnswer] 题目ID: ${questionId}, 用户答案: ${userAnswer} (标准化: ${normalizedUserAnswer}), 正确答案: ${question.answer} (标准化: ${normalizedCorrectAnswer}), 是否正确: ${isCorrect}`);
 
-    // 如果提供了 userId，记录做题记录
+    // 如果提供了 userId，记录做题记录（使用主数据库）
     if (userId && userId !== 'guest') {
+      const mainDb = multiDb.getMainDatabase();
+      
       // 插入做题记录
-      const recordStmt = db.prepare(`
+      const recordStmt = mainDb.prepare(`
         INSERT INTO question_records (user_id, question_id, user_answer, is_correct)
         VALUES (?, ?, ?, ?)
       `);
@@ -240,20 +245,20 @@ const checkAnswer = async (req, res) => {
       const correctIncrement = isCorrect ? 1 : 0;
       const wrongIncrement = isCorrect ? 0 : 1;
       const statsSQL = getUpsertStatsSQL();
-      const statsStmt = db.prepare(statsSQL);
+      const statsStmt = mainDb.prepare(statsSQL);
       await runQuery(statsStmt, userId, correctIncrement, wrongIncrement, correctIncrement, wrongIncrement);
 
       // 如果答错，自动添加到错题本
       if (!isCorrect) {
         if (isPostgres) {
-          const wrongStmt = db.prepare(`
+          const wrongStmt = mainDb.prepare(`
             INSERT INTO wrong_questions (user_id, question_id, user_answer)
             VALUES ($1, $2, $3)
             ON CONFLICT (user_id, question_id) DO NOTHING
           `);
           await runQuery(wrongStmt, userId, questionId, userAnswer);
         } else {
-          const wrongStmt = db.prepare(`
+          const wrongStmt = mainDb.prepare(`
             INSERT OR IGNORE INTO wrong_questions (user_id, question_id, user_answer)
             VALUES (?, ?, ?)
           `);
@@ -283,9 +288,10 @@ const checkAnswer = async (req, res) => {
 // AI 详细解析
 const aiExplain = async (req, res) => {
   try {
-    const { questionId } = req.body;
+    const { questionId, topic } = req.body;
     const apiKey = req.apiKey;
-
+    
+    const db = getDb(topic);
     const stmt = db.prepare('SELECT * FROM questions WHERE id = ?');
     const question = await getQuery(stmt, questionId);
 
@@ -372,71 +378,71 @@ const testConnection = async (req, res) => {
   }
 };
 
-// 定义题目大类分组
-const CATEGORY_GROUPS = {
-  '计算机类': [
-    'Agent开发', 'Bash脚本', 'C++', 'CNN', 'C语言', 'DeepLearning', 
-    'Go语言', 'HALCON', 'Java', 'KET', 'Linux系统', 'OpenCV', 
-    'PyTorch', 'Python', 'QT开发', 'YOLO', '人工智能', '前端开发', 
-    '图像处理', '大数据分析', '大模型应用开发', '机器学习', '设计模式',
-    '通用', '阿里云ACA-AI'
-  ],
-  '小学类': [
-    '小学英语'
-  ],
-  '初中类': [
-    '初中数学', '初中英语'
-  ],
-  '高中类': [
-    '高中数学', '高中英语'
-  ]
-};
-
-// 获取所有分类
+// 获取所有分类（支持多数据库统计）
 const getCategories = async (req, res) => {
   try {
     const { topic } = req.query;
-    console.log('[getCategories] 收到请求, req.query:', req.query);
-    console.log('[getCategories] topic 值:', topic, '类型:', typeof topic);
+    console.log('[getCategories] 收到请求, topic:', topic);
 
-    const topicsStmt = db.prepare(`
-      SELECT topic, COUNT(*) as count FROM questions GROUP BY topic
-    `);
-    const topics = await allQuery(topicsStmt);
+    let topics = [];
+    let difficulties = [];
+    let total = 0;
 
-    const subtopicsStmt = db.prepare(`
-      SELECT DISTINCT subtopic FROM questions WHERE subtopic IS NOT NULL
-    `);
-    const subtopicsResult = await allQuery(subtopicsStmt);
-    const subtopics = subtopicsResult.map(s => s.subtopic).filter(Boolean);
-
-    // 如果有指定 topic，则只统计该 topic 下的难度分布
-    let difficulties;
-    if (topic) {
-      const diffStmt = db.prepare(`
-        SELECT difficulty, COUNT(*) as count FROM questions WHERE topic = ? GROUP BY difficulty
-      `);
-      const diffResult = await allQuery(diffStmt, topic);
-      difficulties = diffResult.map(d => ({
-        name: d.difficulty,
-        label: d.difficulty === 'easy' ? '简单' : d.difficulty === 'medium' ? '中等' : '困难',
-        count: d.count
-      }));
-    } else {
-      const diffStmt = db.prepare(`
-        SELECT difficulty, COUNT(*) as count FROM questions GROUP BY difficulty
-      `);
+    if (isPostgres) {
+      // PostgreSQL 模式：使用原逻辑
+      const db = require('../config/database');
+      const topicsStmt = db.prepare('SELECT topic, COUNT(*) as count FROM questions GROUP BY topic');
+      topics = await allQuery(topicsStmt);
+      
+      const diffStmt = db.prepare('SELECT difficulty, COUNT(*) as count FROM questions GROUP BY difficulty');
       const diffResult = await allQuery(diffStmt);
       difficulties = diffResult.map(d => ({
         name: d.difficulty,
         label: d.difficulty === 'easy' ? '简单' : d.difficulty === 'medium' ? '中等' : '困难',
         count: d.count
       }));
+      
+      const totalStmt = db.prepare('SELECT COUNT(*) as count FROM questions');
+      const totalResult = await getQuery(totalStmt);
+      total = totalResult.count;
+    } else {
+      // SQLite 多数据库模式
+      const topicStats = multiDb.getAllTopicsStats();
+      topics = topicStats.map(t => ({ topic: t.topic, count: t.count }));
+      total = topics.reduce((sum, t) => sum + t.count, 0);
+      
+      // 获取难度分布（从主数据库或指定 topic）
+      if (topic) {
+        const db = getDb(topic);
+        const diffStmt = db.prepare('SELECT difficulty, COUNT(*) as count FROM questions GROUP BY difficulty');
+        const diffResult = await allQuery(diffStmt);
+        difficulties = diffResult.map(d => ({
+          name: d.difficulty,
+          label: d.difficulty === 'easy' ? '简单' : d.difficulty === 'medium' ? '中等' : '困难',
+          count: d.count
+        }));
+      } else {
+        // 汇总所有数据库的难度分布
+        const difficultyMap = {};
+        for (const t of topicStats.slice(0, 5)) { // 只查前5个最大的数据库
+          try {
+            const db = getDb(t.topic);
+            const diffStmt = db.prepare('SELECT difficulty, COUNT(*) as count FROM questions GROUP BY difficulty');
+            const diffResult = await allQuery(diffStmt);
+            diffResult.forEach(d => {
+              difficultyMap[d.difficulty] = (difficultyMap[d.difficulty] || 0) + d.count;
+            });
+          } catch (e) {
+            console.warn(`[getCategories] 获取 ${t.topic} 难度分布失败:`, e.message);
+          }
+        }
+        difficulties = Object.entries(difficultyMap).map(([diff, count]) => ({
+          name: diff,
+          label: diff === 'easy' ? '简单' : diff === 'medium' ? '中等' : '困难',
+          count
+        }));
+      }
     }
-
-    const totalStmt = db.prepare('SELECT COUNT(*) as count FROM questions');
-    const totalResult = await getQuery(totalStmt);
-    const total = totalResult.count;
 
     // 按大类分组组织 topics
     const groupedTopics = {};
@@ -472,12 +478,12 @@ const getCategories = async (req, res) => {
       data: { 
         topics, 
         groupedTopics,
-        subtopics, 
         difficulties, 
         total 
       }
     });
   } catch (error) {
+    console.error('[getCategories] 错误:', error);
     res.status(500).json({
       success: false,
       message: '获取分类失败',
@@ -490,6 +496,7 @@ const getCategories = async (req, res) => {
 const getQuestionsByCategory = async (req, res) => {
   try {
     const { topic, difficulty } = req.query;
+    const db = getDb(topic);
 
     let sql = 'SELECT * FROM questions WHERE 1=1';
     const params = [];
@@ -520,6 +527,36 @@ const getQuestionsByCategory = async (req, res) => {
       message: '筛选题目失败',
       error: error.message
     });
+  }
+};
+
+// 初始化题库（检查多数据库系统）
+const initQuestions = async () => {
+  try {
+    // 获取所有可用的 topic 数据库
+    const availableTopics = multiDb.getAvailableTopics();
+    let totalQuestions = 0;
+    
+    for (const topic of availableTopics) {
+      const topicInfo = multiDb.getTopicInfo(topic);
+      if (topicInfo) {
+        totalQuestions += topicInfo.count;
+      }
+    }
+    
+    console.log(`[initQuestions] 多数据库系统已加载 ${availableTopics.length} 个 topic，共 ${totalQuestions} 道题目`);
+    
+    // 如果主数据库还有题目数据，可以选择清理（可选）
+    // 这里我们只检查，不自动清理，避免误删数据
+    const db = multiDb.getMainDatabase();
+    const checkStmt = db.prepare('SELECT COUNT(*) as count FROM questions');
+    const existingCount = await getQuery(checkStmt);
+    
+    if (existingCount && existingCount.count > 0) {
+      console.log(`[initQuestions] 注意：主数据库中仍有 ${existingCount.count} 道题目，建议迁移到 topic 数据库`);
+    }
+  } catch (error) {
+    console.error('[initQuestions] 初始化题库失败:', error);
   }
 };
 
