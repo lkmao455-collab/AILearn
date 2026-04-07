@@ -4,19 +4,13 @@ const isPostgres = require('../config/database').isPostgres;
 
 // 查询辅助函数
 const getQuery = async (stmt, ...params) => {
-  if (isPostgres) {
-    return await stmt.get(...params);
-  } else {
-    return stmt.get(...params);
-  }
+  const result = stmt.get(...params);
+  return result instanceof Promise ? await result : result;
 };
 
 const allQuery = async (stmt, ...params) => {
-  if (isPostgres) {
-    return await stmt.all(...params);
-  } else {
-    return stmt.all(...params);
-  }
+  const result = stmt.all(...params);
+  return result instanceof Promise ? await result : result;
 };
 
 // 获取排行榜

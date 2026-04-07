@@ -10,27 +10,19 @@ const isPostgres = require('../config/database').isPostgres;
 
 // 执行查询的辅助函数（处理同步/异步差异）
 const runQuery = async (stmt, ...params) => {
-  if (isPostgres) {
-    return await stmt.run(...params);
-  } else {
-    return stmt.run(...params);
-  }
+  const result = stmt.run(...params);
+  // PostgreSQL 返回 Promise，SQLite 返回同步结果
+  return result instanceof Promise ? await result : result;
 };
 
 const getQuery = async (stmt, ...params) => {
-  if (isPostgres) {
-    return await stmt.get(...params);
-  } else {
-    return stmt.get(...params);
-  }
+  const result = stmt.get(...params);
+  return result instanceof Promise ? await result : result;
 };
 
 const allQuery = async (stmt, ...params) => {
-  if (isPostgres) {
-    return await stmt.all(...params);
-  } else {
-    return stmt.all(...params);
-  }
+  const result = stmt.all(...params);
+  return result instanceof Promise ? await result : result;
 };
 
 // 获取插入语句（处理 SQLite/PostgreSQL 差异）
